@@ -1,0 +1,370 @@
+Realistic Adversarial Examples in 3D Meshes
+Intriguing properties of neural networks
+Wild Patterns: Ten Years After the Rise of Adversarial Machine Learning
+Adversarial examples in the physical world
+Synthesizing Robust Adversarial Examples
+Robust Physical-World Attacks on Deep Learning Models
+Defense against the dark arts
+Towards evaluating the robustness of neural networks. 
+Unrestricted Adversarial Examples.
+On evaluating adversarial robustness
+Practical adversarial attacks against object detectors
+Realistic Adversarial Examples in 3D Meshes
+Breaking Linear Classifiers on ImageNet
+Breaking things is easy
+Attacking Machine Learning with Adversarial Examples
+Robust Adversarial Examples
+A Brief Introduction to Adversarial Examples
+Training Robust Classifiers
+Adversarial Machine Learning Reading List
+Recommendations for Evaluating Adversarial Example Defenses
+Secure Machine Learning
+Defense against the dark arts
+Is adversarial examples an Adversarial Example
+Lessons from the Last 3000 Years of Adversarial Examples
+Suprisingly Unsurprisingly Lessons from the Last 3000 Years of Adversarial Examples
+EVALUATION METHODOLOGY FOR ATTACKS AGAINST CONFIDENCE THRESHOLDING MODELS
+New CleverHans Feature: Better Adversarial Robustness Evaluations with Attack Bundling
+Motivating the Rules of the Game for Adversarial Example Research
+Wild Patterns: Ten Years After the Rise of Adversarial Machine Learning
+SoK: Security and Privacy in Machine Learning
+The Limitations of Deep Learning in Adversarial Settings
+Threat of Adversarial Attacks on Deep Learning in Computer Vision: A Survey
+Adversarial Examples-A Complete Characterisation of the Phenomenon
+Defense Against the Dark Arts: An overview of adversarial example security research and future research directions
+Adversarial Attacks and Defences: A Survey 
+Attacks and Defenses towards Machine Learning Based Systems
+Security and Privacy Issues in Deep Learning
+Possibilities and Challenges for Artificial Intelligence in Military Applications
+Security for Machine Learning-based Systems: Attacks and Challenges during Training and Inference
+Securing Distributed Machine Learning in High Dimensions
+A Dynamic-Adversarial Mining Approach to the Security of Machine Learning
+Towards the science of security and privacy in machine learning
+Can Machine Learning Be Secure
+Safely Entering the Deep: A Review of Verification and Validation for Machine Learning and a Challenge Elicitation in the Automotive Industry
+Large-Scale Strategic Games and Adversarial Machine Learning
+Secure and resilient distributed machine learning under adversarial environments
+Securing pervasive systems against adversarial machine learning
+Randomized Prediction Games for Adversarial Machine Learning
+Static prediction games for adversarial learning problems
+Adversarial learning games with deep learning models
+Using Machine Learning for Operational Decisions in Adversarial Environments
+The security of machine learning
+Foundations of Adversarial Machine Learning
+Adversarial classification 
+Nash equilibria of static prediction games
+Static prediction games for adversarial learning problems
+Stackelberg games for adversarial prediction problems
+Machine vs Machine: Mini-max optimal defense against adversarial examples
+Towards evaluating the robustness of neural networks
+Improving the Robustness of Deep Neural Networks via Stability Training
+Robustness of Classifiers to Universal Perturbations: A Geometric Perspective
+Towards Deep Learning Models Resistant to Adversarial Attacks
+Feature prioritization and regularization improve standard accuracy and adversarial robustness
+Making machine learning robust against adversarial inputs
+Towards Deep Learning Models Resistant to Adversarial Attacks
+Towards deep neural network architectures robust to adversarial examples
+Towards robust deep neural networks with bang
+Fundamental limits on adversarial robustness
+Analysis of classifiers robustness to adversarial perturbations
+Robustness of classifiers: from adversarial to random noise
+Less is More: Culling the Training Set to Improve Robustness of Deep Neural Networks
+Sever: A Robust Meta-Algorithm for Stochastic Optimization I Diakonikolas
+Principled Approaches to Robust Machine Learning and Beyond
+Seq2Sick: Evaluating the Robustness of Sequence-to-Sequence Models with Adversarial Examples
+Spartan Networks: Self-Feature-Squeezing Neural Networks for increased robustness in adversarial settings
+Vulnerability of Machine Learning Models to Adversarial Examples
+Adversarial vulnerability for any classifier
+Training verified learners with learned verifiers
+Provably Minimally-Distorted Adversarial Examples
+Verifiably Safe Autonomy for Cyber-Physical Systems
+On the Effectiveness of Interval Bound Propagation for Training Verifiably Robust Models
+Limitations of the Lipschitz constant as a Defense Against Adversarial Examples
+Certified defenses against adversarial examples
+Certifiable distributional robustness with principled adversarial training
+Reluplex: An efficient smt solver for verifying deep neural networks
+Towards Proving the Adversarial Robustness of Deep Neural Networks
+A Dual Approach to Scalable Verification of Deep Networks
+Certified Robustness to adversarial examples with differential privacy
+Piecewise Linear Neural Network verification: A comparative study
+Towards the Verification of Neural Networks for Critical Cyber-Physical Systems
+Formal Specification for Deep Neural Networks
+Toward Scalable Verification for Safety-Critical Deep Networks
+Intriguing properties of neural networks
+The Unreasonable Effectiveness of Deep Features as a Perceptual Metric
+Explaining and Harnessing Adversarial Examples
+The Relationship Between High-Dimensional Geometry and Adversarial Examples
+How Wrong Am I Studying Adversarial Examples and their Impact on Uncertainty in Gaussian Process Machine Learning Models
+Universal adversarial perturbations
+Understanding Adversarial Space through the Lens of Attribution
+Foveation-based mechanisms alleviate adversarial examples 
+Adversarial spheres
+A boundary tilting persepective on the phenomenon of adversarial examples
+Manifold Properties and Saliency
+Sanity Checks for Saliency Maps
+High Dimensional Spaces, Deep Learning and Adversarial Examples
+Fortified Networks: Improving the Robustness of Deep Networks by Modeling the Manifold of Hidden Representations
+Manifold Mixup: Encouraging Meaningful On-manifold Interpolation as a Regularizer 
+The Robust Manifold Defense: Adversarial Training using Generative Models
+LDMNet: Low Dimensional Manifold Regularized Neural Network
+Detecting Adversarial Perturbations with Saliency
+Towards Query Efficient Black-box Attacks: An Input-free Perspective
+Query-Efficient Black-box Adversarial Examples
+Query-efficient hard-label black-box attack: An optimization-based approach
+Query-Efficient GAN Based Black-Box Attack Against Sequence Based Machine and Deep Learning Classifiers
+Transferability in Machine Learning: from Phenomena to Black-Box Attacks using Adversarial Samples
+ZOO: Zeroth Order Optimization based Black-box Attacks to Deep Neural Networks without Training Substitute Models
+Practical black-box attacks against machine learning
+The Space of Transferable Adversarial Examples
+Blocking Transferability of Adversarial Examples in Black-Box Learning Systems
+Delving into Transferable Adversarial Examples and Black-box Attacks
+On the Intriguing Connections of Regularization, Input Gradients and Transferability of Evasion and Poisoning Attacks
+When Does Machine Learning FAIL? Generalized Transferability for Evasion and Poisoning Attacks
+Decision-Based Adversarial Attacks: Reliable Attacks Against Black-Box Machine Learning Models
+Software Bugs in ML Stack
+Security Risks in Deep Learning Implementations
+Summoning demons: The pursuit of exploitable bugs in machine learning
+Rogue Signs: Deceiving Traffic Sign Recognition with Malicious Ads and Logos
+Adversarial Patch
+Adversarial Examples In The Physical World
+Robust Physical-World Attacks on Deep Learning Models
+Synthesizing Robust Adversarial Examples
+Attacking Object Detectors Via Imperceptible Patches on Background
+Adversarial Examples that Fool Detectors
+Practical Adversarial Attack Against Object Detector
+SentiNet: Detecting Physical Attacks Against Deep Learning Systems
+Hardware Trojan Attacks on Neural Networks
+Backdoor: Making microphones hear inaudible sounds 
+Hu-Fu: Hardware and Software Collaborative Attack Framework against Neural Networks
+Hardware Trojan in FPGA CNN Accelerator
+Stealing Machine Learning Models via Prediction APIs
+Towards reverse-engineering black-box neural networks
+Reverse Engineering Convolutional Neural Networks Through Side-channel Information Leaks
+PRADA: Protecting against DNN Model Stealing Attack
+Vulnerabilities in biometric encryption systems
+On the vulnerability of face verification systems to hill-climbing attacks
+An evaluation of indirect attacks and countermeasures in fingerprint verification systems
+Membership inference attacks against machine learning models
+Deep models under the GAN: information leakage from collaborative deep learning
+Machine learning models that remember too much
+Privacy risk in machine learning: Analyzing the connection to overfitting
+LOGAN: evaluating privacy leakage of generative models using generative adversarial networks
+The Secret Sharer: Measuring Unintended Neural Network Memorization & Extracting Secrets
+Model inversion attacks that exploit confidence information and basic countermeasures
+Hacking smart machines with smarter ones: How to extract meaningful data from machine learning classifiers
+Deep Models Under the GAN: Information Leakage from Collaborative Deep Learning
+Training Set Camouflage
+A Method for Restoring the Training Set Distribution in an Image Classifier
+Contamination Attacks and Mitigation in Multi-Party Machine Learning
+DeepFool: a simple and accurate method to fool deep neural networks
+Privacy and machine learning: two unexpected allies
+Adversarial Examples that Fool both Computer Vision and Time-Limited Humans 
+One pixel attack for fooling deep neural networks
+Deep Neural Networks are Easily Fooled: High Confidence Predictions for Unrecognizable Images
+Segmentation & Object Detection
+Adversarial Examples for Semantic Segmentation and Object Detection, C. Xie, ICCV 2017    
+No need to worry about adversarial examples in object detection in autonomous vehicles, Lu, Jiajun, et al.
+Adversarial examples for semantic segmentation and object detection
+Unravelling Robustness of Deep Learning based Face Recognition Against Adversarial Attacks
+Anonymizing k Facial Attributes via Adversarial Perturbations
+SmartBox: Benchmarking Adversarial Detection and Mitigation Algorithms for Face Recognition
+Are Image-Agnostic Universal Adversarial Perturbations for Face Recognition Difficult to Detect
+Disguised Faces in the Wild
+Adversarial Biometric Recognition : A review on biometric system security from the adversarial machine-learning perspective
+Black-box Generation of Adversarial Text Sequences to Evade Deep Learning Classifiers
+Adversarial Examples for Evaluating Reading Comprehension Systems
+Crafting Adversarial Input Sequences for Recurrent Neural Networks
+On Adversarial Examples for Character-Level Neural Machine Translation
+On the practicality of integrity attacks on document-level sentiment analysis
+Seq2Sick: Evaluating the Robustness of Sequence-to-Sequence Models with Adversarial Examples
+All you need is Love: Evading Hate speech detection
+Generating Natural Adversarial Examples
+Audio Adversarial Examples: Targeted Attacks on Speech-to-Text
+CommanderSong: A Systematic Approach for Practical Adversarial Voice Recognition
+Adversarial Attacks Against Automatic Speech Recognition Systems via Psychoacoustic Hiding
+Dolphin Attack: Inaudible Voice Command
+Inaudible Voice Commands: The Long-Range Attack and Defense 
+An Overview of Vulnerabilities of Voice Controlled Systems
+Security of the Internet of Things
+WiVo: Enhancing the Security of Voice Control System via Wireless Signal in IoT Environment
+Security & Privacy in Smart Toys
+Did you hear that? adversarial examples against automatic speech recognition
+Alexa, Siri, Cortana, and More: An Introduction to Voice Assistants
+Insertion, evasion, and denial of service: Eluding network intrusion detection
+Evading network anomaly detection systems: formal reasoning and practical techniques
+Undermining an anomaly-based intrusion detection system using common exploits
+Testing network-based intrusion detection signatures using mutant exploits
+Adversarial examples for malware detection
+Generic Black-Box End-to-End Attack against RNNs and Other API Calls Based Malware Classifiers
+Black-Box Attacks against RNN based Malware Detection Algorithms
+Evasion attacks against machine learning models at test time
+Bringing a GAN to a Knife-fight: Adapting Malware Communication to Avoid Detection
+Adversarial Machine Learning Against Digital Watermarking
+Adversarial Machine Learning: The Case of Recommendation Systems
+Adversarial deep learning for cognitive radio security: jamming attack and defense strategies
+Adversarial Attacks Against Medical Deep Learning Systems
+Adversarial examples for generative models
+Learning Universal Adversarial Perturbations with Generative Models
+Adversarial attacks on neural network policies
+Tactics of Adversarial Attacks on Deep Reinforcement Learning Agents
+Delving into adversarial attacks on deep policies
+Robust Adversarial Reinforcement Learning
+Reinforcement Learning with a Corrupted Reward Channel
+Ensemble methods as a defense to adversarial perturbations against deep neural networks
+Ensemble Adversarial Training: Attacks and Defenses
+Robustness to adversarial examples through an ensemble of specialists
+Training Ensembles to Detect Adversarial Examples
+Generalizable Adversarial Examples Detection Based on Bi-model Decision Mismatch
+MTDeep: Boosting the Security of Deep Neural Nets Against Adversarial Attacks with Moving Target Defense
+On Detecting Adversarial Perturbations
+ReabsNet: Detecting and Revising Adversarial Examples
+Adversarial Examples Detection in Deep Networks with Convolutional Filter Statistics
+Background Class Defense Against Adversarial Examples
+Detecting Adversarial Samples from Artifacts
+On the (Statistical) Detection of Adversarial Examples
+Understanding Measures of Uncertainty for Adversarial Example Detection.
+Attack Strength vs. Detectability Dilemma in Adversarial Machine Learning
+Detection based Defense against Adversarial Examples from the Steganalysis Point ot View, Jiayang Liu
+A Simple Unified Framework for Detecting Out-of-Distribution Samples and Adversarial Attacks
+DARCCC: Detecting Adversaries by Reconstruction from Class Conditional Capsules
+Feature Squeezing: Detecting Adversarial Examples in Deep Neural Networks
+Magnet: a two-pronged defense against adversarial examples
+Feature Squeezing Mitigates and Detects Carlini/Wagner Adversarial Examples
+Detecting Adversarial Image Examples in Deep Networks with Adaptive Noise Reduction
+Detecting Adversarial Examples via Neural Fingerprinting
+Detecting Adversarial Examples via Key-based Network
+SafetyNet: Detecting and Rejecting Adversarial Examples Robustly
+Bridging machine learning and cryptography in defence against adversarial attacks
+Adversarial Examples Are Not Easily Detected: Bypassing Ten Detection Methods
+Adversarial example defenses: Ensembles of weak defenses are not strong
+Detecting Potential Local Adversarial Examples for Human-Interpretable Defense
+Detecting Adversarial Attacks on Neural Network Policies with Visual Foresight
+Isolated and Ensemble Audio Preprocessing Methods for Detecting Adversarial Examples against Automatic Speech Recognition
+PixelDefend: Leveraging Generative Models to Understand and Defend against Adversarial Examples
+Resisting adversarial attacks using gaussian mixture variational autoencoders
+Attacks Meet Interpretability: Attribute-steered Detection of Adversarial Samples
+Adversarial Machine Learning At Scale
+Adversarial Active Learning
+Adversarial Metric Learning
+Robust Machine Comprehension Models via Adversarial Training
+Distributional Smoothing with Virtual Adversarial Training
+Adversarial Training Methods for Semi-Supervised Text Classification
+Defensive Distillation
+Distillation as a Defense to Adversarial Perturbations against Deep Neural Networks
+Extending Defensive Distillation
+Defense-gan: Protecting Classifiers against Adversarial Attacks Using Generative Models
+Defending Against Adversarial Attacks by Leveraging an Entire GAN
+Generative adversarial trainer: Defense to adversarial perturbations with gan
+Defense against Adversarial Attacks Using High-Level Representation Guided Denoiser
+Adversarial Logit Pairing
+Machine Learning with Membership Privacy using Adversarial Regularization
+Cascade Adversarial Machine Learning Regularized with a Unified Embedding
+Gradient Masking
+Obfuscated Gradients Give a False Sense of Security: Circumventing Defenses to Adversarial Examples
+Stochastic Substitute Training: A Gray-box Approach to Craft Adversarial Examples Against Gradient Obfuscation Defenses
+Simulation-based Adversarial Test Generation for Autonomous Vehicles with Machine Learning Components
+Adaptive Grey-box Fuzz-Testing with Thompson Sampling
+Differentially private empirical risk minimization
+Semi-supervised knowledge transfer for deep learning from private training data
+Deep learning with differential privacy
+An Introduction to Adversarial Machine Learning
+Behavior of Machine Learning Algorithms in Adversarial Environments
+Machine learning in adversarial environments
+A Survey on Resilient Machine Learning
+Mimicry Resilient Program Behavior Modeling with LSTM based Branch Models
+Distributed Statistical Machine Learning in Adversarial Settings: Byzantine Gradient Descent
+Vulnerability Detection and Analysis in Adversarial Deep Learning
+PoTrojan: powerful neural-level trojan designs in deep learning models
+A Security Concern About Deep Learning Models
+Analyzing and Improving Representations with the Soft Nearest Neighbor Loss
+Badnets: Identifying vulnerabilities in the machine learning model supply chain
+Targeted Backdoor Attacks on Deep Learning Systems Using Data Poisoning
+Turning Your Weakness Into a Strength: Watermarking Deep Neural Networks by Backdooring
+Backdoor Embedding in Convolutional Neural Network Models via Invisible Perturbation
+Clean-Label Backdoor Attacks
+Poison Frogs! Targeted Clean-Label Poisoning Attacks on Neural Networks
+Trojaning attack on neural networks
+Model-Reuse Attacks on Deep Learning Systems
+Digital Watermarking for Deep Neural Networks
+Backdooring Convolutional Neural Networks via Targeted Weight Perturbations
+How to backdoor federated learning
+Built-in Vulnerabilities to Imperceptible Adversarial Perturbations
+Programmable Neural Network Trojan for Pre-Trained Feature Extractor
+Label Sanitization against Label Flipping Poisoning Attacks
+Contamination Attacks and Mitigation in Multi-party Machine Learning
+Certified defenses for data poisoning attacks.
+Antidote: understanding and defending against poisoning of anomaly detectors
+Detecting Backdoor Attacks on Deep Neural Networks by Activation Clustering
+Neural Cleanse: Identifying and mitigating backdoor Attacks in Neural Networks
+Spectral Signatures in Backdoor Attacks
+Fine-Pruning: Defending Against Backdooring Attacks on Deep Neural Networks
+Keeping the bad guys out: Protecting and vaccinating deep learning with jpeg compression
+Efficient defenses against adversarial attacks
+Countering adversarial images using input transformations
+Safetynet: Detecting and rejecting adversarial examples robustly
+MTDeep: boosting the security of deep neural nets against adversarial attacks with moving target defense
+Smartbox: Benchmarking adversarial detection and mitigation algorithms for face recognition
+Testing Deep Neural Networks
+Deepsec: A uniform platform for security analysis of deep learning model
+TLTD: a testing framework for learning-based IoT traffic detection systems
+Towards reverse-engineering black-box neural networks
+Principled detection of out-of-distribution examples in neural networks
+Does Your Model Know the Digit 6 Is Not a Cat? A Less Biased Evaluation of Outlier Detectors
+Using image quality metrics to identify adversarial imagery for deep learning networks
+Shield: Fast, Practical Defense and Vaccination for Deep Learning using JPEG Compression
+Generative poisoning attack method against neural networks
+Towards poisoning of deep learning algorithms with back-gradient optimization
+This paper updates poisoned inputs using the gradient with respect to the attack objective
+Selecting Critical Patterns Based on Local Geometrical and Statistical Information
+BEBP: An Poisoning Method Against Machine Learning Based IDSs
+Spatially transformed adversarial examples
+Generating natural adversarial examples
+NAG: Network for adversary generation
+Adversarial Generative Nets: Neural Network Attacks on State-of-the-Art Face Recognition
+Rogue Signs: Deceiving Traffic Sign Recognition with Malicious Ads and Logos
+Adversarial Patch
+Adversarial Examples In The Physical World
+Robust Physical-World Attacks on Deep Learning Models
+Synthesizing Robust Adversarial Examples
+Attacking Object Detectors Via Imperceptible Patches on Background
+Adversarial Examples that Fool Detectors
+Practical Adversarial Attack Against Object Detector
+SentiNet: Detecting Physical Attacks Against Deep Learning Systems
+Standard detectors aren't (currently) fooled by physical adversarial stop signs
+Adversarial Examples that Fool Detectors
+Adversarial geometry and lighting using a differentiable renderer
+Universal Adversarial Perturbations 
+Universal perturbations
+Adversarial Reprogramming of Neural Networks
+Universal adversarial perturbations
+Robustness of Classifiers to Universal Perturbations: A Geometric Perspective
+Are Image-Agnostic Universal Adversarial Perturbations for Face Recognition Difficult to Detect
+Learning Universal Adversarial Perturbations with Generative Models
+Defense against universal adversarial perturbations
+Analysis of universal adversarial perturbations
+Universal adversarial perturbations against semantic image segmentation
+Fast feature fool: A data independent approach to universal adversarial perturbations
+Machine learning as an adversarial service: Learning black-box adversarial examples
+Playing the game of universal adversarial perturbations
+Art of singular vectors and universal adversarial perturbations
+Are image agnostic universal adversarial perturbations for face recognition difficult to detect
+DeepMarks: A Digital Fingerprinting Framework for Deep Neural Networks
+Have You Stolen My Model? Evasion Attacks against Deep Neural Network watermarking techniques
+Turning Your Weakness Into a Strength: Watermarking Deep Neural Networks by Backdooring
+Digital Watermarking for Deep Neural Networks
+VerIDeep: Verifying Integrity of Deep Neural Networks through Sensitive-Sample Fingerprinting
+Protecting Intellectual Property of Deep Neural Networks with Watermarking
+BlackMarks: Black-box Multi-bit Watermarking for Deep Neural Networks
+Adversarial frontier stitching for remote neural network watermarking
+Backdoor: Making microphones hear inaudible sounds
+Generating a Backdoor in a Reinforcement Learning Agent
+Data Poisoning Attacks in Contextual Bandits
+Transferable Adversarial Examples
+Transferability in Machine Learning: from Phenomena to Black-Box Attacks using Adversarial Samples
+ZOO: Zeroth Order Optimization based Black-box Attacks to Deep Neural Networks without Training Substitute Models
+Practical black-box attacks against machine learning
+The Space of Transferable Adversarial Examples
+Blocking Transferability of Adversarial Examples in Black-Box Learning Systems 
+Delving into Transferable Adversarial Examples and Black-box Attacks
+On the Intriguing Connections of Regularization, Input Gradients and Transferability of Evasion and Poisoning Attacks
+When Does Machine Learning FAIL? Generalized Transferability for Evasion and Poisoning Attacks

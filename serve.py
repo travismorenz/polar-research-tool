@@ -280,6 +280,21 @@ def discuss():
   ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, tags=TAGS, tag_counts=tag_counts)
   return render_template('discuss.html', **ctx)
 
+@app.route('/analytics', methods=['GET'])
+def analytics(name=None):
+  """ return web page with analytics """
+  return render_template('analytics.html', name=name)
+
+@app.route('/topics', methods=['GET'])
+def topics(name=None):
+  """ return web page with interactive topic visualization """
+  return render_template('recent_lda.html', name=name)
+
+@app.route('/keyphrase', methods=['GET'])
+def keyphrase(name=None):
+  """ return web page with interactive topic visualization """
+  return render_template('keyphrase.html', name=name)
+
 @app.route('/comment', methods=['POST'])
 def comment():
   """ user wants to post a comment """

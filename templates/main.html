@@ -95,6 +95,11 @@ $(document).ready(function(){
   if(render_format === 'friends') { link_endpoint = 'friends'; }
   if(render_format === 'toptwtr') { link_endpoint = 'toptwtr'; }
   if(render_format === 'discussions') { link_endpoint = 'discussions'; }
+  if(render_format === 'analytics') { link_endpoint = 'analytics'; }
+  if(render_format === 'topics') { link_endpoint = 'topics'; }
+  if(render_format === 'keyphrase') { link_endpoint = 'keyphrase'; }
+
+
 
   var time_ranges = ['day', '3days', 'week', 'month', 'year', 'alltime'];
   var time_txt = {'day':'Last day', '3days': 'Last 3 days', 'week': 'Last week', 'month': 'Last month', 'year': 'Last year', 'alltime': 'All time'}
@@ -152,7 +157,12 @@ $(document).ready(function(){
   if( render_format === 'friends') { d3.select('#tabfriends').classed('tab-selected', true); }
   if( render_format === 'discussions') { d3.select('#tabdiscussions').classed('tab-selected', true); }
   if( render_format === 'recommend') { d3.select('#tabrec').classed('tab-selected', true); }
-  if( render_format === 'library') { d3.select('#tablib').classed('tab-selected', true); }
+  if( render_format === 'library') { d3.select('#tablib').classed('tab-selected', true);}
+  if( render_format === 'analytics') { d3.select('#tabanalyze').classed('tab-selected', true); }
+  if( render_format === 'topics') { d3.select('#tabtopic').classed('tab-selected', true); }
+  if( render_format === 'keyphrase') { d3.select('#tabkeyphrase').classed('tab-selected', true); }
+
+
 
   $("#goaway").on('click', function(){
     $("#prompt").slideUp('fast');
@@ -242,6 +252,9 @@ To nuke this message away for a long time click <span id="goaway" style="text-de
   <div class="pagelink" id="tabdiscussions"><a href="/discussions">discussions</a></div>
   <div class="pagelink" id="tabrec"><a href="/recommend">recommended</a></div>
   <div class="pagelink" id="tablib"><a href="/library">library</a></div>
+  <div class="pagelink" id="tabanalyze"><a href="/analytics">Analytics</a></div>
+  <div class="pagelink" id="tabtopic"><a href="/topics">Recent Topics</a></div>
+  <div class="pagelink" id="tabkeyphrase"><a href="/keyphrase">Key Phrases</a></div>
 </div>
 
 <!-- this div will be rendered into dynamcially at init with JS -->

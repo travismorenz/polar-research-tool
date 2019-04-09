@@ -236,7 +236,6 @@ for ik, dtc in enumerate(datetextchunks):
     topwords.append([(id2word[i], words[i]) for i in ids])
 f, axarr = plt.subplots(2, 4, figsize=(30, 20))
 freq = list([len(d) for d in datetextchunks])
-freq[-1] -= 2
 axarr[0][0].bar(range(2013, 2020), freq, color='y')
 axarr[0][0].set_xticks(range(2013, 2020))
 axarr[0][0].set_xticklabels([str(k) for k in range(2013, 2020)], rotation=60)
@@ -260,9 +259,9 @@ for i in range(2013, 2016):
     axarr[0][i - 2012].spines['left'].set_visible(False)
 
 for i in range(2016, 2020):
-    axarr[1][i - 2016].barh(range(0, len(topwords[0]) * 4, 4), [t[1] for t in topwords[i - 2016]], height=3, color='y')
-    axarr[1][i - 2016].set_yticks(range(0, len(topwords[i - 2016]) * 4, 4))
-    axarr[1][i - 2016].set_yticklabels([tw[0] for tw in topwords[i - 2016]], fontsize=12)
+    axarr[1][i - 2016].barh(range(0, len(topwords[0]) * 4, 4), [t[1] for t in topwords[i - 2013]], height=3, color='y')
+    axarr[1][i - 2016].set_yticks(range(0, len(topwords[i - 2013]) * 4, 4))
+    axarr[1][i - 2016].set_yticklabels([tw[0] for tw in topwords[i - 2013]], fontsize=12)
     axarr[1][i - 2016].set_aspect('auto')
     axarr[1][i - 2016].set_title(str(i))
     axarr[1][i - 2016].set_xlabel('Top Average TFIDFs')
@@ -308,7 +307,6 @@ for ik, dtc in enumerate(datetextchunks):
 
 f, axarr = plt.subplots(2, 4, figsize=(30, 20))
 freq = list([len(d) for d in datetextchunks])
-freq[-1] -= 2
 axarr[0][0].bar(range(2013, 2020), freq, color='y')
 axarr[0][0].set_xticks(range(2013, 2020))
 axarr[0][0].set_xticklabels([str(k) for k in range(2013, 2020)], rotation=60)
@@ -332,9 +330,9 @@ for i in range(2013, 2016):
     axarr[0][i - 2012].spines['left'].set_visible(False)
 
 for i in range(2016, 2020):
-    axarr[1][i - 2016].barh(range(0, len(topwords[0]) * 4, 4), [t[1] for t in topwords[i - 2016]], height=3, color='y')
-    axarr[1][i - 2016].set_yticks(range(0, len(topwords[i - 2016]) * 4, 4))
-    axarr[1][i - 2016].set_yticklabels([tw[0] for tw in topwords[i - 2016]], fontsize=12)
+    axarr[1][i - 2016].barh(range(0, len(topwords[0]) * 4, 4), [t[1] for t in topwords[i - 2013]], height=3, color='y')
+    axarr[1][i - 2016].set_yticks(range(0, len(topwords[i - 2013]) * 4, 4))
+    axarr[1][i - 2016].set_yticklabels([tw[0] for tw in topwords[i - 2013]], fontsize=12)
     axarr[1][i - 2016].set_aspect('auto')
     axarr[1][i - 2016].set_title(str(i))
     axarr[1][i - 2016].set_xlabel('Top Average Topic Weights')

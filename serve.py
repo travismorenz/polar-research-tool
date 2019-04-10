@@ -25,7 +25,7 @@ if os.path.isfile('secret_key.txt'):
   SECRET_KEY = open('secret_key.txt', 'r').read()
 else:
   SECRET_KEY = 'devkey, should be in a file'
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/media/tuor369/62EECB97EECB61C1/gitland/gexf-js/')
 app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
@@ -284,6 +284,21 @@ def discuss():
 def analytics(name=None):
   """ return web page with analytics """
   return render_template('analytics.html', name=name)
+
+@app.route('/rankings', methods=['GET'])
+def rankings(name=None):
+  """ return web page with author and paper rankings by citation """
+  return render_template('rankings.html', name=name)
+
+@app.route('/venues', methods=['GET'])
+def venues(name=None):
+  """ return web page with venues papers from corpus were published in """
+  return render_template('venue.html', name=name)
+
+@app.route('/graph', methods=['GET'])
+def graph(name=None):
+  """ return web page with author and paper rankings by citation """
+  return render_template('/media/tuor369/62EECB97EECB61C1/gitland/gexf-js/index.html', name=name)
 
 @app.route('/topics', methods=['GET'])
 def topics(name=None):

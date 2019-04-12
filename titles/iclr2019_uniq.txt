@@ -1,0 +1,140 @@
+Adversarial Training with Voronoi Constraints
+OVERT: Verification of Nonlinear Dynamical Systems with Neural Network Controllers via Overapproximation
+Intriguing Properties of Learned Representations
+Clean-Label Backdoor Attacks
+LEARNING ADVERSARIAL EXAMPLES WITH RIEMANNIAN GEOMETRY
+Pixel Redrawn For A Robust Adversarial Defense
+MMA: Direct Input Space Margin Maximization through Adversarial Training
+The Limitations of Adversarial Training and the Blind-Spot Attack 
+CAMOU: Learning Physical Vehicle Camouflages to Adversarially Attack Detectors in the Wild
+Label Smoothing and Logit Squeezing: A Replacement for Adversarial Training?
+Robustness to l_p-Bounded Adversaries Can Cause Invariance-based Vulnerability
+Regulatory Markets for AI Safety
+Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift
+A Direct Approach to Robust Deep Learning Using Adversarial Networks
+Adversarial Attacks for Optical Flow-Based Action Recognition Classifiers
+Defensive Quantization: When Efficiency Meets Robustness
+Stochastic Quantized Activation: To prevent Overfitting in Fast Adversarial Training
+ImageNet-trained CNNs are biased towards texture; increasing shape bias improves accuracy and robustness
+Fortified Networks: Improving the Robustness of Deep Networks by Modeling the Manifold of Hidden Representations
+ADef: an Iterative Algorithm to Construct Adversarial Deformations  
+Where To Be Adversarial Perturbations Added? Investigating and Manipulating Pixel Robustness Using Input Gradients
+Second-Order Adversarial Attack and Certifiable Robustness
+Featurized Bidirectional GAN: Adversarial Defense via Adversarially Learned Semantic Inference
+Difference-Seeking Generative Adversarial Network
+Adversarial Attacks on Graph Neural Networks via Meta Learning
+Provable Defenses against Spatially Transformed Adversarial Inputs: Impossibility and Possibility Results
+On Regularization and Robustness of Deep Neural Networks
+Are Generative Classifiers More Robust to Adversarial Attacks?
+An Efficient and Margin-Approaching Zero-Confidence Adversarial Attack
+Measuring the Robustness of Reinforcement Learning Algorithms
+Model Agnostic Globally Interpretable Explanations
+Simple Black-box Adversarial Attacks
+NATTACK: A STRONG AND UNIVERSAL GAUSSIAN BLACK-BOX ADVERSARIAL ATTACK
+Adversarial Defense Via Data Dependent Activation Function and  Total Variation Minimization
+ACE: Artificial Checkerboard Enhancer to Induce and Evade Adversarial Attacks
+Robustness May Be at Odds with Accuracy
+RobBoost: A provable approach to boost the robustness of deep model ensemble
+STRUCTURED ADVERSARIAL ATTACK: TOWARDS GENERAL IMPLEMENTATION AND BETTER INTERPRETABILITY
+ATTACK GRAPH CONVOLUTIONAL NETWORKS BY ADDING FAKE NODES
+Harnessing the Vulnerability of Latent Layers in Adversarially Trained Models
+Evading Defenses to Transferable Adversarial Examples by Mitigating Attention Shift
+Improved resistance of neural networks to adversarial images through generative pre-training
+Prior Convictions: Black-box Adversarial Attacks with Bandits and Priors
+Handling Bias in AI Using Simulation
+Adaptation to Dangerous Environments Through Automated Reward Shaping
+Evaluating Robustness of Neural Networks with Mixed Integer Programming
+On the Sensitivity of Adversarial Robustness to Input Data Distributions
+PeerNets: Exploiting Peer Wisdom Against Adversarial Attacks
+ADef: an Iterative Algorithm to Construct Adversarial Deformations
+signSGD via Zeroth-Order Oracle
+Beyond Pixel Norm-Balls: Parametric Adversaries using an Analytically Differentiable Renderer
+How Training Data Affect the Accuracy and Robustness of Neural Networks for Image Classification
+Bridging Adversarial Robustness and Gradient Interpretability
+Calibration of neural network logit vectors to combat adversarial attacks
+Combinatorial Attacks on Binarized Neural Networks 
+Training for Faster Adversarial Robustness Verification via Inducing ReLU Stability
+Evolutionary Search for Adversarially Robust Neural Networks
+Improving the Generalization of Adversarial Training with Domain Adaptation
+Learning Robust Representations by Projecting Superficial Statistics Out
+Misleading meta-objectives and hidden incentives for distributional shift
+Monitoring Opaque Learning Systems
+Optimal Attacks against Multiple Classifiers
+A Statistical Approach to Assessing Neural Network Robustness
+Unifying Bilateral Filtering and Adversarial Training for Robust Neural Networks
+A Convex Relaxation Barrier to Tight Robustness Verification of Neural Networks
+Laplacian Networks: Bounding Indicator Function Smoothness for Neural Networks Robustness
+GEOMETRIC AUGMENTATION FOR ROBUST NEURAL NETWORK CLASSIFIERS
+NeuralVerification.jl: Algorithms for Verifying Deep Neural Networks
+FEATURE PRIORITIZATION AND REGULARIZATION IMPROVE STANDARD ACCURACY AND ADVERSARIAL ROBUSTNESS
+How Training Data Affect the Accuracy and Robustness of Image Classification Models
+Detecting Deep Neural Network Data Corruption With Interpretability Methods
+Boosting Robustness Certification of Neural Networks
+Cost-Sensitive Robustness against Adversarial Examples
+BertViz: A Tool for Visualizing Multi-Head Self-Attention in the BERT Model
+A Rotation and a Translation Suffice: Fooling CNNs with Simple Transformations
+Analysis of Confident-Classifiers for Out-of-Distribution Detection
+Don't let your Discriminator be fooled
+Adversarial Defense for Tree-Based Models
+RANDOM MASK: Towards Robust Convolutional Neural Networks
+Distinguishability of Adversarial Examples
+Towards the first adversarially robust neural network model on MNIST
+Is PGD-Adversarial Training Necessary? Alternative Training via a Soft-Quantization Network with Noisy-Natural Samples Only
+Uncovering Surprising Behaviors in Reinforcement Learning via Worst-Case Analysis
+Measuring Quality and Interpretability of Dimensionality Reduction Visualizations
+How useful is quantilization for mitigating specification-gaming
+Safety-Guided Deep Reinforcement Learning via Online Gaussian Process Estimation
+Neural Networks with Structural Resistance to Adversarial Attacks
+Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware
+Dissecting Pruned Neural Networks
+Adversarially Robust Training through Structured Gradient Regularization
+Visualizations of Decision Regions in the Presence of Adversarial Examples
+Using Pre-Training Can Improve Model Robustness and Uncertainty
+Controlling Over-generalization and its Effect on Adversarial Examples Detection and Generation
+Debugging Trained Machine Learning Models Using Flip Points
+Generalizing from a few environments in safety-critical reinforcement learning
+Distributed generation of privacy preserving data with user customization
+Debugging Machine Learning via Model Assertions
+Taking a HINT: Leveraging Explanations to Make Vision and Language Models More Grounded
+Excessive Invariance Causes Adversarial Vulnerability
+Security Analysis of Deep Neural Networks Operating in the Presence of Cache Side-Channel Attacks
+Structured Adversarial Attack: Towards General Implementation and Better Interpretability
+Evaluation Methodology for Attacks Against Confidence Thresholding Models
+Fatty and Skinny: A Joint Training Method of Watermark Encoder and Decoder
+Fairness via loss variance regularization
+Towards Few-Shot Out-of-Distribution Detection
+MAST: A Tool for Visualizing CNN Model Architecture Searches
+Are adversarial examples inevitable?
+Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems
+The Scientific Method in the Science of Machine Learning
+A Direct Approach to Robust Deep Learni
+Using Word Embeddings to Explore the Learned Representations of Convolutional Neural Networks
+Generalizable Adversarial Training via Spectral Normalization
+Empirically Measuring Concentration: Fundamental Limits on Intrinsic Robustness
+Strength in Numbers: Trading-off Robustness and Computation via Adversarially-Trained Ensembles
+Attribution-driven Causal Analysis for Detection of Adversarial Examples 
+Benchmarking Neural Network Robustness to Common Corruptions and Perturbations
+Adversarial Attacks on Node Embeddings
+Effective Path: Know the Unknowns of Neural Network
+Evaluation of Model Robustness via Interpretable Counterfactuals
+Step-wise Sensitivity Analysis: Identifying Partially Distributed Representations for Interpretable Deep Learning
+GAN-Based Generation and Automatic Selection of Explanations for Neural Networks
+Towards Improved Agent Robustness Against Adversarial Environments
+EFFICIENT TWO-STEP ADVERSARIAL DEFENSE FOR DEEP NEURAL NETWORKS
+Inverting Layers of a Large Generator
+Combinatorial Attacks on Binarized Neural Networks
+Adv-BNN: Improved Adversarial Defense through Robust Bayesian Neural Network
+Exploring the Hyperparameter Landscape of Adversarial Robustness
+Adversarial Reprogramming of Neural Networks
+The Limitations of Adversarial Training and the Blind-Spot Attack
+Fairness GAN: Generating Datasets with Fairness Properties using a Generative Adversarial Network
+Using Videos to Evaluate Image Model Robustness
+Adversarial Examples Are a Natural Consequence of Test Error in Noise
+Universal Multi-Party Poisoning Attacks
+Calibration of Encoder Decoder Models for Neural Machine Translation
+Similarity of Neural Network Representations Revisited
+Constrained Policy Improvement for Safe and Efficient Reinforcement Learning
+Bamboo: Ball-Shape Data Augmentation Against Adversarial Attacks from All Directions
+Delegative Reinforcement Learning: learning to avoid traps with a little help
+Discovery of Intersectional Bias in Machine Learning Using Automatic Subgroup Generation
+Bayesian Deep Learning via Stochastic Gradient MCMC with a Stochastic Approximation Adaptation

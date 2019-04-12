@@ -1,0 +1,3 @@
+Adversarial Machine Learning And Speech Emotion Recognition: Utilizing Generative Adversarial Networks For Robustness
+Label Smoothing and Logit Squeezing: A Replacement for Adversarial Training?
+Fatty and Skinny: A Joint Training Method of Watermark Encoder and Decoder

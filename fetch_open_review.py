@@ -48,7 +48,7 @@ for idx, n in enumerate(advnotes):
                     {'title': 'pdf',
                      'href': 'https://openreview.net/pdf?id=' + n.id,
                     'rel': 'related',
-                    'type': 'application/pdf'}],
+                    'type': 'application/pdf'}]
     entry['arxiv_primary_category'] = {'term': 'OpenReview', 'scheme':'http://arxiv.org/schemas/atom'}
     entry['arxiv_comment'] = ''
     entry['tags'] = [{'term': 'OpenReview', 'scheme':'http://arxiv.org/schemas/atom', 'label':None}] 

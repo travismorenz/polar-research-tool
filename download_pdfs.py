@@ -15,7 +15,7 @@ numok = 0
 numtot = 0
 db = pickle.load(open(Config.db_path, 'rb'))
 for pid,j in db.items():
-  
+  print(j['links'])  
   pdfs = [x['href'] for x in j['links'] if x['type'] == 'application/pdf']
   assert len(pdfs) == 1
   pdf_url = pdfs[0] + '.pdf'

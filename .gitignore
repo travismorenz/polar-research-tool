@@ -7,6 +7,8 @@ static/thumbs/
 as.db
 secret_key.txt
 env/
+.env
 data
 *.DS_Store
 twitter.txt
+settings.json

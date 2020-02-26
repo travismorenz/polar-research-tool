@@ -18,11 +18,13 @@
   <body>
     <header class="navbar container grid-xl">
       <section class="navbar-section">
-        <a href="..." class="navbar-brand mr-10">POLAR</a>
+        <a href="{{ url_for('intmain') }}" class="navbar-brand mr-10">POLAR</a>
       </section>
       <section class="navbar-section">
-        <a href="..." class="btn btn-link text-large">Home</a>
-        <a href="..." class="btn btn-link text-large">Login</a>
+        <!-- Eventually this will be conditional, depending on login state -->
+        <a href="{{ url_for('login') }}" class="btn btn-link text-large"
+          >Login</a
+        >
         <a href="..." class="btn btn-link text-large">Register</a>
       </section>
     </header>

@@ -5,7 +5,11 @@ content %}
     <div class="column col-4 col-mx-auto card">
       <div class="card-body">
         <h2 class="text-center">Login</h2>
-        <form action="{{ url_for('login') }}" method="post" class="form-group">
+        <form
+          action="{{ url_for('login_post') }}"
+          method="post"
+          class="form-group"
+        >
           <label class="form-label" for="username">Username</label>
           <input
             class="form-input"

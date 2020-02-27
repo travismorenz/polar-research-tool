@@ -697,7 +697,7 @@ def addfollow():
 
 @app.route('/login', methods=['GET'])
 def login_get():
-    return render_template('login.html');
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])

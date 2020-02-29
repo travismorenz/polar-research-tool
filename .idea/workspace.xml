@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8b50ac-5880-4086-aa3d-82916ed0b255" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/philiplgelinas.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/arxiv-sanity-preserver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/arxiv-sanity-preserver.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/download_pdfs.py" beforeDir="false" afterPath="$PROJECT_DIR$/download_pdfs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fetch_papers.py" beforeDir="false" afterPath="$PROJECT_DIR$/fetch_papers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/serve.py" beforeDir="false" afterPath="$PROJECT_DIR$/serve.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

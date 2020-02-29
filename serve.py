@@ -698,7 +698,6 @@ def addfollow():
 @app.route('/login', methods=['POST'])
 def login():
     """ logs in the user. if the username doesn't exist creates the account """
-
     if not request.form['username']:
         flash('You have to enter a username')
     elif not request.form['password']:
@@ -713,21 +712,22 @@ def login():
             flash('User ' + request.form['username'] + ' logged in.')
         else:
             # incorrect password
-            flash('User ' + request.form['username'] +
-                  ' already exists, wrong password.')
+            flash('User ' + request.form['username'] + ' already exists, wrong password.')
     else:
-        # create account and log in
-        creation_time = int(time.time())
-        g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''',
-                     [request.form['username'],
-                      generate_password_hash(request.form['password']),
-                      creation_time])
-        user_id = g.db.execute('select last_insert_rowid()').fetchall()[0][0]
-        g.db.commit()
+        flash('An account was not found for that username.')
+    return redirect(url_for('intmain'))
 
-        session['user_id'] = user_id
-        flash('New account %s created' % (request.form['username'], ))
 
+@app.route('/register', methods=['POST'])
+def register():
+    # create account and log in
+    creation_time = int(time.time())
+    g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''', [request.form['username'],
+        generate_password_hash(request.form['password']), creation_time])
+    user_id = g.db.execute('select last_insert_rowid()').fetchall()[0][0]
+    g.db.commit()
+    session['user_id'] = user_id
+    flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))
 
 

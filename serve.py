@@ -729,13 +729,15 @@ def register():
         print("I am unable to connect to the database.")
     cur = conn.cursor()
     try:
-        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (?, ?, ?, ?)", [request.form['username'],
+        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (?, ?, ?)", [request.form['username'],
             generate_password_hash(request.form['password']), creation_time])
+        conn.commit()
     except:
         print("I can't INSERT into User")
     # user_id = cur.execute('select last_insert_rowid()').fetchall()[0][0]
     # cur.commit()
     # session['user_id'] = user_id
+    cur.close()
     flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))
 

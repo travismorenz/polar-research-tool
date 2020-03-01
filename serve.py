@@ -724,19 +724,17 @@ def register():
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:
-        conn = psycopg2.connect(host="database-1.cirrdmwv4gbf.us-west-2.rds.amazonaws.com", database="pnnl", user="pnnl_user", password="uwkrA,U8KhYAL.t6jN!9")
+        conn = psycopg2.connect(host="database-1.cirrdmwv4gbf.us-west-2.rds.amazonaws.com", database="pnnl",
+                                user="pnnl_user", password="uwkrA,U8KhYAL.t6jN!9")
     except:
         print("I am unable to connect to the database.")
     cur = conn.cursor()
     try:
-        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (?, ?, ?)", [request.form['username'],
-            generate_password_hash(request.form['password']), creation_time])
+        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
+                    (request.form['username'], generate_password_hash(request.form['password']), creation_time))
         conn.commit()
     except:
-        print("I can't INSERT into User")
-    # user_id = cur.execute('select last_insert_rowid()').fetchall()[0][0]
-    # cur.commit()
-    # session['user_id'] = user_id
+        print("Cannot insert into User")
     cur.close()
     flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))

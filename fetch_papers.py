@@ -14,7 +14,6 @@ import feedparser
 
 from utils import Config, safe_pickle_dump
 
-
 def encode_feedparser_dict(d):
   """ 
   helper function to get rid of feedparser bs with a deep copy. 
@@ -32,7 +31,6 @@ def encode_feedparser_dict(d):
     return l
   else:
     return d
-
 
 def parse_arxiv_url(url):
   """ 
@@ -70,9 +68,8 @@ def parse_arxiv_url(url):
 # adversarial image
 # adversarial input
 # adversarial samples
-
-
 if __name__ == "__main__":
+
   # parse input arguments
   parser = argparse.ArgumentParser()
   parser.add_argument('--search-query', type=str,

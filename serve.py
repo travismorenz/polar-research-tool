@@ -3,6 +3,7 @@ import dateutil.parser
 import json
 import os
 import pickle
+import psycopg2
 import time
 from dotenv import load_dotenv
 from flask import Flask, request, session, url_for, redirect, \
@@ -720,13 +721,21 @@ def login():
 
 @app.route('/register', methods=['POST'])
 def register():
-    # create account and log in
+    # Create a new account with psycopg2
     creation_time = int(time.time())
-    g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''', [request.form['username'],
-        generate_password_hash(request.form['password']), creation_time])
-    user_id = g.db.execute('select last_insert_rowid()').fetchall()[0][0]
-    g.db.commit()
-    session['user_id'] = user_id
+    try:
+        conn = psycopg2.connect(host="database-1.cirrdmwv4gbf.us-west-2.rds.amazonaws.com", database="pnnl", user="pnnl_user", password="uwkrA,U8KhYAL.t6jN!9")
+    except:
+        print("I am unable to connect to the database.")
+    cur = conn.cursor()
+    try:
+        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (?, ?, ?, ?)", [request.form['username'],
+            generate_password_hash(request.form['password']), creation_time])
+    except:
+        print("I can't INSERT into User")
+    # user_id = cur.execute('select last_insert_rowid()').fetchall()[0][0]
+    # cur.commit()
+    # session['user_id'] = user_id
     flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))
 

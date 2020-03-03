@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8b50ac-5880-4086-aa3d-82916ed0b255" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/credentials.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/serve.py" beforeDir="false" afterPath="$PROJECT_DIR$/serve.py" afterDir="false" />
     </list>
@@ -71,12 +72,17 @@
       <workItem from="1583017741015" duration="159000" />
       <workItem from="1583041759386" duration="3506000" />
       <workItem from="1583045826267" duration="3000000" />
-      <workItem from="1583105787602" duration="257000" />
+      <workItem from="1583105787602" duration="546000" />
+      <workItem from="1583269363014" duration="412000" />
+      <workItem from="1583269830231" duration="444000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.template" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -86,10 +92,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="127" key="#SQL_Dialects/0.23.1440.877@0.23.1440.877" timestamp="1583044169104" />
-    <state x="481" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1583012140980">
+    <state x="481" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1583270309190">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="481" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1583012140980" />
+    <state x="481" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1583270309190" />
     <state x="458" y="215" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1583042266925">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -98,5 +104,9 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="229" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1583011227613" />
+    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup" timestamp="1583269744543">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1583269744543" />
   </component>
 </project>

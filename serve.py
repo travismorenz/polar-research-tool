@@ -721,11 +721,14 @@ def login():
 
 @app.route('/register', methods=['POST'])
 def register():
+    host = os.getenv("DB_HOST")
+    name = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    pw = os.getenv("DB_PASS")
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:
-        conn = psycopg2.connect(host="database-1.cirrdmwv4gbf.us-west-2.rds.amazonaws.com", database="pnnl",
-                                user="pnnl_user", password="uwkrA,U8KhYAL.t6jN!9")
+        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
     except:
         print("I am unable to connect to the database.")
     cur = conn.cursor()

@@ -13,3 +13,4 @@ data
 twitter.txt
 settings.json
 venv/
+*.idea

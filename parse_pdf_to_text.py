@@ -9,7 +9,6 @@ from pdfminer.pdfparser import PDFParser
 
 # Based on https://pdfminersix.readthedocs.io/en/latest/tutorials/composable.html
 def parse_pdf_to_text(url):
-  try:
     pdf = urllib.request.urlopen(url).read()
     in_file = BytesIO(pdf)
     output_string = StringIO()
@@ -21,5 +20,3 @@ def parse_pdf_to_text(url):
     for page in PDFPage.create_pages(doc):
         interpreter.process_page(page)
     return output_string.getvalue()
-  except Exception as err:
-    return err

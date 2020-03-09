@@ -3,6 +3,7 @@ import dateutil.parser
 import json
 import os
 import pickle
+import psycopg2
 import time
 from dotenv import load_dotenv
 from flask import Flask, request, session, url_for, redirect, \
@@ -733,6 +734,28 @@ def login_post():
         session['user_id'] = user_id
         flash('New account %s created' % (request.form['username'], ))
 
+        
+@app.route('/register', methods=['POST'])
+def register():
+    host = os.getenv("DB_HOST")
+    name = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    pw = os.getenv("DB_PASS")
+    # Create a new account with psycopg2
+    creation_time = int(time.time())
+    try:
+        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
+    except:
+        print("I am unable to connect to the database.")
+    cur = conn.cursor()
+    try:
+        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
+                    (request.form['username'], generate_password_hash(request.form['password']), creation_time))
+        conn.commit()
+    except:
+        print("Cannot insert into User")
+    cur.close()
+    flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))
 
 

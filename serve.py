@@ -704,9 +704,15 @@ def conn_db():
     return conn, conn.cursor()
 
 
+@app.route('/login', methods=['GET'])
+def login_get():
+    return render_template('login.html')
+
+
 @app.route('/login', methods=['POST'])
-def login():
+def login_post():
     """ logs in the user. if the username doesn't exist creates the account """
+
     if not request.form['username']:
         flash('You have to enter a username')
     elif not request.form['password']:
@@ -728,7 +734,7 @@ def login():
             flash('An account was not found for that username.')
     return redirect(url_for('intmain'))
 
-
+        
 @app.route('/register', methods=['POST'])
 def register():
     host = os.getenv("DB_HOST")
@@ -835,5 +841,5 @@ if __name__ == "__main__":
         IOLoop.instance().start()
     else:
         print('starting flask!')
-        app.debug = False
+        app.config['TEMPLATES_AUTO_RELOAD'] = True
         app.run(port=args.port, host='0.0.0.0')

@@ -696,6 +696,14 @@ def addfollow():
     return 'NOTOK'
 
 
+def conn_db():
+    try:
+        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
+    except:
+        print("I am unable to connect to the database.")
+    return conn, conn.cursor()
+
+
 @app.route('/login', methods=['POST'])
 def login():
     """ logs in the user. if the username doesn't exist creates the account """
@@ -703,19 +711,21 @@ def login():
         flash('You have to enter a username')
     elif not request.form['password']:
         flash('You have to enter a password')
-    elif get_user_id(request.form['username']) is not None:
-        # username already exists, fetch all of its attributes
-        user = query_db('''select * from user where
-          username = ?''', [request.form['username']], one=True)
-        if check_password_hash(user['pw_hash'], request.form['password']):
-            # password is correct, log in the user
-            session['user_id'] = get_user_id(request.form['username'])
-            flash('User ' + request.form['username'] + ' logged in.')
-        else:
-            # incorrect password
-            flash('User ' + request.form['username'] + ' already exists, wrong password.')
     else:
-        flash('An account was not found for that username.')
+        conn, cur = conn_db()
+        username = cur.execute('''select username from \"User\" where username = ?''', request.form['username'], one=True)
+        if username is not None:
+            # username already exists, fetch all of its attributes
+            user = cur.execute('''select * from \"User\" where username = ?''', request.form['username'], one=True)
+            if check_password_hash(user['pw_hash'], request.form['password']):
+                # password is correct, log in the user
+                session['user_id'] = username
+                flash('User ' + request.form['username'] + ' logged in.')
+            else:
+                # incorrect password
+                flash('User ' + request.form['username'] + ' already exists, wrong password.')
+        else:
+            flash('An account was not found for that username.')
     return redirect(url_for('intmain'))
 
 
@@ -727,11 +737,7 @@ def register():
     pw = os.getenv("DB_PASS")
     # Create a new account with psycopg2
     creation_time = int(time.time())
-    try:
-        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
-    except:
-        print("I am unable to connect to the database.")
-    cur = conn.cursor()
+    conn, cur = conn_db()
     try:
         cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
                     (request.form['username'], generate_password_hash(request.form['password']), creation_time))

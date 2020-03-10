@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8b50ac-5880-4086-aa3d-82916ed0b255" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/credentials.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/philiplgelinas.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/philiplgelinas.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/serve.py" beforeDir="false" afterPath="$PROJECT_DIR$/serve.py" afterDir="false" />
     </list>
@@ -27,6 +28,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -74,7 +76,10 @@
       <workItem from="1583045826267" duration="3000000" />
       <workItem from="1583105787602" duration="546000" />
       <workItem from="1583269363014" duration="412000" />
-      <workItem from="1583269830231" duration="444000" />
+      <workItem from="1583269830231" duration="805000" />
+      <workItem from="1583349343961" duration="153000" />
+      <workItem from="1583607858065" duration="13936000" />
+      <workItem from="1583862939471" duration="3413000" />
     </task>
     <servers />
   </component>
@@ -104,9 +109,9 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="229" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1583011227613" />
-    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup" timestamp="1583269744543">
+    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup" timestamp="1583270543106">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1583269744543" />
+    <state x="385" y="213" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1583270543106" />
   </component>
 </project>

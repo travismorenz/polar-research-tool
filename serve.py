@@ -42,6 +42,18 @@ def connect_db():
     return sqlite_db
 
 
+def get_db():
+    """Returns the open db connection. Creates the connection if it doesn't exist."""
+    if not hasattr(g, 'db'):
+        db_host = os.getenv("DB_HOST")
+        db_name = os.getenv("DB_NAME")
+        db_user = os.getenv("DB_USER")
+        db_pw = os.getenv("DB_PASS")
+        g.db = psycopg2.connect(
+            host=db_host, database=db_name, user=db_user, password=db_pw)
+    return g.db
+
+
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = g.db.execute(query, args)
@@ -734,19 +746,16 @@ def login_post():
         session['user_id'] = user_id
         flash('New account %s created' % (request.form['username'], ))
 
-        
+
 @app.route('/register', methods=['POST'])
 def register():
-    host = os.getenv("DB_HOST")
-    name = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    pw = os.getenv("DB_PASS")
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:
-        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
-    except:
-        print("I am unable to connect to the database.")
+        conn = get_db()
+    except Exception as error:
+        print("ERROR:", error)
+        return redirect(url_for("register_get"), error="Database connection error.")
     cur = conn.cursor()
     try:
         cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",

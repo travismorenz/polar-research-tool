@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8b50ac-5880-4086-aa3d-82916ed0b255" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/philiplgelinas.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/philiplgelinas.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/serve.py" beforeDir="false" afterPath="$PROJECT_DIR$/serve.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +38,28 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
+    <configuration name="pnnl-polar-project" type="PythonConfigurationType" factoryName="Python">
+      <module name="pnnl-polar-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/serve.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <module name="arxiv-sanity-preserver" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,7 +98,11 @@
       <workItem from="1583269830231" duration="805000" />
       <workItem from="1583349343961" duration="153000" />
       <workItem from="1583607858065" duration="13936000" />
-      <workItem from="1583862939471" duration="3558000" />
+      <workItem from="1583862939471" duration="3706000" />
+      <workItem from="1583900912755" duration="3000" />
+      <workItem from="1583985851210" duration="44000" />
+      <workItem from="1584040771725" duration="102000" />
+      <workItem from="1584040895351" duration="52000" />
     </task>
     <servers />
   </component>

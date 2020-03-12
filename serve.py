@@ -697,6 +697,10 @@ def addfollow():
 
 
 def conn_db():
+    host = os.getenv("DB_HOST")
+    name = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    pw = os.getenv("DB_PASS")
     try:
         conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
     except:
@@ -712,7 +716,6 @@ def login_get():
 @app.route('/login', methods=['POST'])
 def login_post():
     """ logs in the user. if the username doesn't exist creates the account """
-
     if not request.form['username']:
         flash('You have to enter a username')
     elif not request.form['password']:
@@ -732,15 +735,12 @@ def login_post():
                 flash('User ' + request.form['username'] + ' already exists, wrong password.')
         else:
             flash('An account was not found for that username.')
+        cur.close()
     return redirect(url_for('intmain'))
 
         
 @app.route('/register', methods=['POST'])
 def register():
-    host = os.getenv("DB_HOST")
-    name = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    pw = os.getenv("DB_PASS")
     # Create a new account with psycopg2
     creation_time = int(time.time())
     conn, cur = conn_db()

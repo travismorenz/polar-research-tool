@@ -753,10 +753,15 @@ def register_get():
         
 @app.route('/register', methods=['POST'])
 def register_post():
-    host = os.getenv("DB_HOST")
-    name = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    pw = os.getenv("DB_PASS")
+    username = request.form['username']
+    password = request.form['password']
+
+    # Check for empty input
+    if not username or not username.strip():
+        return redirect(url_for("register_get"), error="Username is missing")
+    if not password or not password.strip():
+        return redirect(url_for("register_get"), error="Password is missing")
+
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:
@@ -767,7 +772,7 @@ def register_post():
     cur = conn.cursor()
     try:
         cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
-                    (request.form['username'], generate_password_hash(request.form['password']), creation_time))
+                    (username, generate_password_hash(password]), creation_time))
         conn.commit()
     except:
         print("Cannot insert into User")

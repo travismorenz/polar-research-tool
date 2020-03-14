@@ -44,14 +44,14 @@ def connect_db():
 
 def get_db():
     """Returns the open db connection. Creates the connection if it doesn't exist."""
-    if not hasattr(g, 'db'):
+    if not hasattr(g, 'pg_db'):
         db_host = os.getenv("DB_HOST")
         db_name = os.getenv("DB_NAME")
         db_user = os.getenv("DB_USER")
         db_pw = os.getenv("DB_PASS")
-        g.db = psycopg2.connect(
+        g.pg_db = psycopg2.connect(
             host=db_host, database=db_name, user=db_user, password=db_pw)
-    return g.db
+    return g.pg_db
 
 
 def query_db(query, args=(), one=False):
@@ -73,6 +73,10 @@ def get_username(user_id):
     rv = query_db('select username from user where user_id = ?',
                   [user_id], one=True)
     return rv[0] if rv else None
+
+
+def formatConsoleError(error):
+    print('ERROR on', request.path, request.method + ':', error)
 
 # -----------------------------------------------------------------------------
 # connection handlers
@@ -755,27 +759,27 @@ def register_get():
 def register_post():
     username = request.form['username']
     password = request.form['password']
-
     # Check for empty input
     if not username or not username.strip():
-        return redirect(url_for("register_get"), error="Username is missing")
+        return render_template("register.html", error="Username is missing.")
     if not password or not password.strip():
-        return redirect(url_for("register_get"), error="Password is missing")
+        return render_template("register.html", error="Password is missing.")
 
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:
         conn = get_db()
     except Exception as error:
-        print("ERROR:", error)
-        return redirect(url_for("register_get"), error="Database connection error.")
+        formatConsoleError(error)
+        return render_template("register.html", error="Database connection error.")
     cur = conn.cursor()
     try:
         cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
-                    (username, generate_password_hash(password]), creation_time))
+                    (username, generate_password_hash(password), creation_time))
         conn.commit()
-    except:
-        print("Cannot insert into User")
+    except Exception as error:
+        formatConsoleError(error)
+        return render_template("register.html", error="Internal error. Try again later.")
     cur.close()
     flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))

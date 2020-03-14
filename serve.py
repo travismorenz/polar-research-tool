@@ -720,7 +720,6 @@ def login_get():
 @app.route('/login', methods=['POST'])
 def login_post():
     """ logs in the user. if the username doesn't exist creates the account """
-
     if not request.form['username']:
         flash('You have to enter a username')
     elif not request.form['password']:
@@ -735,15 +734,12 @@ def login_post():
             flash('User ' + request.form['username'] + ' logged in.')
         else:
             # incorrect password
-            flash('User ' + request.form['username'] +
-                  ' already exists, wrong password.')
+            flash('User ' + request.form['username'] + ' already exists, wrong password.')
     else:
         # create account and log in
         creation_time = int(time.time())
-        g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''',
-                     [request.form['username'],
-                      generate_password_hash(request.form['password']),
-                      creation_time])
+        g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''', [request.form['username'],
+                      generate_password_hash(request.form['password']), creation_time])
         user_id = g.db.execute('select last_insert_rowid()').fetchall()[0][0]
         g.db.commit()
 
@@ -766,6 +762,10 @@ def register_post():
         return render_template("register.html", error="Password is missing.")
     if len(password) < 7:
         return render_template("register.html", error="Password must be at least 7 characters.")
+    if len(password) > 50:
+        return render_template("register.html", error="Password may be a maximum of 50 characters.")
+    if len(username) > 50:
+        return render_template("register.html", error="Username may be a maximum of 50 characters.")
 
     # Create a new account with psycopg2
     creation_time = int(time.time())

@@ -759,11 +759,13 @@ def register_get():
 def register_post():
     username = request.form['username']
     password = request.form['password']
-    # Check for empty input
+    # Input validation
     if not username or not username.strip():
         return render_template("register.html", error="Username is missing.")
-    if not password or not password.strip():
+    if not password:
         return render_template("register.html", error="Password is missing.")
+    if len(password) < 7:
+        return render_template("register.html", error="Password must be at least 7 characters.")
 
     # Create a new account with psycopg2
     creation_time = int(time.time())

@@ -732,7 +732,6 @@ def login_post():
             return render_template("login.html", error="Database connection error.")
         cur = conn.cursor()
         try:
-            # Currently this throws an exception...
             cur.execute("SELECT username FROM \"User\" WHERE username = '" + request.form['username'] + "';")
             username = cur.fetchone()
         except Exception as error:

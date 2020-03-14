@@ -734,9 +734,13 @@ def login_post():
         session['user_id'] = user_id
         flash('New account %s created' % (request.form['username'], ))
 
+
+@app.route('/register', methods=['GET'])
+def register_get():
+    return render_template('register.html')
         
 @app.route('/register', methods=['POST'])
-def register():
+def register_post():
     host = os.getenv("DB_HOST")
     name = os.getenv("DB_NAME")
     user = os.getenv("DB_USER")

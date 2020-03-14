@@ -42,6 +42,18 @@ def connect_db():
     return sqlite_db
 
 
+def get_db():
+    """Returns the open db connection. Creates the connection if it doesn't exist."""
+    if not hasattr(g, 'pg_db'):
+        db_host = os.getenv("DB_HOST")
+        db_name = os.getenv("DB_NAME")
+        db_user = os.getenv("DB_USER")
+        db_pw = os.getenv("DB_PASS")
+        g.pg_db = psycopg2.connect(
+            host=db_host, database=db_name, user=db_user, password=db_pw)
+    return g.pg_db
+
+
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = g.db.execute(query, args)
@@ -61,6 +73,10 @@ def get_username(user_id):
     rv = query_db('select username from user where user_id = ?',
                   [user_id], one=True)
     return rv[0] if rv else None
+
+
+def formatConsoleError(error):
+    print('ERROR on', request.path, request.method + ':', error)
 
 # -----------------------------------------------------------------------------
 # connection handlers
@@ -696,18 +712,6 @@ def addfollow():
     return 'NOTOK'
 
 
-def conn_db():
-    host = os.getenv("DB_HOST")
-    name = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    pw = os.getenv("DB_PASS")
-    try:
-        conn = psycopg2.connect(host=host, database=name, user=user, password=pw)
-    except:
-        print("I am unable to connect to the database.")
-    return conn, conn.cursor()
-
-
 @app.route('/login', methods=['GET'])
 def login_get():
     return render_template('login.html')
@@ -721,35 +725,74 @@ def login_post():
     elif not request.form['password']:
         flash('You have to enter a password')
     else:
-        conn, cur = conn_db()
-        username = cur.execute('''select username from \"User\" where username = ?''', request.form['username'], one=True)
+        try:
+            conn = get_db()
+        except Exception as error:
+            formatConsoleError(error)
+            return render_template("login.html", error="Database connection error.")
+        cur = conn.cursor()
+        try:
+            # Currently this throws an exception...
+            cur.execute("SELECT username FROM \"User\" WHERE username = '" + request.form['username'] + "';")
+            username = cur.fetchone()
+        except Exception as error:
+            formatConsoleError(error)
+            return render_template("login.html", error="Internal error. Try again later.")
         if username is not None:
-            # username already exists, fetch all of its attributes
-            user = cur.execute('''select * from \"User\" where username = ?''', request.form['username'], one=True)
-            if check_password_hash(user['pw_hash'], request.form['password']):
+            # username exists, fetch all of its attributes
+            user = cur.execute("SELECT * FROM \"User\" WHERE username = '" + request.form['username'] + "';")
+            if user is not None and check_password_hash(user['pw_hash'], request.form['password']):
                 # password is correct, log in the user
+                print("Login success!")
                 session['user_id'] = username
                 flash('User ' + request.form['username'] + ' logged in.')
             else:
                 # incorrect password
+                print("Incorrect password!")
                 flash('User ' + request.form['username'] + ' already exists, wrong password.')
         else:
+            print("Incorrect username!")
             flash('An account was not found for that username.')
         cur.close()
     return redirect(url_for('intmain'))
 
+
+@app.route('/register', methods=['GET'])
+def register_get():
+    return render_template('register.html')
         
+
 @app.route('/register', methods=['POST'])
-def register():
+def register_post():
+    username = request.form['username']
+    password = request.form['password']
+    # Input validation
+    if not username or not username.strip():
+        return render_template("register.html", error="Username is missing.")
+    if not password:
+        return render_template("register.html", error="Password is missing.")
+    if len(password) < 7:
+        return render_template("register.html", error="Password must be at least 7 characters.")
+    if len(password) > 50:
+        return render_template("register.html", error="Password may be a maximum of 50 characters.")
+    if len(username) > 50:
+        return render_template("register.html", error="Username may be a maximum of 50 characters.")
+
     # Create a new account with psycopg2
     creation_time = int(time.time())
-    conn, cur = conn_db()
+    try:
+        conn = get_db()
+    except Exception as error:
+        formatConsoleError(error)
+        return render_template("register.html", error="Database connection error.")
+    cur = conn.cursor()
     try:
         cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
-                    (request.form['username'], generate_password_hash(request.form['password']), creation_time))
+                    (username, generate_password_hash(password), creation_time))
         conn.commit()
-    except:
-        print("Cannot insert into User")
+    except Exception as error:
+        formatConsoleError(error)
+        return render_template("register.html", error="Internal error. Try again later.")
     cur.close()
     flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))

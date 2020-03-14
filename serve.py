@@ -747,8 +747,16 @@ def login_post():
         flash('New account %s created' % (request.form['username'], ))
 
 
+@app.route('/register', methods=['GET'])
+def register_get():
+    return render_template('register.html')
+        
 @app.route('/register', methods=['POST'])
-def register():
+def register_post():
+    host = os.getenv("DB_HOST")
+    name = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    pw = os.getenv("DB_PASS")
     # Create a new account with psycopg2
     creation_time = int(time.time())
     try:

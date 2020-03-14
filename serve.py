@@ -3,6 +3,7 @@ import dateutil.parser
 import json
 import os
 import pickle
+import psycopg2
 import time
 from dotenv import load_dotenv
 from flask import Flask, request, session, url_for, redirect, \
@@ -41,6 +42,18 @@ def connect_db():
     return sqlite_db
 
 
+def get_db():
+    """Returns the open db connection. Creates the connection if it doesn't exist."""
+    if not hasattr(g, 'pg_db'):
+        db_host = os.getenv("DB_HOST")
+        db_name = os.getenv("DB_NAME")
+        db_user = os.getenv("DB_USER")
+        db_pw = os.getenv("DB_PASS")
+        g.pg_db = psycopg2.connect(
+            host=db_host, database=db_name, user=db_user, password=db_pw)
+    return g.pg_db
+
+
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = g.db.execute(query, args)
@@ -60,6 +73,10 @@ def get_username(user_id):
     rv = query_db('select username from user where user_id = ?',
                   [user_id], one=True)
     return rv[0] if rv else None
+
+
+def formatConsoleError(error):
+    print('ERROR on', request.path, request.method + ':', error)
 
 # -----------------------------------------------------------------------------
 # connection handlers
@@ -695,8 +712,13 @@ def addfollow():
     return 'NOTOK'
 
 
+@app.route('/login', methods=['GET'])
+def login_get():
+    return render_template('login.html')
+
+
 @app.route('/login', methods=['POST'])
-def login():
+def login_post():
     """ logs in the user. if the username doesn't exist creates the account """
 
     if not request.form['username']:
@@ -728,6 +750,40 @@ def login():
         session['user_id'] = user_id
         flash('New account %s created' % (request.form['username'], ))
 
+
+@app.route('/register', methods=['GET'])
+def register_get():
+    return render_template('register.html')
+        
+@app.route('/register', methods=['POST'])
+def register_post():
+    username = request.form['username']
+    password = request.form['password']
+    # Input validation
+    if not username or not username.strip():
+        return render_template("register.html", error="Username is missing.")
+    if not password:
+        return render_template("register.html", error="Password is missing.")
+    if len(password) < 7:
+        return render_template("register.html", error="Password must be at least 7 characters.")
+
+    # Create a new account with psycopg2
+    creation_time = int(time.time())
+    try:
+        conn = get_db()
+    except Exception as error:
+        formatConsoleError(error)
+        return render_template("register.html", error="Database connection error.")
+    cur = conn.cursor()
+    try:
+        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
+                    (username, generate_password_hash(password), creation_time))
+        conn.commit()
+    except Exception as error:
+        formatConsoleError(error)
+        return render_template("register.html", error="Internal error. Try again later.")
+    cur.close()
+    flash('New account %s created' % (request.form['username'],))
     return redirect(url_for('intmain'))
 
 
@@ -817,5 +873,5 @@ if __name__ == "__main__":
         IOLoop.instance().start()
     else:
         print('starting flask!')
-        app.debug = False
+        app.config['TEMPLATES_AUTO_RELOAD'] = True
         app.run(port=args.port, host='0.0.0.0')

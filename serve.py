@@ -9,12 +9,13 @@ from dotenv import load_dotenv
 from flask import Flask, request, session, url_for, redirect, \
     render_template, abort, g, flash, _app_ctx_stack
 from flask_limiter import Limiter
+from flask_login import LoginManager, UserMixin, current_user, login_user
 from hashlib import md5
 import numpy as np
 import pymongo
 from random import shuffle, randrange, uniform
 from sqlite3 import dbapi2 as sqlite3
-from werkzeug import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
 
@@ -29,11 +30,25 @@ else:
 app = Flask(__name__)
 app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
+login = LoginManager(app)
 
 # -----------------------------------------------------------------------------
 # utilities for database interactions
 # -----------------------------------------------------------------------------
 # to initialize the database: sqlite3 as.db < schema.sql
+
+
+class User(UserMixin, db.Model):
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+@login.user_loader
+def load_user(username):
+    return User.query.get(username)
 
 
 def connect_db():
@@ -712,14 +727,11 @@ def addfollow():
     return 'NOTOK'
 
 
-@app.route('/login', methods=['GET'])
-def login_get():
-    return render_template('login.html')
-
-
-@app.route('/login', methods=['POST'])
-def login_post():
-    """ logs in the user. if the username doesn't exist creates the account """
+@app.route('/login', methods=['GET', 'POST'])
+def loginUser():
+    if current_user.is_authenticated:
+        return redirect(url_for('intmain'))
+    form = request.form
     if not request.form['username']:
         flash('You have to enter a username')
     elif not request.form['password']:
@@ -732,28 +744,17 @@ def login_post():
             return render_template("login.html", error="Database connection error.")
         cur = conn.cursor()
         try:
-            cur.execute("SELECT username FROM \"User\" WHERE username = '" + request.form['username'] + "';")
-            username = cur.fetchone()
+            cur.execute("SELECT * FROM \"User\" WHERE username = '" + form['username'] + "';")
+            user = cur.fetchone()
         except Exception as error:
             formatConsoleError(error)
-            return render_template("login.html", error="Internal error. Try again later.")
-        if username is not None:
-            # username exists, fetch all of its attributes
-            user = cur.execute("SELECT * FROM \"User\" WHERE username = '" + request.form['username'] + "';")
-            if user is not None and check_password_hash(user['pw_hash'], request.form['password']):
-                # password is correct, log in the user
-                print("Login success!")
-                session['user_id'] = username
-                flash('User ' + request.form['username'] + ' logged in.')
-            else:
-                # incorrect password
-                print("Incorrect password!")
-                flash('User ' + request.form['username'] + ' already exists, wrong password.')
-        else:
-            print("Incorrect username!")
-            flash('An account was not found for that username.')
-        cur.close()
-    return redirect(url_for('intmain'))
+            return render_template("register.html", error="Internal error. Try again later.")
+        if user is None or not check_password_hash(user['password'], form['password']):
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
+        login_user(user, remember=None)
+        return redirect(url_for('intmain'))
+    return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/register', methods=['GET'])

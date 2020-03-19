@@ -10,6 +10,7 @@ from flask import Flask, request, session, url_for, redirect, \
     render_template, abort, g, flash, _app_ctx_stack
 from flask_limiter import Limiter
 from flask_login import LoginManager, UserMixin, current_user, login_user
+from flask_sqlalchemy import SQLAlchemy
 from hashlib import md5
 import numpy as np
 import pymongo
@@ -27,8 +28,15 @@ if os.path.isfile('secret_key.txt'):
     SECRET_KEY = open('secret_key.txt', 'r').read()
 else:
     SECRET_KEY = 'devkey, should be in a file'
+load_dotenv()
 app = Flask(__name__)
 app.config.from_object(__name__)
+db_username = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASS")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}/{db_name}'
+db = SQLAlchemy(app)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 login = LoginManager(app)
 
@@ -38,7 +46,10 @@ login = LoginManager(app)
 # to initialize the database: sqlite3 as.db < schema.sql
 
 
-class User(UserMixin, db.Model):
+class Person(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Text, unique=True, nullable=False)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
@@ -108,12 +119,12 @@ def before_request():
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
 
-
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+# TODO: nuke
+# @app.teardown_request
+# def teardown_request(exception):
+#     db = getattr(g, 'db', None)
+#     if db is not None:
+#         db.close()
 
 # -----------------------------------------------------------------------------
 # search/sort functionality
@@ -726,35 +737,27 @@ def addfollow():
 
     return 'NOTOK'
 
+@app.route('/login', methods=['GET'])
+def login_get():
+    return render_template('login.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def loginUser():
+@app.route('/login', methods=['POST'])
+def login_post():
     if current_user.is_authenticated:
         return redirect(url_for('intmain'))
-    form = request.form
-    if not request.form['username']:
-        flash('You have to enter a username')
-    elif not request.form['password']:
-        flash('You have to enter a password')
-    else:
-        try:
-            conn = get_db()
-        except Exception as error:
-            formatConsoleError(error)
-            return render_template("login.html", error="Database connection error.")
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT * FROM \"User\" WHERE username = '" + form['username'] + "';")
-            user = cur.fetchone()
-        except Exception as error:
-            formatConsoleError(error)
-            return render_template("register.html", error="Internal error. Try again later.")
-        if user is None or not check_password_hash(user['password'], form['password']):
-            flash('Invalid username or password.')
-            return redirect(url_for('login'))
-        login_user(user, remember=None)
-        return redirect(url_for('intmain'))
-    return render_template('login.html', title='Sign In', form=form)
+    username = request.form['username']
+    password = request.form['password']
+
+    if not username or not username.strip():
+        return render_template("login.html", error="Username is missing.")
+    if not password:
+        return render_template("login.html", error="Password is missing.")
+    person = Person.query.filter_by(username=username).first()
+    if person is None or not check_password_hash(person['password'], password):
+        return render_template("login.html", error="Credentials are incorrect.")
+
+    login_user(person, remember=True)
+    return redirect(url_for('intmain'))
 
 
 @app.route('/register', methods=['GET'])
@@ -810,7 +813,6 @@ def logout():
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
     # load environment variables
-    load_dotenv()
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--prod', dest='prod',
@@ -828,7 +830,8 @@ if __name__ == "__main__":
         os.system('sqlite3 as.db < schema.sql')
 
     print('loading the paper database', Config.db_serve_path)
-    db = pickle.load(open(Config.db_serve_path, 'rb'))
+    # TODO: nuke
+    #db = pickle.load(open(Config.db_serve_path, 'rb'))
 
     print('loading tfidf_meta', Config.meta_path)
     meta = pickle.load(open(Config.meta_path, "rb"))

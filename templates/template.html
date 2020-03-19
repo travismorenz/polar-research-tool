@@ -25,7 +25,9 @@
         <a href="{{ url_for('login_get') }}" class="btn btn-link text-large"
           >Login</a
         >
-        <a href="..." class="btn btn-link text-large">Register</a>
+        <a href="{{ url_for('register_get') }}" class="btn btn-link text-large"
+          >Register</a
+        >
       </section>
     </header>
     {% block content %}{% endblock %}

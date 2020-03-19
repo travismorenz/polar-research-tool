@@ -10,6 +10,9 @@ content %}
           method="post"
           class="form-group"
         >
+          {% with messages = get_flashed_messages() %} {% if messages %}
+          <div class="text-success text-center">{{ messages[0] }}</div>
+          {% endif %} {% endwith %}
           <label class="form-label" for="username">Username</label>
           <input
             class="form-input"
@@ -26,6 +29,7 @@ content %}
             name="password"
             placeholder="password"
           />
+          <div class="text-error text-center">{{ error }}</div>
           <div class="text-center auth-btn">
             <input
               type="submit"

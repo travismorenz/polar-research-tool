@@ -307,6 +307,9 @@ def goaway():
         goaway_collection.insert_one({'uid': uid, 'time': int(time.time())})
     return 'OK'
 
+@app.route('/newmain')
+def newmain():
+    return render_template('newmain.html')
 
 @app.route("/")
 def intmain():
@@ -739,7 +742,7 @@ def addfollow():
 @app.route('/login', methods=['GET'])
 def login_get():
     if current_user.is_authenticated:
-        return redirect(url_for('intmain'))
+        return redirect(url_for('newmain'))
     return render_template('login.html')
 
 @app.route('/login', methods=['POST'])
@@ -755,13 +758,13 @@ def login_post():
     if person is None or not person.check_password(password):
         return render_template("login.html", error="Credentials are incorrect.")
     login_user(person, remember=True)
-    return redirect(url_for('intmain'))
+    return redirect(url_for('newmain'))
 
 
 @app.route('/register', methods=['GET'])
 def register_get():
     if current_user.is_authenticated:
-        return redirect(url_for('intmain'))
+        return redirect(url_for('newmain'))
     return render_template('register.html')
         
 

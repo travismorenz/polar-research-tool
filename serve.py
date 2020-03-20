@@ -45,11 +45,42 @@ login = LoginManager(app)
 # -----------------------------------------------------------------------------
 # to initialize the database: sqlite3 as.db < schema.sql
 
+# TODO: Move all database logic to its own file
+# TODO: Add citation, author, and corresponding junction tables
+# Database Definitions
+persons_projects = our_db.Table('persons_projects', 
+    our_db.Column('person_id', our_db.Integer, our_db.ForeignKey('person.id'), primary_key=True),
+    our_db.Column('project_id', our_db.Integer, our_db.ForeignKey('project.id'), primary_key=True))
+
+
+persons_articles = our_db.Table('persons_articles', 
+    our_db.Column('person_id', our_db.Integer, our_db.ForeignKey('person.id'), primary_key=True),
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True))
+
+
+articles_categories = our_db.Table('articles_categories',
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True),
+    our_db.Column('category_id', our_db.Integer, our_db.ForeignKey('category.id'), primary_key=True))
+
+
+articles_keyphrases = our_db.Table('articles_keyphrases',
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True),
+    our_db.Column('keyphrase_id', our_db.Integer, our_db.ForeignKey('keyphrase.id'), primary_key=True))
+
+projects_keyphrases = our_db.Table('projects_keyphrases',
+    our_db.Column('project_id', our_db.Integer, our_db.ForeignKey('project.id'), primary_key=True),
+    our_db.Column('keyphrase_id', our_db.Integer, our_db.ForeignKey('keyphrase.id'), primary_key=True))
+
 
 class Person(UserMixin, our_db.Model):
     id = our_db.Column(our_db.Integer, primary_key=True)
     username = our_db.Column(our_db.Text, unique=True, nullable=False)
     password_hash = our_db.Column(our_db.Text,unique=False, nullable=False)
+    created_at = our_db.Column(our_db.DateTime, default=our_db.func.now(), nullable=False)
+
+    projects = our_db.relationship('Project', secondary=persons_projects, back_populates='persons')
+    library = our_db.relationship('Article', secondary=persons_articles, back_populates='persons')
+    comments = our_db.relationship('Comment', back_populates='persons')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -57,6 +88,56 @@ class Person(UserMixin, our_db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
+class Project(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    persons = our_db.relationship('Person', secondary=persons_projects, back_populates='projects')
+    keyphrases = our_db.relationship('Keyphrase', secondary=projects_keyphrases, back_populates='projects')
+
+
+class Article(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    title = our_db.Column(our_db.Text, nullable=False)
+    content = our_db.Column(our_db.Text, nullable=False)
+    url = our_db.Column(our_db.Text, unique=True, nullable=False)
+    publish_date = our_db.Column(our_db.DateTime, nullable=True) # This might be nullable=False, not sure yet
+    # TODO: Analysis result fields will probably go here
+
+    persons = our_db.relationship('Person', secondary=persons_articles, back_populates='library')
+    comments = our_db.relationship('Comment', back_populates='articles')
+    categories = our_db.relationship('Category', secondary=articles_categories, back_populates="articles")
+    keyphrases = our_db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")
+
+
+class Comment(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    content = our_db.Column(our_db.Text, nullable=False)
+    created_at = our_db.Column(our_db.DateTime, default=our_db.func.now(), nullable=False)
+    article_id = our_db.Column(our_db.Integer, our_db.ForeignKey('article.id'))
+    person_id = our_db.Column(our_db.Integer, our_db.ForeignKey('person.id'))
+
+    persons = our_db.relationship('Person', back_populates='comments')
+    articles = our_db.relationship('Article', back_populates='comments')
+
+
+class Category(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    articles = our_db.relationship('Article', secondary=articles_categories, back_populates="categories")
+
+
+class Keyphrase(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    articles = our_db.relationship('Article', secondary=articles_keyphrases, back_populates="keyphrases")
+    projects = our_db.relationship('Project', secondary=projects_keyphrases, back_populates="keyphrases")
+
+
+our_db.create_all()
 
 @login.user_loader
 def load_user(username):
@@ -755,6 +836,7 @@ def login_post():
     if not password:
         return render_template("login.html", error="Password is missing.")
     person = Person.query.filter_by(username=username).first()
+    print(person.projects)
     if person is None or not person.check_password(password):
         return render_template("login.html", error="Credentials are incorrect.")
     login_user(person, remember=True)

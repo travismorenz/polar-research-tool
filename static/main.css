@@ -1,3 +1,11 @@
+/* Header */
+header {
+  padding-top: 5px;
+}
+.nav-btn {
+  margin-right: 5px;
+}
+
 /* Login & Register Pages */
 .auth-card {
   margin-top: 10rem;
@@ -5,4 +13,9 @@
 
 .auth-btn {
   margin-top: 0.8rem;
+}
+
+/* Main Page */
+main {
+  margin-top: 90px;
 }

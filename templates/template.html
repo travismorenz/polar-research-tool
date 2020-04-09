@@ -18,14 +18,32 @@
   <body>
     <header class="navbar container grid-xl">
       <section class="navbar-section">
-        <a href="{{ url_for('intmain') }}" class="navbar-brand mr-10">POLAR</a>
+        <a href="{{ url_for('intmain') }}" class="navbar-brand mr-10"
+          >POLAR Research Tool</a
+        >
       </section>
       <section class="navbar-section">
-        <!-- Eventually this will be conditional, depending on login state -->
-        <a href="{{ url_for('login_get') }}" class="btn btn-link text-large"
+        {% if current_user.is_authenticated %}
+        <div class="dropdown">
+          <a href="#" class="btn dropdown-toggle" tabindex="0">
+            {{current_user.username}} &#9660;
+          </a>
+          <ul class="menu">
+            <li class="menu-item">
+              <a href="{{url_for('logout')}}">
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+        {% else %}
+        <a href="{{ url_for('login_get') }}" class="btn text-large nav-btn"
           >Login</a
         >
-        <a href="..." class="btn btn-link text-large">Register</a>
+        <a href="{{ url_for('register_get') }}" class="btn text-large"
+          >Register</a
+        >
+        {% endif %}
       </section>
     </header>
     {% block content %}{% endblock %}

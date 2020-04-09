@@ -9,12 +9,14 @@ from dotenv import load_dotenv
 from flask import Flask, request, session, url_for, redirect, \
     render_template, abort, g, flash, _app_ctx_stack
 from flask_limiter import Limiter
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
 from hashlib import md5
 import numpy as np
 import pymongo
 from random import shuffle, randrange, uniform
 from sqlite3 import dbapi2 as sqlite3
-from werkzeug import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
 
@@ -26,14 +28,120 @@ if os.path.isfile('secret_key.txt'):
     SECRET_KEY = open('secret_key.txt', 'r').read()
 else:
     SECRET_KEY = 'devkey, should be in a file'
+load_dotenv()
 app = Flask(__name__)
 app.config.from_object(__name__)
+db_username = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASS")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}/{db_name}'
+our_db = SQLAlchemy(app)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
+login = LoginManager(app)
 
 # -----------------------------------------------------------------------------
 # utilities for database interactions
 # -----------------------------------------------------------------------------
 # to initialize the database: sqlite3 as.db < schema.sql
+
+# TODO: Move all database logic to its own file
+# TODO: Add citation, author, and corresponding junction tables
+# Database Definitions
+persons_projects = our_db.Table('persons_projects', 
+    our_db.Column('person_id', our_db.Integer, our_db.ForeignKey('person.id'), primary_key=True),
+    our_db.Column('project_id', our_db.Integer, our_db.ForeignKey('project.id'), primary_key=True))
+
+
+persons_articles = our_db.Table('persons_articles', 
+    our_db.Column('person_id', our_db.Integer, our_db.ForeignKey('person.id'), primary_key=True),
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True))
+
+
+articles_categories = our_db.Table('articles_categories',
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True),
+    our_db.Column('category_id', our_db.Integer, our_db.ForeignKey('category.id'), primary_key=True))
+
+
+articles_keyphrases = our_db.Table('articles_keyphrases',
+    our_db.Column('article_id', our_db.Integer, our_db.ForeignKey('article.id'), primary_key=True),
+    our_db.Column('keyphrase_id', our_db.Integer, our_db.ForeignKey('keyphrase.id'), primary_key=True))
+
+projects_keyphrases = our_db.Table('projects_keyphrases',
+    our_db.Column('project_id', our_db.Integer, our_db.ForeignKey('project.id'), primary_key=True),
+    our_db.Column('keyphrase_id', our_db.Integer, our_db.ForeignKey('keyphrase.id'), primary_key=True))
+
+
+class Person(UserMixin, our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    username = our_db.Column(our_db.Text, unique=True, nullable=False)
+    password_hash = our_db.Column(our_db.Text,unique=False, nullable=False)
+    created_at = our_db.Column(our_db.DateTime, default=our_db.func.now(), nullable=False)
+
+    projects = our_db.relationship('Project', secondary=persons_projects, back_populates='persons')
+    library = our_db.relationship('Article', secondary=persons_articles, back_populates='persons')
+    comments = our_db.relationship('Comment', back_populates='persons')
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+class Project(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    persons = our_db.relationship('Person', secondary=persons_projects, back_populates='projects')
+    keyphrases = our_db.relationship('Keyphrase', secondary=projects_keyphrases, back_populates='projects')
+
+
+class Article(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    title = our_db.Column(our_db.Text, nullable=False)
+    content = our_db.Column(our_db.Text, nullable=False)
+    url = our_db.Column(our_db.Text, unique=True, nullable=False)
+    publish_date = our_db.Column(our_db.DateTime, nullable=True) # This might be nullable=False, not sure yet
+    # TODO: Analysis result fields will probably go here
+
+    persons = our_db.relationship('Person', secondary=persons_articles, back_populates='library')
+    comments = our_db.relationship('Comment', back_populates='articles')
+    categories = our_db.relationship('Category', secondary=articles_categories, back_populates="articles")
+    keyphrases = our_db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")
+
+
+class Comment(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    content = our_db.Column(our_db.Text, nullable=False)
+    created_at = our_db.Column(our_db.DateTime, default=our_db.func.now(), nullable=False)
+    article_id = our_db.Column(our_db.Integer, our_db.ForeignKey('article.id'))
+    person_id = our_db.Column(our_db.Integer, our_db.ForeignKey('person.id'))
+
+    persons = our_db.relationship('Person', back_populates='comments')
+    articles = our_db.relationship('Article', back_populates='comments')
+
+
+class Category(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    articles = our_db.relationship('Article', secondary=articles_categories, back_populates="categories")
+
+
+class Keyphrase(our_db.Model):
+    id = our_db.Column(our_db.Integer, primary_key=True)
+    name = our_db.Column(our_db.Text, unique=True, nullable=False)
+
+    articles = our_db.relationship('Article', secondary=articles_keyphrases, back_populates="keyphrases")
+    projects = our_db.relationship('Project', secondary=projects_keyphrases, back_populates="keyphrases")
+
+
+our_db.create_all()
+
+@login.user_loader
+def load_user(username):
+    return Person.query.get(username)
 
 
 def connect_db():
@@ -82,7 +190,6 @@ def formatConsoleError(error):
 # connection handlers
 # -----------------------------------------------------------------------------
 
-
 @app.before_request
 def before_request():
     # this will always request database connection, even if we dont end up using it ;\
@@ -92,7 +199,6 @@ def before_request():
     if 'user_id' in session:
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
-
 
 @app.teardown_request
 def teardown_request(exception):
@@ -282,6 +388,9 @@ def goaway():
         goaway_collection.insert_one({'uid': uid, 'time': int(time.time())})
     return 'OK'
 
+@app.route('/newmain')
+def newmain():
+    return render_template('newmain.html')
 
 @app.route("/")
 def intmain():
@@ -711,50 +820,36 @@ def addfollow():
 
     return 'NOTOK'
 
-
 @app.route('/login', methods=['GET'])
 def login_get():
+    if current_user.is_authenticated:
+        return redirect(url_for('newmain'))
     return render_template('login.html')
-
 
 @app.route('/login', methods=['POST'])
 def login_post():
-    """ logs in the user. if the username doesn't exist creates the account """
+    username = request.form['username']
+    password = request.form['password']
 
-    if not request.form['username']:
-        flash('You have to enter a username')
-    elif not request.form['password']:
-        flash('You have to enter a password')
-    elif get_user_id(request.form['username']) is not None:
-        # username already exists, fetch all of its attributes
-        user = query_db('''select * from user where
-          username = ?''', [request.form['username']], one=True)
-        if check_password_hash(user['pw_hash'], request.form['password']):
-            # password is correct, log in the user
-            session['user_id'] = get_user_id(request.form['username'])
-            flash('User ' + request.form['username'] + ' logged in.')
-        else:
-            # incorrect password
-            flash('User ' + request.form['username'] +
-                  ' already exists, wrong password.')
-    else:
-        # create account and log in
-        creation_time = int(time.time())
-        g.db.execute('''insert into user (username, pw_hash, creation_time) values (?, ?, ?)''',
-                     [request.form['username'],
-                      generate_password_hash(request.form['password']),
-                      creation_time])
-        user_id = g.db.execute('select last_insert_rowid()').fetchall()[0][0]
-        g.db.commit()
-
-        session['user_id'] = user_id
-        flash('New account %s created' % (request.form['username'], ))
+    if not username or not username.strip():
+        return render_template("login.html", error="Username is missing.")
+    if not password:
+        return render_template("login.html", error="Password is missing.")
+    person = Person.query.filter_by(username=username).first()
+    print(person.projects)
+    if person is None or not person.check_password(password):
+        return render_template("login.html", error="Credentials are incorrect.")
+    login_user(person, remember=True)
+    return redirect(url_for('newmain'))
 
 
 @app.route('/register', methods=['GET'])
 def register_get():
+    if current_user.is_authenticated:
+        return redirect(url_for('newmain'))
     return render_template('register.html')
         
+
 @app.route('/register', methods=['POST'])
 def register_post():
     username = request.form['username']
@@ -766,31 +861,25 @@ def register_post():
         return render_template("register.html", error="Password is missing.")
     if len(password) < 7:
         return render_template("register.html", error="Password must be at least 7 characters.")
+    if len(password) > 50:
+        return render_template("register.html", error="Password may be a maximum of 50 characters.")
+    if len(username) > 50:
+        return render_template("register.html", error="Username may be a maximum of 50 characters.")
 
-    # Create a new account with psycopg2
-    creation_time = int(time.time())
-    try:
-        conn = get_db()
-    except Exception as error:
-        formatConsoleError(error)
-        return render_template("register.html", error="Database connection error.")
-    cur = conn.cursor()
-    try:
-        cur.execute("insert into \"User\" (username, pw_hash, creation_time) values (%s, %s, %s)",
-                    (username, generate_password_hash(password), creation_time))
-        conn.commit()
-    except Exception as error:
-        formatConsoleError(error)
-        return render_template("register.html", error="Internal error. Try again later.")
-    cur.close()
-    flash('New account %s created' % (request.form['username'],))
-    return redirect(url_for('intmain'))
+    person = Person.query.filter_by(username=username).first()
+    if person is not None:
+        return render_template("register.html", error="User already exists.")
+    person = Person(username=username)
+    person.set_password(password)
+    our_db.session.add(person)
+    our_db.session.commit()
+    flash("User successfully created!")
+    return redirect(url_for("login_get"))
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
-    flash('You were logged out')
+    logout_user()
     return redirect(url_for('intmain'))
 
 
@@ -799,7 +888,6 @@ def logout():
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
     # load environment variables
-    load_dotenv()
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--prod', dest='prod',

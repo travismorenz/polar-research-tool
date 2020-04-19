@@ -1,0 +1,16 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:${APP_PORT}"
+    depends_on:
+      - redis
+    command: gunicorn --bind 0.0.0.0:8000 "app:create_app()"
+  worker:
+    build: .
+    depends_on:
+      - redis
+    command: celery -A app.worker.celery_app beat -l info
+  redis:
+    image: redis

@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET'])
-def loginget():
+def login_get():
     if current_user.is_authenticated:
         return redirect(url_for('newmain'))
     return render_template('login.html')

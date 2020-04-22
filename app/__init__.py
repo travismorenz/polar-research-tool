@@ -33,4 +33,5 @@ def create_app():
     from app.views.site import site
     from app.views.auth import auth
     app.register_blueprint(site)
+    app.register_blueprint(auth)
     return app

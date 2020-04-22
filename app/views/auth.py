@@ -24,7 +24,7 @@ def login_post():
     if person is None or not person.check_password(password):
         return render_template("login.html", error="Credentials are incorrect.")
     login_user(person, remember=True)
-    return redirect(url_for('newmain'))
+    return redirect(url_for('site.intmain'))
 
 
 @auth.route('/register', methods=['GET'])
@@ -58,10 +58,10 @@ def register_post():
     db.session.add(person)
     db.session.commit()
     flash("User successfully created!")
-    return redirect(url_for("login_get"))
+    return redirect(url_for("auth.login_get"))
 
 
 @auth.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('intmain'))
+    return redirect(url_for('site.intmain'))

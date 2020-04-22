@@ -24,6 +24,7 @@ def load_user(username):
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+    app.secret_key = os.getenv('SECRET_KEY')
     # Initialize database
     db.init_app(app)
     db.create_all(app=app)

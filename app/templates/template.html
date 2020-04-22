@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/spectre.css/dist/spectre.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='main.css') }}"
+    />
+
+    <title>{% block title %}{% endblock %} - POLAR</title>
+  </head>
+  <body>
+    <header class="navbar container grid-xl">
+      <section class="navbar-section">
+        <a href="{{ url_for('site.intmain') }}" class="navbar-brand mr-10"
+          >POLAR Research Tool</a
+        >
+      </section>
+      <section class="navbar-section">
+        {% if current_user.is_authenticated %}
+        <div class="dropdown">
+          <a href="#" class="btn dropdown-toggle" tabindex="0">
+            {{current_user.username}} &#9660;
+          </a>
+          <ul class="menu">
+            <li class="menu-item">
+              <a href="{{url_for('auth.logout')}}">
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+        {% else %}
+        <a href="{{ url_for('auth.login_get') }}" class="btn text-large nav-btn"
+          >Login</a
+        >
+        <a href="{{ url_for('auth.register_get') }}" class="btn text-large"
+          >Register</a
+        >
+        {% endif %}
+      </section>
+    </header>
+    {% block content %}{% endblock %}
+  </body>
+</html>

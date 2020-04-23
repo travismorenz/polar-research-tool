@@ -19,3 +19,28 @@ header {
 main {
   margin-top: 90px;
 }
+
+/* Account Page */
+.account-wrapper {
+  margin-top: 5rem;
+}
+
+.account-wrapper button {
+  margin-top: 0.3rem;
+}
+
+.account-wrapper h5 {
+  margin-top: 1rem;
+}
+
+.account-wrapper .column {
+  margin-bottom: 1rem;
+}
+
+.leave-btn {
+  margin-left: auto;
+}
+
+#edit-projects {
+  display: none !important;
+}

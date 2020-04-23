@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from app.models import db, Person, Project
+from app.models import db, Person, Project, Keyphrase, Category
 from flask_login import current_user, login_user, logout_user
 
 auth = Blueprint('auth', __name__)
@@ -66,11 +66,27 @@ def logout():
     logout_user()
     return redirect(url_for('site.intmain'))
 
+# Account route. //TODO: BROKEN on categories and keyphrases I think
+def parse_project_names(form):
+    projects = []
+    for key in form:
+        if key != 'edit-projects':
+            name = key.split('-')[1]
+            if name not in projects:
+                projects.append(name)
+    return projects
+
+
+def clean_up_input(arr):
+    return [x.strip() for x in set(filter(lambda x: x != '', arr))]
+
 @auth.route('/account', methods=['GET', 'POST'])
 def account():
     def get_context():
         context = {}
         context['projects'] = []
+        p = Project()
+        print(p.categories)
         for p in current_user.projects:
             project = {'name': p.name}
             if hasattr(p, 'keyphrases'):
@@ -93,8 +109,8 @@ def account():
                 return render_template('account.html', **context)
             project = Project(name=name)
             current_user.projects.append(project)
-            our_db.session.add(current_user)
-            our_db.session.commit()
+            db.session.add(current_user)
+            db.session.commit()
         # Project joining
         if 'join-project' in request.form:
             name = request.form['join-project'].strip()
@@ -109,16 +125,16 @@ def account():
                 context['join_error'] = "That project does not exist"
                 return render_template('account.html', **context)
             current_user.projects.append(project)
-            our_db.session.add(current_user)
-            our_db.session.commit()
+            db.session.add(current_user)
+            db.session.commit()
         # Project leaving
         left = False
         if 'leave-project' in request.form:
             name = request.form['leave-project']
             project = Project.query.filter_by(name=name).first()
             current_user.projects.remove(project)
-            our_db.session.add(current_user)
-            our_db.session.commit()
+            db.session.add(current_user)
+            db.session.commit()
             left = True
         # Project editing
         if 'edit-projects' in request.form and not left:
@@ -152,8 +168,10 @@ def account():
                             keyphrase = Keyphrase.query.filter_by(name=name).first()
                             if keyphrase is None:
                                 keyphrase = Keyphrase(name=name)
+                            project.keyphrases.append(keyphrase)
                 # Update categories
                 if hasattr(project, 'categories'):
+                    print('HERE')
                     old_categories = list(map(lambda x: x.name, project.categories))
                     if set(new_categories) != set(old_categories):
                         changes = True
@@ -163,10 +181,10 @@ def account():
                             category = Category.query.filter_by(name=name).first()
                             if category is None:
                                 category = Category(name=name)
-                            project.keyphrases.append(category)
+                            project.categories.append(category)
                 if changes:
-                    our_db.session.add(project)
-                    our_db.session.commit()
+                    db.session.add(project)
+                    db.session.commit()
             if len(requires_update) != 0:
                 print('UPDATE', requires_update)
     # update projects in case they have changed

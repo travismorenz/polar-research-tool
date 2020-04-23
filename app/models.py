@@ -26,6 +26,9 @@ projects_keyphrases = db.Table('projects_keyphrases',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
     db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
 
+projects_categories = db.Table('projects_categories',
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
 
 class Person(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +53,7 @@ class Project(db.Model):
 
     persons = db.relationship('Person', secondary=persons_projects, back_populates='projects')
     keyphrases = db.relationship('Keyphrase', secondary=projects_keyphrases, back_populates='projects')
+    categories = db.relationship('Category', secondary=projects_categories, back_populates="projects")
 
 
 class Article(db.Model):
@@ -82,6 +86,7 @@ class Category(db.Model):
     name = db.Column(db.Text, unique=True, nullable=False)
 
     articles = db.relationship('Article', secondary=articles_categories, back_populates="categories")
+    projects = db.relationship('Project', secondary=projects_categories, back_populates="categories")
 
 
 class Keyphrase(db.Model):

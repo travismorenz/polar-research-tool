@@ -1,0 +1,16 @@
+tmp/
+pdf/
+txt/
+static/thumbs/
+*.p
+*.pyc
+as.db
+secret_key.txt
+env/
+.env
+data
+*.DS_Store
+twitter.txt
+settings.json
+venv/
+.idea/

@@ -19,31 +19,3 @@ header {
 main {
   margin-top: 90px;
 }
-
-#banner_child{
-  width: 100%;
-  text-align: center;
-  margin-top: 5px;
-}
-
-#sbox {
-  text-align: center;
-  margin-top: 5px;
-}
-
-#pagebar {
-  width: 970px;
-  padding: 10px 15px 0px 15px;
-  margin-left: auto;
-  margin-right: auto;
-
-  border-top: solid 1px #D6D3C5;
-  border-left: solid 1px #D6D3C5;
-  border-right: solid 1px #D6D3C5;
-
-  background-color: #EEE;
-}
-
-.pagelink:hover {
-  text-decoration: none;
-}

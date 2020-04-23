@@ -1,43 +1,3 @@
-/* Header */
-header {
-	padding-top: 5px;
-}
-.nav-btn {
-	margin-right: 5px;
-}
-
-/* Login & Register Pages */
-.auth-card {
-	margin-top: 10rem;
-}
-
-.auth-btn {
-	margin-top: 0.8rem;
-}
-
-/* Main Page */
-main {
-	margin-top: 90px;
-}
-
-#sbox {
-	text-align: center;
-	margin-top: 5px;
-}
-
-#pagebar {
-	width: 970px;
-	padding: 10px 15px 0px 15px;
-	margin-left: auto;
-	margin-right: auto;
-
-	border-top: solid 1px #D6D3C5;
-	border-left: solid 1px #D6D3C5;
-	border-right: solid 1px #D6D3C5;
-
-	background-color: #EEE;
-}
-
 body {
 	margin: 0;
 	padding: 0;
@@ -167,7 +127,7 @@ h1 {
 	display: block;
 }
 #qfield {
-  border: 5px solid white;
+  border: 5px solid white; 
   width: 950px;
   border: solid 1px #999;
 
@@ -184,7 +144,7 @@ h1 {
 }
 #sbox {
 	margin-top: 10px;
-  	text-align: center;
+  text-align: center;
 }
 .msg {
 	background-color: #EEF;
@@ -315,7 +275,7 @@ ul.flashes li {
 	border-left: 1px solid #AAA;
 	border-right: 1px solid #AAA;
 	border-top: 1px solid #AAA;
-
+	
 	padding: 10px 5px 10px 5px;
 	background-color: #CCE;
 }
@@ -487,7 +447,7 @@ ul.flashes li {
 }
 .caction {
 	display:inline-block;
-	float:right;
+	float:right; 
 	padding:2px;
 }
 .caction img {

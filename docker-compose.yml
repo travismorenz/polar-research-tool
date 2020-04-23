@@ -13,7 +13,6 @@ services:
     build: .
     depends_on:
       - redis
-      - beat
     command: celery -A app.worker.celery_app worker -l info
     environment:
       - TZ=${UPDATE_TIMEZONE}
@@ -22,7 +21,7 @@ services:
     ports:
       - "8000:${APP_PORT}"
     depends_on:
-      - redis
+      - worker
     command: gunicorn --bind 0.0.0.0:8000 "app:create_app()"
     environment:
       - TZ=${UPDATE_TIMEZONE}

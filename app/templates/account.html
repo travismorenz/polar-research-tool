@@ -9,9 +9,7 @@ content %}
     $(res.selector).html(res.error);
   }
   function leaveProject(name) {
-    $.post("{{ url_for('auth.account') }}", { "leave-project": name }).done(
-      success
-    );
+    $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);
   }
   function createProject() {
     $.post("{{ url_for('auth.create_project') }}", {

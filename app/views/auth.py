@@ -99,6 +99,18 @@ def join_project():
     return res
 
 
+# By convention, this should be DELETE. jQuery only has built in post tho, so I'm going to be lazy and leave it
+@auth.route('/leave-project', methods=['POST'])
+def leave_project():
+    res = {}
+    name = request.form['name']
+    project = Project.query.filter_by(name=name).first()
+    current_user.projects.remove(project)
+    db.session.add(current_user)
+    db.session.commit()
+    return res
+
+
 def parse_project_names(form):
     projects = []
     for key in form:
@@ -128,15 +140,6 @@ def account():
         return context
     context = get_context()
     if request.method == "POST":
-        # Project leaving
-        left = False
-        if 'leave-project' in request.form:
-            name = request.form['leave-project']
-            project = Project.query.filter_by(name=name).first()
-            current_user.projects.remove(project)
-            db.session.add(current_user)
-            db.session.commit()
-            left = True
         # Project editing
         if 'edit-projects' in request.form and not left:
             names = parse_project_names(request.form)

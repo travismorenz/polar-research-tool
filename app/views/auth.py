@@ -20,7 +20,6 @@ def login_post():
     if not password:
         return render_template("login.html", error="Password is missing.")
     person = Person.query.filter_by(username=username).first()
-    print(person.projects)
     if person is None or not person.check_password(password):
         return render_template("login.html", error="Credentials are incorrect.")
     login_user(person, remember=True)
@@ -86,7 +85,6 @@ def account():
         context = {}
         context['projects'] = []
         p = Project()
-        print(p.categories)
         for p in current_user.projects:
             project = {'name': p.name}
             if hasattr(p, 'keyphrases'):
@@ -171,7 +169,6 @@ def account():
                             project.keyphrases.append(keyphrase)
                 # Update categories
                 if hasattr(project, 'categories'):
-                    print('HERE')
                     old_categories = list(map(lambda x: x.name, project.categories))
                     if set(new_categories) != set(old_categories):
                         changes = True

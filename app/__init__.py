@@ -6,16 +6,20 @@ from app.models import db, Person
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
+
+# Celery Setup (The import is janky, can probably be cleaned up)
 celery_app = Celery(__name__, broker='redis://redis:6379/0')
 hours_minutes = os.getenv('UPDATE_TIME').split(':')
 celery_app.conf.beat_schedule = {
     'update': {
-        'task': 'tasks.update',
+        'task': 'app.tasks.update',
         'schedule': crontab(hour=int(hours_minutes[0]), minute=int(hours_minutes[1]))
     }
 }
+celery_app.conf.timezone = os.getenv('UPDATE_TIMEZONE')
+import app.tasks
+
 login = LoginManager()
 @login.user_loader
 def load_user(username):

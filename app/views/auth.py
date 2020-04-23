@@ -65,20 +65,6 @@ def logout():
     logout_user()
     return redirect(url_for('site.intmain'))
 
-# Account route. //TODO: BROKEN on categories and keyphrases I think
-def parse_project_names(form):
-    projects = []
-    for key in form:
-        if key != 'edit-projects':
-            name = key.split('-')[1]
-            if name not in projects:
-                projects.append(name)
-    return projects
-
-
-def clean_up_input(arr):
-    return [x.strip() for x in set(filter(lambda x: x != '', arr))]
-
 @auth.route('/create-project', methods=['POST'])
 def create_project():
     res = {'selector': '#create-project-error'}
@@ -96,6 +82,36 @@ def create_project():
     db.session.commit()
     return res
 
+@auth.route('/join-project', methods=['POST'])
+def join_project():
+    res = {'selector': '#join-project-error'}
+    name = request.form['name'].strip()
+    if name == "":
+        res['error'] = 'Missing'
+        return res, 400
+    project = Project.query.filter_by(name=name).first()
+    if project is None:
+        res['error'] = "That project does not exist"
+        return res, 400
+    current_user.projects.append(project)
+    db.session.add(current_user)
+    db.session.commit()
+    return res
+
+
+def parse_project_names(form):
+    projects = []
+    for key in form:
+        if key != 'edit-projects':
+            name = key.split('-')[1]
+            if name not in projects:
+                projects.append(name)
+    return projects
+
+
+def clean_up_input(arr):
+    return [x.strip() for x in set(filter(lambda x: x != '', arr))]
+
 @auth.route('/account', methods=['GET', 'POST'])
 def account():
     def get_context():
@@ -112,22 +128,6 @@ def account():
         return context
     context = get_context()
     if request.method == "POST":
-        # Project joining
-        if 'join-project' in request.form:
-            name = request.form['join-project'].strip()
-            if name == "":
-                context['join_error'] = "Missing"
-                return render_template('account.html', **context)
-            project = Project.query.filter_by(name=name).first()
-            if project is None:
-                context['join_error'] = "That project does not exist"
-                return render_template('account.html', **context)
-            if any(p.name == name for p in current_user.projects):
-                context['join_error'] = "That project does not exist"
-                return render_template('account.html', **context)
-            current_user.projects.append(project)
-            db.session.add(current_user)
-            db.session.commit()
         # Project leaving
         left = False
         if 'leave-project' in request.form:

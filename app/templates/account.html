@@ -20,6 +20,13 @@ content %}
       .done(success)
       .fail(fail);
   }
+  function joinProject() {
+    $.post("{{ url_for('auth.join_project') }}", {
+      name: $("#join-project").val(),
+    })
+      .done(success)
+      .fail(fail);
+  }
 </script>
 <div class="container account-wrapper grid-xl">
   <h2>My Account</h2>
@@ -51,7 +58,9 @@ content %}
       placeholder="Project Name"
     />
     <div class="text-error" id="join-project-error"></div>
-    <button class="btn btn-primary">Join</button>
+    <button type="button" onclick="joinProject()" class="btn btn-primary">
+      Join
+    </button>
   </form>
   <h5>My Projects</h5>
   <form id="my-projects" action="{{ url_for('auth.account') }}" method="post">

@@ -20,6 +20,41 @@ main {
   margin-top: 90px;
 }
 
+#banner_child {
+  width: 100%;
+  text-align: center;
+  margin-top: 5px;
+}
+
+#qfield {
+  width: calc(80% - 34px);
+  padding-left: 5px;
+}
+
+#sbox {
+  text-align: center;
+  margin-top: 5px;
+}
+
+#pagebar {
+  width: 80%;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article {
+  margin-top: 25px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+#prev_next {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
 /* Account Page */
 .account-wrapper {
   margin-top: 5rem;

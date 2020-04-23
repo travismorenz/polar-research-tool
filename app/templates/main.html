@@ -1,83 +1,57 @@
-{% extends "template.html" %} {% block title %}Home{% endblock %} {% block content %}
+{% extends "template.html" %} {% block title %}Home{% endblock %} {% block
+content %}
 
-<div id="flashesdiv">
-    {% with flashes = get_flashed_messages() %} {% if flashes %}
-    <ul class="flashes">
-        {% for message in flashes %}
-        <li>{{ message }} {% endfor %}</li>
-    </ul>
-    {% endif %} {% endwith %}
-</div>
-
-{% if render_format == "recent" and g.user.username is not defined %}
 <div id="banner">
-    <div id="banner_child"  class="label secondary-label">
-        New to arxiv-sanity? Check out the <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a>.
-    </div>
+  <div id="banner_child" class="label secondary-label">
+    New to arxiv-sanity? Check out the
+    <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a
+    >.
+  </div>
 
-    <div id="sbox" style="text-align: center; margin-top: 5px;">
-        <form action="/search" method="get">
-            <div>
-                <input placeholder="Search..." style="width: calc(80% - 34px); padding-left: 5px;" name="q" type="text" id="qfield"/>
-                <button type="submit"><i class="fa fa-search"></i></button>
-            </div>
-        </form>
-        <div id="search_hint"></div>
-    </div>
-
-    {% if show_prompt == "yes" %}
-    <div id="prompt" style="background-color:#f6ff7a; padding:10px; width:980px; margin-left:auto; margin-right:auto; font-size:14px;">
-        Hey there {{ g.user.username }}, sorry to interrupt. Arxiv-sanity costs a non-negligible amount of money to
-        host. If you love the site, please consider pitching in:
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="display:inline-block;">
-            <input type="hidden" name="cmd" value="_s-xclick"/>
-            <input type="hidden" name="hosted_button_id" value="DRW9PQ2J3U3RJ"/>
-            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0"
-                   name="submit" alt="PayPal - The safer, easier way to pay online!" style="display:inline-block;height:14px;"/>
-            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"/>
-        </form>
-        To nuke this message away for a long time click
-        <span id="goaway" style="text-decoration: underline;cursor: pointer;">here</span>.
-    </div>
+  <!--
+  <div id="sbox" style="text-align: center; margin-top: 5px;">
+    <form action="/search" method="get">
+      <div>
+        <input placeholder="Search..." name="q" type="text" id="qfield" />
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </div>
+    </form>
+    <div id="search_hint"></div>
+  </div>
+  -->
+  <div class="btn-group btn-group-block" id="pagebar">
+    {% if tab == "articles" %}
+    <a href="/" class="btn active"
+      ><div class="pagelink" id="tabart" class="btn">Articles</div></a
+    >
+    <a href="/library" class="btn"
+      ><div class="pagelink" id="tablib">Library</div></a
+    >
+    {% endif %} {% if tab == "library" %}
+    <a href="/" class="btn"
+      ><div class="pagelink" id="tabart" class="btn">Articles</div></a
+    >
+    <a href="/library" class="btn active"
+      ><div class="pagelink" id="tablib">Library</div></a
+    >
     {% endif %}
-
-    <div style="width: 80%; margin-top: 5px; margin-left: auto; margin-right: auto;" class="btn-group btn-group-block" id="pagebar">
-        <div class="pagelink btn active" id="tabrecent" class="btn"><a href="/">most recent</a></div>
-        <div class="pagelink btn" id="tabdiscussions">
-            <a href="/discussions">spotlight</a>
-        </div>
-        <div class="pagelink btn" id="tabtop"><a href="/top">top recent</a></div>
-        <div class="pagelink btn" id="tabrec">
-            <a href="/recommend">recommended</a>
-        </div>
-        <div class="pagelink btn" id="tablib"><a href="/library">library</a></div>
-        <div class="pagelink btn" id="tabvenues"><a href="/venues">venues</a></div>
-        <div class="pagelink btn" id="tabrankings">
-            <a href="/rankings">rankings</a>
-        </div>
-        <div class="pagelink btn" id="tabgraph">
-            <a href="http://130.20.35.54:5002">graph</a>
-        </div>
-        <div class="pagelink btn" id="tabanalyze">
-            <a href="/analytics">analysis</a>
-        </div>
-        <div class="pagelink btn" id="tabtopic"><a href="/topics">topics</a></div>
-        <div class="pagelink btn" id="tabkeyphrase">
-            <a href="/keyphrase">phrases</a>
-        </div>
-    </div>
+  </div>
 </div>
 
-<!-- this div will be rendered into dynamically at init with JS -->
-<div style="text-align: center; margin-top: 10px;" id="recommend-time-choice" class="centerdiv"></div>
-
-<div style="margin-left: 10%; margin-right: 10%;" id="maindiv">
-    <div id="rtable"></div>
-    <div style="margin-top: 50px; text-align: center;" id="loadmore">
-        <button id="loadmorebtn">Load more</button>
-    </div>
+{% for article in articles.items %}
+<div class="article">
+  <h4>{{ article.title }}</h4>
+  <p>{{ article.summary }}</p>
 </div>
-<br/><br/><br/><br/><br/><br/>
+{% endfor %}
+<div id="prev_next">
+  {% if articles.has_prev %}<a
+    href="{{ url_for('site.intmain', page=articles.prev_num) }}"
+    >&lt;&lt; Newer Articles</a
+  >{% else %}&lt;&lt; Newer Articles{% endif %} | {% if articles.has_next %}<a
+    href="{{ url_for('site.intmain', page=articles.next_num) }}"
+    >Older Articles &gt;&gt;</a
+  >{% else %}Older Articles &gt;&gt;{% endif %}
+</div>
 
-{% endif %}
 {% endblock %}

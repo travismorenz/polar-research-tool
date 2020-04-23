@@ -1,31 +1,5 @@
 {% extends "template.html" %} {% block title %}My Account{% endblock %} {% block
 content %}
-<script>
-  function success() {
-    window.location.href = "/account";
-  }
-  function fail(res) {
-    res = res.responseJSON;
-    $(res.selector).html(res.error);
-  }
-  function leaveProject(name) {
-    $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);
-  }
-  function createProject() {
-    $.post("{{ url_for('auth.create_project') }}", {
-      name: $("#create-project").val(),
-    })
-      .done(success)
-      .fail(fail);
-  }
-  function joinProject() {
-    $.post("{{ url_for('auth.join_project') }}", {
-      name: $("#join-project").val(),
-    })
-      .done(success)
-      .fail(fail);
-  }
-</script>
 <div class="container account-wrapper grid-xl">
   <h2>My Account</h2>
   <p>Password change logic goes here...</p>
@@ -61,8 +35,7 @@ content %}
     </button>
   </form>
   <h5>My Projects</h5>
-  <form id="my-projects" action="{{ url_for('auth.account') }}" method="post">
-    <input name="edit-projects" id="edit-projects" />
+  <form id="my-projects">
     {% for project in projects %}
     <div class="columns">
       <div class="column col-4 col-sm-12">
@@ -121,8 +94,55 @@ content %}
     {% else %}
     <div>No Projects currently</div>
     {% endfor %}
-    <div class="text-error">{{ projects_error }}</div>
+    <div class="text-success" id="save-success"></div>
     <button class="btn btn-primary">Save All Project Settings</button>
   </form>
 </div>
+<script>
+  function success() {
+    window.location.href = "/account";
+  }
+  function fail(res) {
+    res = res.responseJSON;
+    $(res.selector).html(res.error);
+  }
+  function leaveProject(name) {
+    $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);
+  }
+  function createProject() {
+    $.post("{{ url_for('auth.create_project') }}", {
+      name: $("#create-project").val(),
+    })
+      .done(success)
+      .fail(fail);
+  }
+  function joinProject() {
+    $.post("{{ url_for('auth.join_project') }}", {
+      name: $("#join-project").val(),
+    })
+      .done(success)
+      .fail(fail);
+  }
+  $("#my-projects").on("submit", function (e) {
+    const form = $(this).serializeArray();
+    const data = {};
+    for (let obj of form) {
+      const [input, project] = obj.name.split("-");
+      const val = obj.value;
+      if (!data[project]) {
+        data[project] = {};
+      }
+      data[project][input] = val;
+    }
+    $.post("{{ url_for('auth.save_projects') }}", JSON.stringify(data)).done(
+      function (res) {
+        $("#save-success").html(res.msg);
+        if (res.nameChange) {
+          setTimeout(success, 500);
+        }
+      }
+    );
+    return false;
+  });
+</script>
 {% endblock %}

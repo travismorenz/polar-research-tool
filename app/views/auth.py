@@ -79,6 +79,23 @@ def parse_project_names(form):
 def clean_up_input(arr):
     return [x.strip() for x in set(filter(lambda x: x != '', arr))]
 
+@auth.route('/create-project', methods=['POST'])
+def create_project():
+    res = {'selector': '#create-project-error'}
+    name = request.form['name'].strip()
+    if name == "":
+        res['error'] = 'Missing'
+        return res, 400
+    project = Project.query.filter_by(name=name).first()
+    if project is not None:
+        res['error'] = "That project already exists"
+        return res, 400
+    project = Project(name=name)
+    current_user.projects.append(project)
+    db.session.add(current_user)
+    db.session.commit()
+    return res
+
 @auth.route('/account', methods=['GET', 'POST'])
 def account():
     def get_context():
@@ -95,20 +112,6 @@ def account():
         return context
     context = get_context()
     if request.method == "POST":
-        # Project creation
-        if 'create-project' in request.form:
-            name = request.form['create-project'].strip()
-            if name == "":
-                context['create_error'] = "Missing"
-                return render_template('account.html', **context)
-            project = Project.query.filter_by(name=name).first()
-            if project is not None:
-                context['create_error'] = "That project already exists"
-                return render_template('account.html', **context)
-            project = Project(name=name)
-            current_user.projects.append(project)
-            db.session.add(current_user)
-            db.session.commit()
         # Project joining
         if 'join-project' in request.form:
             name = request.form['join-project'].strip()

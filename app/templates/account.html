@@ -1,33 +1,42 @@
 {% extends "template.html" %} {% block title %}My Account{% endblock %} {% block
 content %}
 <script>
+  function success() {
+    window.location.href = "/account";
+  }
+  function fail(res) {
+    res = res.responseJSON;
+    $(res.selector).html(res.error);
+  }
   function leaveProject(name) {
     $.post("{{ url_for('auth.account') }}", { "leave-project": name }).done(
-      function (res) {
-        window.location.href = "/account";
-      }
+      success
     );
+  }
+  function createProject() {
+    $.post("{{ url_for('auth.create_project') }}", {
+      name: $("#create-project").val(),
+    })
+      .done(success)
+      .fail(fail);
   }
 </script>
 <div class="container account-wrapper grid-xl">
   <h2>My Account</h2>
   <p>Password change logic goes here...</p>
   <h4>Projects</h4>
-  <form
-    class="form-group col-4 col-lg-6 col-sm-12"
-    action="{{ url_for('auth.account') }}"
-    method="post"
-  >
+  <form class="form-group col-4 col-lg-6 col-sm-12">
     <label class="form-label" for="create-project">Create Project</label>
     <input
       type="text"
       class="form-input"
-      name="create-project"
       id="create-project"
       placeholder="Project Name"
     />
-    <div class="text-error">{{ create_error }}</div>
-    <button class="btn btn-primary">Create</button>
+    <div class="text-error" id="create-project-error"></div>
+    <button type="button" onclick="createProject()" class="btn btn-primary">
+      Create
+    </button>
   </form>
   <form
     class="form-group col-4 col-lg-6 col-sm-12"
@@ -39,10 +48,9 @@ content %}
       type="text"
       class="form-input"
       id="join-project"
-      name="join-project"
       placeholder="Project Name"
     />
-    <div class="text-error">{{ join_error }}</div>
+    <div class="text-error" id="join-project-error"></div>
     <button class="btn btn-primary">Join</button>
   </form>
   <h5>My Projects</h5>

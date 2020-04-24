@@ -62,6 +62,7 @@ class Article(db.Model):
     content = db.Column(db.Text, nullable=False)
     summary = db.Column(db.Text, nullable=False)
     url = db.Column(db.Text, unique=True, nullable=False)
+    version = db.Column(db.Integer, nullable=False)
     publish_date = db.Column(db.DateTime, nullable=True) # This might be nullable=False, not sure yet
     # TODO: Analysis result fields will probably go here
 

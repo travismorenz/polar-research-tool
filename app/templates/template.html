@@ -20,11 +20,10 @@
     <title>{% block title %}{% endblock %} - POLAR</title>
   </head>
   <body>
-    <header class="navbar container grid-xl">
+    <div class="container grid-lg">
+    <header class="navbar">
       <section class="navbar-section">
-        <a href="{{ url_for('site.intmain') }}" class="navbar-brand mr-10"
-          >POLAR Research Tool</a
-        >
+        <a href="{{ url_for('site.intmain') }}" class="navbar-brand mr-10">POLAR <span>Research Tool</span></a>
       </section>
       <section class="navbar-section">
         {% if current_user.is_authenticated %}
@@ -56,5 +55,6 @@
       </section>
     </header>
     {% block content %}{% endblock %}
+    </div>
   </body>
 </html>

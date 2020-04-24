@@ -2,56 +2,66 @@
 content %}
 
 <div id="banner">
-  <div id="banner_child" class="label secondary-label">
-    New to arxiv-sanity? Check out the
-    <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a
-    >.
-  </div>
+    <div id="banner_child" class="label secondary-label">
+        New to arxiv-sanity? Check out the
+        <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a
+        >.
+    </div>
 
-  <!--
-  <div id="sbox" style="text-align: center; margin-top: 5px;">
-    <form action="/search" method="get">
-      <div>
-        <input placeholder="Search..." name="q" type="text" id="qfield" />
-        <button type="submit"><i class="fa fa-search"></i></button>
-      </div>
-    </form>
-    <div id="search_hint"></div>
-  </div>
-  -->
-  <div class="btn-group btn-group-block" id="pagebar">
-    {% if tab == "articles" %}
-    <a href="/" class="btn active"
-      ><div class="pagelink" id="tabart" class="btn">Articles</div></a
-    >
-    <a href="/library" class="btn"
-      ><div class="pagelink" id="tablib">Library</div></a
-    >
-    {% endif %} {% if tab == "library" %}
-    <a href="/" class="btn"
-      ><div class="pagelink" id="tabart" class="btn">Articles</div></a
-    >
-    <a href="/library" class="btn active"
-      ><div class="pagelink" id="tablib">Library</div></a
-    >
-    {% endif %}
-  </div>
+    <!--
+    <div id="sbox" style="text-align: center; margin-top: 5px;">
+      <form action="/search" method="get">
+        <div>
+          <input placeholder="Search..." name="q" type="text" id="qfield" />
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
+      <div id="search_hint"></div>
+    </div>
+    -->
+    <div class="btn-group btn-group-block" id="pagebar">
+        {% if tab == "articles" %}
+        <a href="/" class="btn active">
+            <div class="pagelink" id="tabart" class="btn">Articles</div>
+        </a>
+        <a href="/library" class="btn">
+            <div class="pagelink" id="tablib">Library</div>
+        </a>
+        {% endif %} {% if tab == "library" %}
+        <a href="/" class="btn">
+            <div class="pagelink" id="tabart" class="btn">Articles</div>
+        </a>
+        <a href="/library" class="btn active">
+            <div class="pagelink" id="tablib">Library</div>
+        </a>
+        {% endif %}
+    </div>
 </div>
 
 {% for article in articles.items %}
-<div class="article">
-  <h4>{{ article.title }}</h4>
-  <p>{{ article.summary }}</p>
+<div class="article card">
+    <a href="{{ article.url }}" target="_blank"><h4>{{ article.title }}</h4></a>
+    <div class="metadata">
+        <span class="publish_date">{{ article.publish_date.strftime('%m/%d/%Y') }}</span>
+        {% if article.version1 %}
+        <span class="publish_date version1_date"><a href="{{ article.version1.url }}" target="_blank">(v1: {{ article.version1.publish_date.strftime('%m/%d/%Y') }})</a></span>
+        {% endif %}
+        {% for category in article.categories[:-1] %}
+        <span>{{ category.name }} |</span>
+        {% endfor %}
+        <span>{{ article.categories[-1].name }}</span>
+    </div>
+    <p>{{ article.summary }}</p>
 </div>
 {% endfor %}
 <div id="prev_next">
-  {% if articles.has_prev %}<a
-    href="{{ url_for('site.intmain', page=articles.prev_num) }}"
-    >&lt;&lt; Newer Articles</a
-  >{% else %}&lt;&lt; Newer Articles{% endif %} | {% if articles.has_next %}<a
-    href="{{ url_for('site.intmain', page=articles.next_num) }}"
-    >Older Articles &gt;&gt;</a
-  >{% else %}Older Articles &gt;&gt;{% endif %}
+    {% if articles.has_prev %}<a
+        href="{{ url_for('site.intmain', page=articles.prev_num) }}"
+>&lt;&lt; Newer Articles</a
+>{% else %}&lt;&lt; Newer Articles{% endif %} | {% if articles.has_next %}<a
+        href="{{ url_for('site.intmain', page=articles.next_num) }}"
+>Older Articles &gt;&gt;</a
+>{% else %}Older Articles &gt;&gt;{% endif %}
 </div>
 
 {% endblock %}

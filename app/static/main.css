@@ -1,9 +1,21 @@
+html {
+  font-size: 15px;
+}
+
 /* Header */
 header {
   padding-top: 0.5rem;
 }
 .nav-btn {
   margin-right: 1rem;
+}
+
+.navbar-brand {
+  font-size: 1.5rem !important;
+}
+
+.navbar-brand span {
+  font-size: 1rem;
 }
 
 /* Login & Register Pages */
@@ -45,8 +57,6 @@ main {
 
 .article {
   margin-top: 25px;
-  margin-left: 10%;
-  margin-right: 10%;
 }
 
 #prev_next {
@@ -78,4 +88,23 @@ main {
 
 #edit-projects {
   display: none !important;
+}
+
+.card {
+  box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+  padding: 1rem;
+  border: 0;
+}
+
+.publish_date {
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.version1_date {
+  font-weight: normal;
+}
+
+.metadata {
+  padding-bottom: 10px;
 }

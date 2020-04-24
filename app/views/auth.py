@@ -152,6 +152,8 @@ def save_projects():
             project.keyphrases = []
             for kp in new_keyphrases:
                 keyphrase = Keyphrase.query.filter_by(name=kp).first()
+                if keyphrase is None:
+                    keyphrase = Keyphrase(name=kp)
                 project.keyphrases.append(keyphrase)
         if curr_categories != new_categories:
             changes = True
@@ -159,6 +161,8 @@ def save_projects():
             for c in new_categories:
                 # TODO: validate categories here
                 category = Category.query.filter_by(name=c).first()
+                if category is None:
+                    category = Category(name=c)
                 project.categories.append(category)
         if changes:
             db.session.add(project)

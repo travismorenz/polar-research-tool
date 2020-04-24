@@ -134,7 +134,7 @@ def save_projects():
     res = {}
     projects = request.get_json(force=True)
     for curr_name in projects:
-        new_name = projects[curr_name]['name']
+        new_name = projects[curr_name]['name'].strip()
         new_keyphrases = clean_input(projects[curr_name]['keyphrases'])
         new_categories = clean_input(projects[curr_name]['categories'])
 

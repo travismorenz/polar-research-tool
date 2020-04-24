@@ -1,9 +1,13 @@
+body {
+  font-size: 0.7rem;
+}
+
 /* Header */
 header {
   padding: 0.5rem 0;
   width: 100%;
   border-bottom: 1px solid lightgrey;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .nav-btn {
   margin-right: 1rem;
@@ -41,15 +45,13 @@ main {
   margin-top: 5px;
 }
 
-#pagebar {
-  width: 80%;
-  margin-top: 5px;
+#banner {
+  width: 10rem;
   margin-left: auto;
-  margin-right: auto;
 }
 
 .article {
-  margin-top: 25px;
+  margin-top: 1rem;
 }
 
 #prev_next {

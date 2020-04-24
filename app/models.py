@@ -22,6 +22,10 @@ articles_keyphrases = db.Table('articles_keyphrases',
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
     db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
 
+articles_authors = db.Table('articles_authors',
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True))
+
 projects_keyphrases = db.Table('projects_keyphrases',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
     db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
@@ -58,6 +62,7 @@ class Project(db.Model):
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    arxiv_id = db.Column(db.Text, nullable=False)
     title = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
     summary = db.Column(db.Text, nullable=False)
@@ -70,6 +75,12 @@ class Article(db.Model):
     comments = db.relationship('Comment', back_populates='articles')
     categories = db.relationship('Category', secondary=articles_categories, back_populates="articles")
     keyphrases = db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")
+    authors = db.relationship('Author', secondary=articles_authors, back_populates="articles")
+
+class Author(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, unique=True, nullable=False)
+    articles = db.relationship('Article', secondary=articles_authors, back_populates="authors")
 
 
 class Comment(db.Model):

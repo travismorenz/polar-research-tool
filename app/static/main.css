@@ -1,10 +1,9 @@
-html {
-  font-size: 15px;
-}
-
 /* Header */
 header {
-  padding-top: 0.5rem;
+  padding: 0.5rem 0;
+  width: 100%;
+  border-bottom: 1px solid lightgrey;
+  margin-bottom: 2rem;
 }
 .nav-btn {
   margin-right: 1rem;
@@ -30,12 +29,6 @@ header {
 /* Main Page */
 main {
   margin-top: 90px;
-}
-
-#banner_child {
-  width: 100%;
-  text-align: center;
-  margin-top: 5px;
 }
 
 #qfield {
@@ -65,11 +58,26 @@ main {
   margin-bottom: 25px;
 }
 
-/* Account Page */
-.account-wrapper {
-  margin-top: 5rem;
+.card {
+  box-shadow: 0 0.25rem 1rem rgba(48, 55, 66, 0.15);
+  padding: 1rem;
+  border: 0;
 }
 
+.publish_date {
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.version1_date {
+  font-weight: normal;
+}
+
+.metadata {
+  padding-bottom: 10px;
+}
+
+/* Account Page */
 .account-wrapper button {
   margin-top: 0.3rem;
 }
@@ -88,23 +96,4 @@ main {
 
 #edit-projects {
   display: none !important;
-}
-
-.card {
-  box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
-  padding: 1rem;
-  border: 0;
-}
-
-.publish_date {
-  margin-right: 1rem;
-  font-weight: bold;
-}
-
-.version1_date {
-  font-weight: normal;
-}
-
-.metadata {
-  padding-bottom: 10px;
 }

@@ -34,6 +34,11 @@ content %}
 {% for article in articles.items %}
 <div class="article card">
   <a href="{{ article.url }}" target="_blank"><h5>{{ article.title }}</h5></a>
+  <div id="authors">
+    {% for author in article.authors[:-1] %}
+    <a href="#">{{ author.name }}</a>&nbsp;, {% endfor %}
+    <a href="#">{{ article.authors[-1].name }}</a>
+  </div>
   <div class="metadata">
     <span class="publish_date"
       >{{ article.publish_date.strftime('%m/%d/%Y') }}</span
@@ -45,9 +50,8 @@ content %}
       ></span
     >
     {% endif %} {% for category in article.categories[:-1] %}
-    <span>{{ category.name }} |</span>
-    {% endfor %}
-    <span>{{ article.categories[-1].name }}</span>
+    <a href="#">{{ category.name }}</a>&nbsp;| {% endfor %}
+    <a href="#">{{ article.categories[-1].name }}</a>
   </div>
   <p>{{ article.summary }}</p>
 </div>

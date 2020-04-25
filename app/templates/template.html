@@ -29,6 +29,22 @@
         </section>
         <section class="navbar-section">
           {% if current_user.is_authenticated %}
+          <div class="form-group">
+            Selected Project:
+            <label class="form-inline">
+              <select class="form-select" id="project-select">
+                <option value="none">None</option>
+                {% for project in current_user.projects %} {% if
+                session['selected-project'] == project.name %}
+                <option selected value="{{ project.name }}"
+                  >{{ project.name }}</option
+                >
+                {% else %}
+                <option>{{ project.name }}</option>
+                {% endif %} {% endfor %}
+              </select>
+            </label>
+          </div>
           <div class="dropdown">
             <a href="#" class="btn dropdown-toggle" tabindex="0">
               {{current_user.username}} &#9660;
@@ -62,5 +78,14 @@
     <div class="container grid-lg">
       {% block content %}{% endblock %}
     </div>
+    <script>
+      $("#project-select").on("change", function (e) {
+        $.post("{{ url_for('site.select_project') }}", {
+          selection: e.target.value,
+        }).done(function () {
+          window.location.href = window.location.pathname;
+        });
+      });
+    </script>
   </body>
 </html>

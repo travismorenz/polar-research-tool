@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, session
 from app.models import db, Article
 
 site = Blueprint('site', __name__)
@@ -14,6 +14,13 @@ def intmain():
                 article.version1 = version1
     return render_template('main.html', articles=articles, tab='articles')
 
+
 @site.route('/library', methods=['GET'])
 def library():
     return redirect(url_for('site.intmain'))
+
+
+@site.route('/select-project', methods=['POST'])
+def select_project():
+    session['selected-project'] = request.form['selection']
+    return {}

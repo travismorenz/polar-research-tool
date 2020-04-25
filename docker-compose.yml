@@ -1,0 +1,27 @@
+version: "3"
+services:
+  redis:
+    image: redis
+  beat:
+    build: .
+    depends_on:
+      - redis
+    command: celery -A app.worker.celery_app beat -l debug
+    environment:
+      - TZ=${UPDATE_TIMEZONE}
+  worker:
+    build: .
+    depends_on:
+      - redis
+    command: celery -A app.worker.celery_app worker -l info
+    environment:
+      - TZ=${UPDATE_TIMEZONE}
+  web:
+    build: .
+    ports:
+      - "8000:${APP_PORT}"
+    depends_on:
+      - worker
+    command: gunicorn --bind 0.0.0.0:8000 "app:create_app()"
+    environment:
+      - TZ=${UPDATE_TIMEZONE}

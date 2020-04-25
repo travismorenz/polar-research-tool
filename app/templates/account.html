@@ -1,0 +1,148 @@
+{% extends "template.html" %} {% block title %}My Account{% endblock %} {% block
+content %}
+<div class="container account-wrapper grid-xl">
+  <h2>My Account</h2>
+  <p>Password change logic goes here...</p>
+  <h4>Projects</h4>
+  <form class="form-group col-4 col-lg-6 col-sm-12">
+    <label class="form-label" for="create-project">Create Project</label>
+    <input
+      type="text"
+      class="form-input"
+      id="create-project"
+      placeholder="Project Name"
+    />
+    <div class="text-error" id="create-project-error"></div>
+    <button type="button" onclick="createProject()" class="btn btn-primary">
+      Create
+    </button>
+  </form>
+  <form
+    class="form-group col-4 col-lg-6 col-sm-12"
+    action="{{ url_for('auth.account')}}"
+    method="post"
+  >
+    <label class="form-label" for="join-project">Join Project</label>
+    <input
+      type="text"
+      class="form-input"
+      id="join-project"
+      placeholder="Project Name"
+    />
+    <div class="text-error" id="join-project-error"></div>
+    <button type="button" onclick="joinProject()" class="btn btn-primary">
+      Join
+    </button>
+  </form>
+  <h5>My Projects</h5>
+  <form id="my-projects">
+    {% for project in projects %}
+    <div class="columns">
+      <div class="column col-4 col-sm-12">
+        <label class="form-label" for="name-{{ project.name }}">Name</label>
+        <input
+          type="text"
+          class="form-input"
+          id="name-{{ project.name }}"
+          name="name-{{ project.name }}"
+          value="{{ project.name }}"
+          placeholder="Project Name"
+        />
+      </div>
+      <div class="column col-4 col-sm-12">
+        <label class="form-label" for="keyphrases-{{ project.name }}"
+          >Keyphrases (comma-delimited)</label
+        >
+        <textarea
+          type="text"
+          class="form-input"
+          id="keyphrases-{{ project.name }}"
+          name="keyphrases-{{ project.name }}"
+          placeholder="Ex: adverserial learning, data poisoning"
+          rows="4"
+        >
+{{ project.keyphrases }}</textarea
+        >
+      </div>
+      <div class="column col-4 col-sm-12">
+        <label class="form-label" for="categories-{{ project.name }}"
+          >Categories (<a
+            href="https://arxiv.org/category_taxonomy"
+            target="_blank"
+            >options</a
+          >, comma-delimited)</label
+        >
+        <textarea
+          type="text"
+          class="form-input"
+          id="categories-{{ project.name }}"
+          name="categories-{{ project.name }}"
+          placeholder="Ex: cs.AI, math.AG, math.CT"
+          rows="4"
+        >
+{{ project.categories }}</textarea
+        >
+      </div>
+      <button
+        onclick="leaveProject('{{ project.name }}')"
+        type="button"
+        class="btn btn-primary leave-btn"
+      >
+        Leave Project
+      </button>
+    </div>
+    {% else %}
+    <div>No Projects currently</div>
+    {% endfor %}
+    <div class="text-success" id="save-success"></div>
+    <button class="btn btn-primary">Save All Project Settings</button>
+  </form>
+</div>
+<script>
+  function success() {
+    window.location.href = "/account";
+  }
+  function fail(res) {
+    res = res.responseJSON;
+    $(res.selector).html(res.error);
+  }
+  function leaveProject(name) {
+    $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);
+  }
+  function createProject() {
+    $.post("{{ url_for('auth.create_project') }}", {
+      name: $("#create-project").val(),
+    })
+      .done(success)
+      .fail(fail);
+  }
+  function joinProject() {
+    $.post("{{ url_for('auth.join_project') }}", {
+      name: $("#join-project").val(),
+    })
+      .done(success)
+      .fail(fail);
+  }
+  $("#my-projects").on("submit", function (e) {
+    const form = $(this).serializeArray();
+    const data = {};
+    for (let obj of form) {
+      const [input, project] = obj.name.split("-");
+      const val = obj.value;
+      if (!data[project]) {
+        data[project] = {};
+      }
+      data[project][input] = val;
+    }
+    $.post("{{ url_for('auth.save_projects') }}", JSON.stringify(data)).done(
+      function (res) {
+        $("#save-success").html(res.msg);
+        if (res.nameChange) {
+          setTimeout(success, 500);
+        }
+      }
+    );
+    return false;
+  });
+</script>
+{% endblock %}

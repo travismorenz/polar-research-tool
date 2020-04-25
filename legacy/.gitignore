@@ -14,5 +14,3 @@ twitter.txt
 settings.json
 venv/
 .idea/
-__pycache__
-.vscode

@@ -1,11 +1,21 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
-from app.models import db, Article
+from app.models import db, Article, articles_categories, articles_keyphrases, projects_categories, projects_keyphrases, Project
 
 site = Blueprint('site', __name__)
 
 @site.route("/", methods=['GET'])
 def intmain():
-    articles = Article.query.order_by(Article.publish_date.desc()).paginate(max_per_page=10, error_out=False)
+    articles = Article.query
+    if session['selected-project'] and session['selected-project'] != "none":
+        project = Project.query.filter_by(name=session['selected-project']).first()
+        articles = db.session.query(Article).distinct()\
+            .join(articles_categories)\
+            .join(articles_keyphrases)\
+            .join(projects_categories, (projects_categories.c.category_id == articles_categories.c.category_id) & (projects_categories.c.project_id == project.id))\
+            .join(projects_keyphrases, (projects_keyphrases.c.keyphrase_id == articles_keyphrases.c.keyphrase_id) & (projects_keyphrases.c.project_id == project.id))
+    articles = articles.order_by(Article.publish_date.desc())
+    articles = articles.paginate(max_per_page=10, error_out=False)
+
     for article in articles.items:
         version = article.version
         if version > 1:

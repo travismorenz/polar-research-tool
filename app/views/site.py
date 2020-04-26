@@ -6,7 +6,7 @@ site = Blueprint('site', __name__)
 @site.route("/", methods=['GET'])
 def intmain():
     articles = Article.query
-    if session['selected-project'] and session['selected-project'] != "none":
+    if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
         articles = db.session.query(Article).distinct()\
             .join(articles_categories)\

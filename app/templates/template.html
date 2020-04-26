@@ -3,15 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/spectre.css/dist/spectre.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='main.css') }}"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"/>
     <script
       src="https://code.jquery.com/jquery-3.5.0.min.js"
       integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
@@ -23,9 +16,7 @@
     <header>
       <div class="navbar container grid-xl">
         <section class="navbar-section">
-          <a href="{{ url_for('site.intmain') }}" class="navbar-brand mr-10"
-            >POLAR <span>Research Tool</span></a
-          >
+          <a href="{{ url_for('site.intmain') }}" class="navbar-brand mr-10">POLAR <span>Research Tool</span></a>
         </section>
         <section class="navbar-section">
           {% if current_user.is_authenticated %}
@@ -34,11 +25,9 @@
             <label class="form-inline">
               <select class="form-select" id="project-select">
                 <option value="none">None</option>
-                {% for project in current_user.projects %} {% if
-                session['selected-project'] == project.name %}
-                <option selected value="{{ project.name }}"
-                  >{{ project.name }}</option
-                >
+                {% for project in current_user.projects %}
+                {% if session['selected-project'] == project.name %}
+                <option selected value="{{ project.name }}">{{ project.name }}</option>
                 {% else %}
                 <option>{{ project.name }}</option>
                 {% endif %} {% endfor %}
@@ -65,12 +54,8 @@
           {% else %}
           <a
             href="{{ url_for('auth.login_get') }}"
-            class="btn text-large nav-btn"
-            >Login</a
-          >
-          <a href="{{ url_for('auth.register_get') }}" class="btn text-large"
-            >Register</a
-          >
+            class="btn text-large nav-btn">Login</a>
+          <a href="{{ url_for('auth.register_get') }}" class="btn text-large">Register</a>
           {% endif %}
         </section>
       </div>

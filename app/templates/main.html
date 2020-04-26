@@ -64,5 +64,6 @@ content %}
     href="{{ url_for('site.intmain', page=articles.next_num) }}"
     >Older Articles &gt;&gt;</a
   >{% else %}Older Articles &gt;&gt;{% endif %}
+  <div>{{ articles.page * articles.per_page }}/{{ articles.total }}</div>
 </div>
 {% endblock %}

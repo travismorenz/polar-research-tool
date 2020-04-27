@@ -8,7 +8,7 @@ def intmain():
     articles = Article.query
     if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
-        # Query all articles that share at least one keyphrase and category with the project
+        # Query all articles that share at least one keyphrase and category with the selected project
         cat_sq = db.session.query(articles_categories)\
             .join(projects_categories, (articles_categories.c.category_id == projects_categories.c.category_id) & (projects_categories.c.project_id == project.id))\
             .filter(articles_categories.c.article_id == Article.id)

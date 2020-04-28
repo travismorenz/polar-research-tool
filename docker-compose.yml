@@ -6,14 +6,14 @@ services:
     build: .
     depends_on:
       - redis
-    command: celery -A app.worker.celery_app beat -l debug
+    command: celery -A app.worker.celery_app beat -l DEBUG
     environment:
       - TZ=${UPDATE_TIMEZONE}
   worker:
     build: .
     depends_on:
       - redis
-    command: celery -A app.worker.celery_app worker -l info
+    command: celery -A app.worker.celery_app worker -l ERROR
     environment:
       - TZ=${UPDATE_TIMEZONE}
   web:

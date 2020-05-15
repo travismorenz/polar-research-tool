@@ -100,6 +100,15 @@ def create_project():
     db.session.commit()
     return res
 
+@auth.route('/delete-project', methods=['POST'])
+def delete_project():
+    res = {}
+    name = request.form['name']
+    project = Project.query.filter_by(name=name).first()
+    db.session.delete(project)
+    db.session.commit()
+    return res
+
 
 @auth.route('/join-project', methods=['POST'])
 def join_project():

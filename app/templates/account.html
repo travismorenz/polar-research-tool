@@ -92,6 +92,15 @@ content %}
       >
         Leave Project
       </button>
+      {% if current_user.admin %}
+      <button
+        onclick="deleteProject('{{ project.name }}')"
+        type="button"
+        class="btn btn-primary leave-btn"
+      >
+        Delete Project
+      </button>
+      {% endif %}
     </div>
     {% else %}
     <div>No Projects currently</div>
@@ -107,6 +116,13 @@ content %}
   function fail(res) {
     res = res.responseJSON;
     $(res.selector).html(res.error);
+  }
+  function deleteProject(name) {
+    const confirm = window.confirm(`Are you sure you want to delete ${name}?`);
+    if (!confirm) return;
+    $.post("{{ url_for('auth.delete_project') }}", { name: name }).done(
+      success
+    );
   }
   function leaveProject(name) {
     $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);

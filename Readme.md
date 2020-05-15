@@ -8,13 +8,15 @@
 
 ### Config
 
-Duplicate the `env.template` file found in the app directory and rename it to `.env`. Fill it out with your desired settings.
+1. Duplicate the `env.template` file found and rename it to `.env`. Fill it out with your desired settings.
 
-- `APP_PORT`: The port that the web app will be hosted on.
-- `SECRET_KEY`: The key used for signing session cookies. You can generate one using `python -c 'import os; print(os.urandom(16))'`. Make sure to use the entire generated key, including the `b` and single-quotes.
-- `SQLALCHEMY_DATABASE_URI`: The connection string for your database.
-- `UPDATE_TIME` (HH:MM): The time of day that you would like to update the database with new articles. **NOTE:** This process is asynchronous, so it shouldn't impact your server's performance.
-- `UPDATE_TIMEZONE` (ex: America/Los_Angeles): The timezone that you live in. This syncs up docker to your host time and ensures that the update is fired correctly.
+   - `APP_PORT`: The port that the web app will be hosted on.
+   - `SECRET_KEY`: The key used for signing session cookies. You can generate one using `python -c 'import os; print(os.urandom(16))'`. Make sure to use the entire generated key, including the `b` and single-quotes.
+   - `SQLALCHEMY_DATABASE_URI`: The connection string for your database.
+   - `UPDATE_TIME` (HH:MM): The time of day that you would like to update the database with new articles. **NOTE:** This process is asynchronous, so it shouldn't impact your server's performance.
+   - `UPDATE_TIMEZONE` (ex: America/Los_Angeles): The timezone that you live in. This syncs up docker to your host time and ensures that the update is fired correctly.
+
+2. Duplicate the `admins.template.py` in the app directory and rename to `admins.py`. Then put the usernames of the users you want to be admins into that array. This must be done before their accounts are created and it is case sensitive.
 
 ### Startup
 

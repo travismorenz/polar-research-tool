@@ -4,6 +4,7 @@ content %}
   <h2>My Account</h2>
   <p>Password change logic goes here...</p>
   <h4>Projects</h4>
+  {% if current_user.admin %}
   <form class="form-group col-4 col-lg-6 col-sm-12">
     <label class="form-label" for="create-project">Create Project</label>
     <input
@@ -17,6 +18,7 @@ content %}
       Create
     </button>
   </form>
+  {% endif %}
   <form
     class="form-group col-4 col-lg-6 col-sm-12"
     action="{{ url_for('auth.account')}}"
@@ -61,8 +63,8 @@ content %}
           placeholder="Ex: adverserial learning, data poisoning"
           rows="4"
         >
-{{ project.keyphrases }}
-        </textarea>
+{{ project.keyphrases }}</textarea
+        >
       </div>
       <div class="column col-4 col-sm-12">
         <label class="form-label" for="categories-{{ project.name }}">
@@ -80,8 +82,8 @@ content %}
           placeholder="Ex: cs.AI, math.AG, math.CT"
           rows="4"
         >
-{{ project.categories }}
-        </textarea>
+{{ project.categories }}</textarea
+        >
       </div>
       <button
         onclick="leaveProject('{{ project.name }}')"

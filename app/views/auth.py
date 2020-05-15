@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from app.models import db, Person, Project, Keyphrase, Category
 from flask_login import current_user, login_user, logout_user
+from app.admins import admins
 import os
 
 auth = Blueprint('auth', __name__)
@@ -53,7 +54,7 @@ def register_post():
     person = Person.query.filter_by(username=username).first()
     if person is not None:
         return render_template("register.html", error="User already exists.")
-    person = Person(username=username)
+    person = Person(username=username, admin=username in admins)
     person.set_password(password)
     db.session.add(person)
     db.session.commit()
@@ -79,6 +80,9 @@ def account():
     return render_template('account.html', **context)
 
 
+#####
+#  All project endpoints will be moved into their own view file at some point
+#####
 @auth.route('/create-project', methods=['POST'])
 def create_project():
     res = {'selector': '#create-project-error'}
@@ -125,6 +129,7 @@ def leave_project():
     db.session.commit()
     return res
 
+# Utility function for save-projects
 def clean_input(input):
     input = input.split(',')
     return sorted([x.strip() for x in set(filter(lambda x: x != '', input))])

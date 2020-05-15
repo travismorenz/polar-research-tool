@@ -8,11 +8,6 @@ persons_projects = db.Table('persons_projects',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True))
 
 
-persons_articles = db.Table('persons_articles', 
-    db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
-    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True))
-
-
 articles_categories = db.Table('articles_categories',
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
@@ -39,9 +34,9 @@ class Person(UserMixin, db.Model):
     username = db.Column(db.Text, unique=True, nullable=False)
     password_hash = db.Column(db.Text,unique=False, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.now(), nullable=False)
+    admin = db.Column(db.Boolean, nullable=False)
 
     projects = db.relationship('Project', secondary=persons_projects, back_populates='persons')
-    library = db.relationship('Article', secondary=persons_articles, back_populates='persons')
     comments = db.relationship('Comment', back_populates='persons')
 
     def set_password(self, password):
@@ -71,7 +66,6 @@ class Article(db.Model):
     publish_date = db.Column(db.DateTime, nullable=True) # This might be nullable=False, not sure yet
     # TODO: Analysis result fields will probably go here
 
-    persons = db.relationship('Person', secondary=persons_articles, back_populates='library')
     comments = db.relationship('Comment', back_populates='articles')
     categories = db.relationship('Category', secondary=articles_categories, back_populates="articles")
     keyphrases = db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")

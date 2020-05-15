@@ -14,7 +14,7 @@ from pdfminer.pdfparser import PDFParser
 
 # Helpers
 def log(*msg):
-    print(str(datetime.datetime.now())+":", *msg, file=open("./log", "a"))
+    print(str(datetime.datetime.now())+":", *msg, file=open("./log_"+datetime.datetime.today().strftime('%Y-%m-%d'), "a"))
 
 def get_content(links):
     """
@@ -141,3 +141,4 @@ def update():
 
                 log('Sleeping for %i seconds\n' % (5,))
                 time.sleep(5)
+    log('Finished----')

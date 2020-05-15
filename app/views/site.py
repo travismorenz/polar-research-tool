@@ -6,6 +6,7 @@ site = Blueprint('site', __name__)
 @site.route("/", methods=['GET'])
 def intmain():
     articles = Article.query
+    project = None
     if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
         # Query all articles that share at least one keyphrase and category with the selected project
@@ -25,7 +26,7 @@ def intmain():
             version1 = Article.query.filter_by(version=1, title=article.title).first()
             if version1 is not None:
                 article.version1 = version1
-    return render_template('main.html', articles=articles, tab='articles')
+    return render_template('main.html', articles=articles, tab='articles', project=project)
 
 
 @site.route('/library', methods=['GET'])
@@ -41,23 +42,17 @@ def library():
                 version1 = Article.query.filter_by(version=1, title=article.title).first()
                 if version1 is not None:
                     article.version1 = version1
-    return render_template('main.html', articles=articles, tab='library')
+    return render_template('main.html', articles=articles, tab='library', project=project)
 
 
 @site.route('/toggle-in-library', methods=['POST'])
 def toggle_in_library():
     res = {}
-    title = request.form['title']
+    id = request.form['id']
     if session.get('selected-project') and session['selected-project'] != "none":
-        article = Article.query.filter_by(title=title).first()
+        article = Article.query.filter_by(id=id).first()
         project = Project.query.filter_by(name=session['selected-project']).first()
-        found = False
-        for a in project.articles:
-            print(a.id)
-            if a.id == article.id:
-                found = True
-                break
-        if found:
+        if article in project.articles:
             project.articles.remove(article)
         else:
             project.articles.append(article)

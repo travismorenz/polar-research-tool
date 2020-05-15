@@ -1,22 +1,11 @@
 {% extends "template.html" %} {% block title %}Home{% endblock %} {% block
 content %}
 <div id="banner">
-  <!--
-    <div id="sbox" style="text-align: center; margin-top: 5px;">
-      <form action="/search" method="get">
-        <div>
-          <input placeholder="Search..." name="q" type="text" id="qfield" />
-          <button type="submit"><i class="fa fa-search"></i></button>
-        </div>
-      </form>
-      <div id="search_hint"></div>
-    </div>
-    -->
   <div class="btn-group btn-group-block" id="pagebar">
     <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
       <div class="pagelink" id="tabart" class="btn">Articles</div>
     </a>
-    {% if session['selected-project'] %}
+    {% if project %}
     <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
       <div class="pagelink" id="tablib">Library</div>
     </a>
@@ -24,7 +13,18 @@ content %}
   </div>
 </div>
 {% for article in articles.items %}
-<div class="article card">
+<div class="article card" id="{{ article.id }}">
+  {% if project %} {% if project in article.projects %}
+  <i
+    onclick="toggleLibray(this, '{{ article.id }}')"
+    class="fas fa-bookmark"
+  ></i>
+  {% else %}
+  <i
+    onclick="toggleLibray(this, '{{ article.id }}')"
+    class="far fa-bookmark"
+  ></i>
+  {% endif %} {% endif %}
   <a href="{{ article.url }}" target="_blank"><h5>{{ article.title }}</h5></a>
   <div id="authors">
     {% for author in article.authors[:-1] %}
@@ -46,7 +46,6 @@ content %}
     <a href="#">{{ article.categories[-1].name }}</a>
   </div>
   <p>{{ article.summary }}</p>
-  <button onclick="toggleLibray('{{ article.title }}')">Save</button>
 </div>
 {% endfor %}
 <div id="prev_next">
@@ -59,13 +58,25 @@ content %}
     >Older Articles &gt;&gt;</a
   >
   {% else %} Older Articles &gt;&gt; {% endif %}
-  <div>{{ articles.total }} articles total</div>
+  <div id="total">{{ articles.total }} articles total</div>
 </div>
 <script>
-  function toggleLibray(title) {
-    $.post("{{ url_for('site.toggle_in_library') }}", { title }).done(() =>
-      console.log("Done")
-    );
+  function toggleLibray(el, id) {
+    $.post("{{ url_for('site.toggle_in_library') }}", { id }).done(() => {
+      const $icon = $(el);
+      const tab = {{ tab | tojson }};
+      const $article = $(`#${id}`);
+      if (tab === "library") {
+        const $total = $('#total');
+        let content = $total.html().split(' ');
+        content[0] = content[0] - 1;
+        content = content.join(' ');
+        $total.html(content);
+        $article.remove();
+      }
+      if ($icon.hasClass('fas')) return $icon.removeClass('fas').addClass('far');
+      if ($icon.hasClass('far')) return $icon.removeClass('far').addClass('fas');
+    });
   }
 </script>
 {% endblock %}

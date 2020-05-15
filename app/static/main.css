@@ -71,6 +71,13 @@ main {
   border: 0;
 }
 
+.card i {
+  font-size: 1.2rem;
+  color: #5755d9;
+  margin-left: auto;
+  cursor: pointer;
+}
+
 .publish_date {
   margin-right: 1rem;
   font-weight: bold;

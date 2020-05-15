@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from app.models import db, Person, Project, Keyphrase, Category
 from flask_login import current_user, login_user, logout_user
 from app.admins import admins
@@ -64,6 +64,7 @@ def register_post():
 
 @auth.route('/logout')
 def logout():
+    session.clear();
     logout_user()
     return redirect(url_for('site.intmain'))
 

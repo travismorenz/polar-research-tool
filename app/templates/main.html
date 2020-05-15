@@ -13,12 +13,14 @@ content %}
     </div>
     -->
   <div class="btn-group btn-group-block" id="pagebar">
-    <a href="/" class="btn active">
+    <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
       <div class="pagelink" id="tabart" class="btn">Articles</div>
     </a>
-    <a href="/library" class="btn">
+    {% if session['selected-project'] %}
+    <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
       <div class="pagelink" id="tablib">Library</div>
     </a>
+    {% endif %}
   </div>
 </div>
 {% for article in articles.items %}
@@ -44,6 +46,7 @@ content %}
     <a href="#">{{ article.categories[-1].name }}</a>
   </div>
   <p>{{ article.summary }}</p>
+  <button onclick="toggleLibray('{{ article.title }}')">Save</button>
 </div>
 {% endfor %}
 <div id="prev_next">
@@ -58,4 +61,11 @@ content %}
   {% else %} Older Articles &gt;&gt; {% endif %}
   <div>{{ articles.total }} articles total</div>
 </div>
+<script>
+  function toggleLibray(title) {
+    $.post("{{ url_for('site.toggle_in_library') }}", { title }).done(() =>
+      console.log("Done")
+    );
+  }
+</script>
 {% endblock %}

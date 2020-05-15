@@ -29,6 +29,10 @@ projects_categories = db.Table('projects_categories',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
 
+projects_articles = db.Table('projects_articles',
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True))
+
 class Person(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, unique=True, nullable=False)
@@ -53,6 +57,7 @@ class Project(db.Model):
     persons = db.relationship('Person', secondary=persons_projects, back_populates='projects')
     keyphrases = db.relationship('Keyphrase', secondary=projects_keyphrases, back_populates='projects')
     categories = db.relationship('Category', secondary=projects_categories, back_populates="projects")
+    articles = db.relationship('Article', secondary=projects_articles, back_populates="projects", lazy="dynamic")
 
 
 class Article(db.Model):
@@ -70,6 +75,7 @@ class Article(db.Model):
     categories = db.relationship('Category', secondary=articles_categories, back_populates="articles")
     keyphrases = db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")
     authors = db.relationship('Author', secondary=articles_authors, back_populates="articles")
+    projects = db.relationship('Project', secondary=projects_articles, back_populates="articles", lazy="dynamic")
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)

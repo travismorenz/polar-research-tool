@@ -120,12 +120,10 @@ content %}
   function deleteProject(name) {
     const confirm = window.confirm(`Are you sure you want to delete ${name}?`);
     if (!confirm) return;
-    $.post("{{ url_for('auth.delete_project') }}", { name: name }).done(
-      success
-    );
+    $.post("{{ url_for('auth.delete_project') }}", { name }).done(success);
   }
   function leaveProject(name) {
-    $.post("{{ url_for('auth.leave_project') }}", { name: name }).done(success);
+    $.post("{{ url_for('auth.leave_project') }}", { name }).done(success);
   }
   function createProject() {
     $.post("{{ url_for('auth.create_project') }}", {

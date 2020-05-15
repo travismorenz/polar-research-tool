@@ -100,6 +100,7 @@ def create_project():
     db.session.commit()
     return res
 
+
 @auth.route('/delete-project', methods=['POST'])
 def delete_project():
     res = {}
@@ -137,6 +138,7 @@ def leave_project():
     db.session.add(current_user)
     db.session.commit()
     return res
+
 
 # Utility function for save-projects
 def clean_input(input):

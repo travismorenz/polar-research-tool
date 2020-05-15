@@ -6,7 +6,7 @@ site = Blueprint('site', __name__)
 @site.route("/", methods=['GET'])
 def intmain():
     articles = Article.query
-    if session.get('selected-project') and session['selected-project'] is not "none":
+    if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
         # Query all articles that share at least one keyphrase and category with the selected project
         cat_sq = db.session.query(articles_categories)\
@@ -30,7 +30,7 @@ def intmain():
 
 @site.route('/library', methods=['GET'])
 def library():
-    if session.get('selected-project') is None or session['selected-project'] is None:
+    if session.get('selected-project') == None or session['selected-project'] == None:
         return redirect(url_for('site.intmain'))
     project = Project.query.filter_by(name=session["selected-project"]).first()
     if project is not None:
@@ -48,7 +48,7 @@ def library():
 def toggle_in_library():
     res = {}
     title = request.form['title']
-    if session.get('selected-project') and session['selected-project'] is not "none":
+    if session.get('selected-project') and session['selected-project'] != "none":
         article = Article.query.filter_by(title=title).first()
         project = Project.query.filter_by(name=session['selected-project']).first()
         found = False

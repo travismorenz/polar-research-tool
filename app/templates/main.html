@@ -12,7 +12,7 @@ content %}
     {% endif %}
   </div>
 </div>
-{% for article in articles.items %}
+{% for article in articles %}
 <div class="article card" id="{{ article.id }}">
   {% if project %} {% if project in article.projects %}
   <i
@@ -58,7 +58,7 @@ content %}
     >Older Articles &gt;&gt;</a
   >
   {% else %} Older Articles &gt;&gt; {% endif %}
-  <div id="total">{{ articles.total }} articles total</div>
+  <div id="total">{{ total }} articles total</div>
 </div>
 <script>
   function toggleLibray(el, id) {

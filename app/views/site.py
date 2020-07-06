@@ -1,32 +1,97 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
-from app.models import db, Article, articles_categories, articles_keyphrases, projects_categories, projects_keyphrases, Project, projects_articles
+from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 
 site = Blueprint('site', __name__)
 
+# TODO: 
+# fix pagination
+# fix count
+# add search bar functionality
+
+def build_search_query(project, terms):
+    def like_statement(column_name):
+        c = map(lambda t: f"{column_name} LIKE '%{t}%'", terms)
+        return ' OR '.join(c)
+    operator = 'AND' if project else 'WHERE'
+    query = f"""
+        {operator} (
+				EXISTS (
+					SELECT * from articles_authors aa
+					JOIN author
+						ON author.id = aa.author_id
+					WHERE aa.article_id = a.id
+					AND ({like_statement('author.name')})
+				)
+				OR EXISTS (
+					SELECT * from articles_keyphrases ak
+					JOIN keyphrase
+						ON keyphrase.id = ak.keyphrase_id
+					WHERE ak.article_id = a.id
+					AND ({like_statement('keyphrase.name')})
+				)
+                OR EXISTS (
+					SELECT * from articles_categories ac
+					JOIN category
+						ON category.id = ac.category_id
+					WHERE ac.article_id = a.id
+					AND ({like_statement('category.name')})
+				)
+                OR ({like_statement('a.title')})
+        	)
+        """
+    return query
+
+def build_filter_query(project_id):
+    return """
+            WHERE EXISTS (
+                SELECT * FROM articles_categories ac 
+                JOIN projects_categories pc
+                    ON pc.category_id = ac.category_id AND pc.project_id = :id
+                WHERE ac.article_id = a.id
+            )
+            AND EXISTS (
+                SELECT * FROM articles_keyphrases ak 
+                JOIN projects_keyphrases pk
+                    ON pk.keyphrase_id = ak.keyphrase_id AND pk.project_id = :id 
+                WHERE ak.article_id = a.id
+            )
+        """
+
 @site.route("/", methods=['GET'])
 def intmain():
-    articles = Article.query
+    
+    filter_query = ""
     project = None
     if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
-        # Query all articles that share at least one keyphrase and category with the selected project
-        cat_sq = db.session.query(articles_categories)\
-            .join(projects_categories, (articles_categories.c.category_id == projects_categories.c.category_id) & (projects_categories.c.project_id == project.id))\
-            .filter(articles_categories.c.article_id == Article.id)
-        kp_sq = db.session.query(articles_keyphrases)\
-            .join(projects_keyphrases, (articles_keyphrases.c.keyphrase_id == projects_keyphrases.c.keyphrase_id) & (projects_keyphrases.c.project_id == project.id))\
-            .filter(articles_keyphrases.c.article_id == Article.id)
-        articles = db.session.query(Article).filter(cat_sq.exists() & kp_sq.exists())
-    articles = articles.order_by(Article.publish_date.desc())
-    articles = articles.paginate(max_per_page=10, error_out=False)
+        filter_query = build_filter_query(project.id)
 
-    for article in articles.items:
+    search_string = "Martin Stetter,stat.ML"
+    search_query = ""
+    if search_string:
+        terms = search_string.split(',')
+        search_query = build_search_query(project, terms)
+
+    main_query = f"""
+        SELECT *
+            FROM article a
+        {filter_query}
+        {search_query}
+        ORDER BY publish_date DESC
+        LIMIT 50 OFFSET 0;
+    """
+    articles = Article.query.from_statement(db.text(main_query))
+    if project:
+        articles = articles.params(id=project.id)
+    articles = articles.all()
+
+    for article in articles:
         version = article.version
         if version > 1:
             version1 = Article.query.filter_by(version=1, title=article.title).first()
             if version1 is not None:
                 article.version1 = version1
-    return render_template('main.html', articles=articles, tab='articles', project=project)
+    return render_template('main.html', articles=articles, total=len(articles), tab='articles', project=project)
 
 
 @site.route('/library', methods=['GET'])

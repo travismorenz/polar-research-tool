@@ -6,7 +6,7 @@ site = Blueprint('site', __name__)
 # TODO: 
 # fix pagination
 # fix count
-# add search bar functionality
+# add search bar functionality (!! remember to sanitize input)
 
 def build_search_query(project, terms):
     def like_statement(column_name):
@@ -59,19 +59,21 @@ def build_filter_query(project_id):
 
 @site.route("/", methods=['GET'])
 def intmain():
-    
+    # Filter articles if project is selected
     filter_query = ""
     project = None
     if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
         filter_query = build_filter_query(project.id)
 
+    # Filter articles on search string
     search_string = "Martin Stetter,stat.ML"
     search_query = ""
     if search_string:
         terms = search_string.split(',')
         search_query = build_search_query(project, terms)
 
+    # Main query including pagination functionality
     main_query = f"""
         SELECT *
             FROM article a

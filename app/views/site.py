@@ -5,8 +5,8 @@ site = Blueprint('site', __name__)
 
 # TODO: 
 # fix library
-# add search bar functionality (!! remember to sanitize input)
-# fulltext
+# add search bar functionality (!! remember to use prepared statements)
+# fulltext instead of LIKE
 
 def build_search_query(project, terms):
     def like_statement(column_name):

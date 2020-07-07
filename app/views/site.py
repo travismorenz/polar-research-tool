@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 
 site = Blueprint('site', __name__)
+LIMIT = 20 # num of articles per page
 
 # TODO: 
-# fix library
 # add search bar functionality (!! remember to use prepared statements)
 # fulltext instead of LIKE
 
@@ -57,18 +57,24 @@ def build_filter_query(project_id):
             )
         """
 
-def set_pagination_info(articles, limit, page):
+def set_pagination_info(articles, page):
     total = articles['total']
     curr_amount = len(articles['items'])
-    articles['has_next'] = total > limit * page + curr_amount
+    articles['has_next'] = total > LIMIT * page + curr_amount
     articles['has_prev'] = page > 0
     articles['next_page'] = page + 1
     articles['prev_page'] = page - 1
 
+def set_previous_versions(articles):
+    for article in articles['items']:
+        version = article.version
+        if version > 1:
+            version1 = Article.query.filter_by(version=1, title=article.title).first()
+            if version1 is not None:
+                article.version1 = version1
+
 @site.route("/", methods=['GET'])
 def intmain():
-    # For pagination
-    limit = 20 
     page = int(request.args.get('page')) if request.args.get('page') else 0
 
     # Filter articles if project is selected
@@ -85,15 +91,15 @@ def intmain():
         terms = search_string.split(',')
         search_query = build_search_query(project, terms)
 
-    # Main queries
+    # Construct queries
     main_query = f"""
         SELECT *
             FROM article a
         {filter_query}
         {search_query}
         ORDER BY publish_date DESC
-        LIMIT {limit}
-        OFFSET {page * limit};
+        LIMIT {LIMIT}
+        OFFSET {page * LIMIT};
     """
     count_query = f"""
         SELECT COUNT(*)
@@ -101,6 +107,7 @@ def intmain():
         {filter_query}
         {search_query};
     """
+    # Populate articles dict with query results and metadata
     articles = {}
     if project:
         articles['items'] = Article.query.from_statement(db.text(main_query)).params(id=project.id).all()
@@ -108,14 +115,9 @@ def intmain():
     else:
         articles['items'] = Article.query.from_statement(db.text(main_query)).all()
         articles['total'] = db.engine.execute(db.text(count_query)).fetchall()[0]['count']
-    set_pagination_info(articles, limit, page)
+    set_pagination_info(articles, page)
+    set_previous_versions(articles)
 
-    for article in articles['items']:
-        version = article.version
-        if version > 1:
-            version1 = Article.query.filter_by(version=1, title=article.title).first()
-            if version1 is not None:
-                article.version1 = version1
     return render_template('main.html', articles=articles, tab='articles', project=project)
 
 
@@ -123,15 +125,14 @@ def intmain():
 def library():
     if session.get('selected-project') == None or session['selected-project'] == None:
         return redirect(url_for('site.intmain'))
+    page = int(request.args.get('page')) if request.args.get('page') else 0
     project = Project.query.filter_by(name=session["selected-project"]).first()
-    if project is not None:
-        articles = project.articles.order_by(Article.publish_date.desc()).paginate(max_per_page=10, error_out=False)
-        for article in articles.items:
-            version = article.version
-            if version > 1:
-                version1 = Article.query.filter_by(version=1, title=article.title).first()
-                if version1 is not None:
-                    article.version1 = version1
+
+    articles = {}
+    articles['items'] = project.articles.order_by(Article.publish_date.desc()).limit(LIMIT).offset(page * LIMIT).all()
+    articles['total'] = project.articles.count()
+    set_pagination_info(articles, page)
+    set_previous_versions(articles)
     return render_template('main.html', articles=articles, tab='library', project=project)
 
 

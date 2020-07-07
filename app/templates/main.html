@@ -47,7 +47,7 @@ content %}
   </div>
   <p>{{ article.summary }}</p>
 </div>
-{% endfor %}
+{% endfor %} {% if tab != 'library' %}
 <div id="prev_next">
   {% if articles['has_prev'] %}
   <a href="{{ url_for('site.intmain', page=articles['prev_page']) }}"
@@ -57,26 +57,38 @@ content %}
   <a href="{{ url_for('site.intmain', page=articles['next_page']) }}"
     >Older Articles &gt;&gt;</a
   >
-  {% else %} Older Articles &gt;&gt; {% endif %}
-  <div id="total">{{ articles['total'] }} articles total</div>
+  {% else %} Older Articles &gt;&gt; {% endif %} {% else %}
+  <div id="prev_next">
+    {% if articles['has_prev'] %}
+    <a href="{{ url_for('site.library', page=articles['prev_page']) }}"
+      >&lt;&lt; Newer Articles</a
+    >
+    {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles['has_next']
+    %}
+    <a href="{{ url_for('site.library', page=articles['next_page']) }}"
+      >Older Articles &gt;&gt;</a
+    >
+    {% else %} Older Articles &gt;&gt; {% endif %} {% endif %}
+    <div id="total">{{ articles['total'] }} articles total</div>
+  </div>
+  <script>
+    function toggleLibray(el, id) {
+      $.post("{{ url_for('site.toggle_in_library') }}", { id }).done(() => {
+        const $icon = $(el);
+        const tab = {{ tab | tojson }};
+        const $article = $(`#${id}`);
+        if (tab === "library") {
+          const $total = $('#total');
+          let content = $total.html().split(' ');
+          content[0] = content[0] - 1;
+          content = content.join(' ');
+          $total.html(content);
+          $article.remove();
+        }
+        if ($icon.hasClass('fas')) return $icon.removeClass('fas').addClass('far');
+        if ($icon.hasClass('far')) return $icon.removeClass('far').addClass('fas');
+      });
+    }
+  </script>
+  {% endblock %}
 </div>
-<script>
-  function toggleLibray(el, id) {
-    $.post("{{ url_for('site.toggle_in_library') }}", { id }).done(() => {
-      const $icon = $(el);
-      const tab = {{ tab | tojson }};
-      const $article = $(`#${id}`);
-      if (tab === "library") {
-        const $total = $('#total');
-        let content = $total.html().split(' ');
-        content[0] = content[0] - 1;
-        content = content.join(' ');
-        $total.html(content);
-        $article.remove();
-      }
-      if ($icon.hasClass('fas')) return $icon.removeClass('fas').addClass('far');
-      if ($icon.hasClass('far')) return $icon.removeClass('far').addClass('fas');
-    });
-  }
-</script>
-{% endblock %}

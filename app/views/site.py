@@ -4,9 +4,9 @@ from app.models import db, Article, Author, articles_authors, articles_categorie
 site = Blueprint('site', __name__)
 
 # TODO: 
-# fix pagination
-# fix count
+# fix library
 # add search bar functionality (!! remember to sanitize input)
+# fulltext
 
 def build_search_query(project, terms):
     def like_statement(column_name):
@@ -57,8 +57,20 @@ def build_filter_query(project_id):
             )
         """
 
+def set_pagination_info(articles, limit, page):
+    total = articles['total']
+    curr_amount = len(articles['items'])
+    articles['has_next'] = total > limit * page + curr_amount
+    articles['has_prev'] = page > 0
+    articles['next_page'] = page + 1
+    articles['prev_page'] = page - 1
+
 @site.route("/", methods=['GET'])
 def intmain():
+    # For pagination
+    limit = 20 
+    page = int(request.args.get('page')) if request.args.get('page') else 0
+
     # Filter articles if project is selected
     filter_query = ""
     project = None
@@ -67,33 +79,44 @@ def intmain():
         filter_query = build_filter_query(project.id)
 
     # Filter articles on search string
-    search_string = "Martin Stetter,stat.ML"
+    search_string = ""
     search_query = ""
     if search_string:
         terms = search_string.split(',')
         search_query = build_search_query(project, terms)
 
-    # Main query including pagination functionality
+    # Main queries
     main_query = f"""
         SELECT *
             FROM article a
         {filter_query}
         {search_query}
         ORDER BY publish_date DESC
-        LIMIT 50 OFFSET 0;
+        LIMIT {limit}
+        OFFSET {page * limit};
     """
-    articles = Article.query.from_statement(db.text(main_query))
+    count_query = f"""
+        SELECT COUNT(*)
+            FROM article a
+        {filter_query}
+        {search_query};
+    """
+    articles = {}
     if project:
-        articles = articles.params(id=project.id)
-    articles = articles.all()
+        articles['items'] = Article.query.from_statement(db.text(main_query)).params(id=project.id).all()
+        articles['total'] = db.engine.execute(db.text(count_query), id=project.id).fetchall()[0]['count']
+    else:
+        articles['items'] = Article.query.from_statement(db.text(main_query)).all()
+        articles['total'] = db.engine.execute(db.text(count_query)).fetchall()[0]['count']
+    set_pagination_info(articles, limit, page)
 
-    for article in articles:
+    for article in articles['items']:
         version = article.version
         if version > 1:
             version1 = Article.query.filter_by(version=1, title=article.title).first()
             if version1 is not None:
                 article.version1 = version1
-    return render_template('main.html', articles=articles, total=len(articles), tab='articles', project=project)
+    return render_template('main.html', articles=articles, tab='articles', project=project)
 
 
 @site.route('/library', methods=['GET'])

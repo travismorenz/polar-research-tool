@@ -12,7 +12,7 @@ content %}
     {% endif %}
   </div>
 </div>
-{% for article in articles %}
+{% for article in articles['items'] %}
 <div class="article card" id="{{ article.id }}">
   {% if project %} {% if project in article.projects %}
   <i
@@ -49,16 +49,16 @@ content %}
 </div>
 {% endfor %}
 <div id="prev_next">
-  {% if articles.has_prev %}
-  <a href="{{ url_for('site.intmain', page=articles.prev_num) }}"
+  {% if articles['has_prev'] %}
+  <a href="{{ url_for('site.intmain', page=articles['prev_page']) }}"
     >&lt;&lt; Newer Articles</a
   >
-  {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles.has_next %}
-  <a href="{{ url_for('site.intmain', page=articles.next_num) }}"
+  {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles['has_next'] %}
+  <a href="{{ url_for('site.intmain', page=articles['next_page']) }}"
     >Older Articles &gt;&gt;</a
   >
   {% else %} Older Articles &gt;&gt; {% endif %}
-  <div id="total">{{ total }} articles total</div>
+  <div id="total">{{ articles['total'] }} articles total</div>
 </div>
 <script>
   function toggleLibray(el, id) {

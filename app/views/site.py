@@ -108,7 +108,6 @@ def intmain():
         {search_query};
     """
     # Populate articles dict with query results and metadata
-    print (count_query)
     articles = {}
     query_params = {'limit': LIMIT, 'offset': page * LIMIT}
     if project:

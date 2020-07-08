@@ -41,7 +41,7 @@ def build_search_query(project, terms):
         """
     return query
 
-def build_filter_query(project_id):
+def get_filter_query(project_id):
     return """
             WHERE EXISTS (
                 SELECT * FROM articles_categories ac 
@@ -82,7 +82,7 @@ def intmain():
     project = None
     if session.get('selected-project') and session['selected-project'] != "none":
         project = Project.query.filter_by(name=session['selected-project']).first()
-        filter_query = build_filter_query(project.id)
+        filter_query = get_filter_query(project.id)
 
     # Filter articles on search string
     search_string = ""
@@ -98,8 +98,8 @@ def intmain():
         {filter_query}
         {search_query}
         ORDER BY publish_date DESC
-        LIMIT {LIMIT}
-        OFFSET {page * LIMIT};
+        LIMIT :limit
+        OFFSET :offset;
     """
     count_query = f"""
         SELECT COUNT(*)
@@ -108,13 +108,13 @@ def intmain():
         {search_query};
     """
     # Populate articles dict with query results and metadata
+    print (count_query)
     articles = {}
+    query_params = {'limit': LIMIT, 'offset': page * LIMIT}
     if project:
-        articles['items'] = Article.query.from_statement(db.text(main_query)).params(id=project.id).all()
-        articles['total'] = db.engine.execute(db.text(count_query), id=project.id).fetchall()[0]['count']
-    else:
-        articles['items'] = Article.query.from_statement(db.text(main_query)).all()
-        articles['total'] = db.engine.execute(db.text(count_query)).fetchall()[0]['count']
+        query_params['id'] = project.id
+    articles['items'] = Article.query.from_statement(db.text(main_query)).params(**query_params).all()
+    articles['total'] = db.engine.execute(db.text(count_query), **query_params).fetchall()[0]['count']
     set_pagination_info(articles, page)
     set_previous_versions(articles)
 

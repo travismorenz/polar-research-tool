@@ -10,7 +10,7 @@ LIMIT = 20 # num of articles per page
 
 def build_search_query(project, terms):
     def like_statement(column_name):
-        c = map(lambda t: f"{column_name} LIKE '%{t}%'", terms)
+        c = map(lambda t: f"LOWER({column_name}) LIKE LOWER('%{t}%')", terms)
         return ' OR '.join(c)
     operator = 'AND' if project else 'WHERE'
     query = f"""
@@ -85,10 +85,10 @@ def intmain():
         filter_query = get_filter_query(project.id)
 
     # Filter articles on search string
-    search_string = ""
+    search_string = "analogies graph"
     search_query = ""
     if search_string:
-        terms = search_string.split(',')
+        terms = search_string.split(' ')
         search_query = build_search_query(project, terms)
 
     # Construct queries

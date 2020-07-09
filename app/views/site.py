@@ -85,7 +85,7 @@ def intmain():
         filter_query = get_filter_query(project.id)
 
     # Filter articles on search string
-    search_string = "analogies graph"
+    search_string = ""
     search_query = ""
     if search_string:
         terms = search_string.split(' ')

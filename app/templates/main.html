@@ -1,16 +1,22 @@
 {% extends "template.html" %} {% block title %}Home{% endblock %} {% block
 content %}
-<div id="banner">
-  <div class="btn-group btn-group-block" id="pagebar">
-    <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
-      <div class="pagelink" id="tabart" class="btn">Articles</div>
-    </a>
-    {% if project %}
-    <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
-      <div class="pagelink" id="tablib">Library</div>
-    </a>
-    {% endif %}
+<div class="space-between">
+  <div id="tabs">
+    <div class="btn-group btn-group-block" id="pagebar">
+      <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
+        <div class="pagelink" id="tabart" class="btn">Articles</div>
+      </a>
+      {% if project %}
+      <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
+        <div class="pagelink" id="tablib">Library</div>
+      </a>
+      {% endif %}
+    </div>
   </div>
+  <form id="search-bar" class="has-icon-left">
+    <input type="text" class="form-input" />
+    <i class="form-icon icon icon-search"></i>
+  </form>
 </div>
 {% for article in articles['items'] %}
 <div class="article card" id="{{ article.id }}">

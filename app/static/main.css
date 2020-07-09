@@ -50,9 +50,17 @@ main {
   margin-top: 5px;
 }
 
-#banner {
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+#search-bar {
+  width: 20rem;
+}
+
+#tabs {
   width: 10rem;
-  margin-left: auto;
 }
 
 .article {

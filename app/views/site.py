@@ -9,9 +9,9 @@ LIMIT = 20 # num of articles per page
 # add search bar functionality (!! remember to use prepared statements)
 # fulltext instead of LIKE
 
-def build_search_query(project, terms):
+def build_search_query(project, param_keys):
     def like_statement(column_name):
-        c = map(lambda x: f"LOWER({column_name}) LIKE LOWER(:term_{x})", terms)
+        c = map(lambda key: f"LOWER({column_name}) LIKE LOWER(:{key})", param_keys)
         return ' OR '.join(c)
     operator = 'AND' if project else 'WHERE'
     query = f"""
@@ -74,9 +74,12 @@ def set_previous_versions(articles):
             if version1 is not None:
                 article.version1 = version1
 
-def params_reduce_helper(a, b):
-    a['term_'+b] = f"%{b}%"
-    return a
+def build_search_query_params(terms):
+    params = {}
+    for i in range(len(terms)):
+        term = terms[i]
+        params[f'term{str(i)}'] = f'%{term}%'
+    return params
 
 
 @site.route("/", methods=['GET'])
@@ -97,8 +100,8 @@ def intmain():
     search_query_params = None
     if search_string:
         terms = list(filter(lambda x: x, search_string.split(' '))) # split search string on space, remove empty strings
-        search_query = build_search_query(project, terms)
-        search_query_params = reduce(params_reduce_helper, terms, {}) # convert to dict of sql params
+        search_query_params = build_search_query_params(terms)
+        search_query = build_search_query(project, search_query_params.keys())
 
     # Construct queries
     main_query = f"""

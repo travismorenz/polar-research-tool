@@ -6,7 +6,7 @@ site = Blueprint('site', __name__)
 LIMIT = 20 # num of articles per page
 
 # TODO: 
-# add search bar functionality (!! remember to use prepared statements)
+# reconfigure library to work with searching
 # fulltext instead of LIKE
 
 def build_search_query(project, param_keys):
@@ -86,7 +86,7 @@ def build_search_query_params(terms):
 def intmain():
     # Query params
     page = int(request.args.get('page')) if request.args.get('page') else 0
-    search_string = request.args.get('search')
+    search_string = request.args.get('search') if request.args.get('search') else ''
 
     # Filter articles if project is selected
     filter_query = ""
@@ -133,7 +133,7 @@ def intmain():
     # Add additional metadata to articles for display
     set_pagination_info(articles, page)
     set_previous_versions(articles)
-    return render_template('main.html', articles=articles, tab='articles', project=project)
+    return render_template('main.html', articles=articles, tab='articles', project=project, search_string=search_string)
 
 
 @site.route('/library', methods=['GET'])

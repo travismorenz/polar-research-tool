@@ -13,8 +13,18 @@ content %}
       {% endif %}
     </div>
   </div>
-  <form id="search-bar" class="has-icon-left">
-    <input type="text" class="form-input" />
+  <form
+    method="GET"
+    action="{{ url_for('site.intmain') }}"
+    id="search-bar"
+    class="has-icon-left"
+  >
+    <input
+      name="search"
+      value="{{ search_string }}"
+      type="text"
+      class="form-input"
+    />
     <i class="form-icon icon icon-search"></i>
   </form>
 </div>

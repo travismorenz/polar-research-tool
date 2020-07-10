@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
+from functools import reduce
 from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 
 site = Blueprint('site', __name__)
@@ -10,7 +11,7 @@ LIMIT = 20 # num of articles per page
 
 def build_search_query(project, terms):
     def like_statement(column_name):
-        c = map(lambda t: f"LOWER({column_name}) LIKE LOWER('%{t}%')", terms)
+        c = map(lambda x: f"LOWER({column_name}) LIKE LOWER(:term_{x})", terms)
         return ' OR '.join(c)
     operator = 'AND' if project else 'WHERE'
     query = f"""
@@ -73,6 +74,11 @@ def set_previous_versions(articles):
             if version1 is not None:
                 article.version1 = version1
 
+def params_reduce_helper(a, b):
+    a['term_'+b] = f"%{b}%"
+    return a
+
+
 @site.route("/", methods=['GET'])
 def intmain():
     page = int(request.args.get('page')) if request.args.get('page') else 0
@@ -87,9 +93,11 @@ def intmain():
     # Filter articles on search string
     search_string = ""
     search_query = ""
+    search_params = None
     if search_string:
-        terms = search_string.split(' ')
+        terms = list(filter(lambda x: x, search_string.split(' '))) # split search string on space, remove empty strings
         search_query = build_search_query(project, terms)
+        search_params = reduce(params_reduce_helper, terms, {}) # convert to dict of sql params
 
     # Construct queries
     main_query = f"""
@@ -112,6 +120,8 @@ def intmain():
     query_params = {'limit': LIMIT, 'offset': page * LIMIT}
     if project:
         query_params['id'] = project.id
+    if search_params:
+        query_params.update(search_params)
     articles['items'] = Article.query.from_statement(db.text(main_query)).params(**query_params).all()
     articles['total'] = db.engine.execute(db.text(count_query), **query_params).fetchall()[0]['count']
     set_pagination_info(articles, page)

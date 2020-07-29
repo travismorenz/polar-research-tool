@@ -1,18 +1,34 @@
 {% extends "template.html" %} {% block title %}Home{% endblock %} {% block
 content %}
-<div id="banner">
-  <div class="btn-group btn-group-block" id="pagebar">
-    <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
-      <div class="pagelink" id="tabart" class="btn">Articles</div>
-    </a>
-    {% if project %}
-    <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
-      <div class="pagelink" id="tablib">Library</div>
-    </a>
-    {% endif %}
+<div class="space-between">
+  <div id="tabs">
+    <div class="btn-group btn-group-block" id="pagebar">
+      <a href="/" class="btn {{ 'active' if tab == 'articles' }}">
+        <div class="pagelink" id="tabart" class="btn">Articles</div>
+      </a>
+      {% if project %}
+      <a href="/library" class="btn {{ 'active' if tab == 'library' }}">
+        <div class="pagelink" id="tablib">Library</div>
+      </a>
+      {% endif %}
+    </div>
   </div>
+  <form
+    method="GET"
+    action="{{ url_for('site.intmain') }}"
+    id="search-bar"
+    class="has-icon-left"
+  >
+    <input
+      name="search"
+      value="{{ search_string }}"
+      type="text"
+      class="form-input"
+    />
+    <i class="form-icon icon icon-search"></i>
+  </form>
 </div>
-{% for article in articles.items %}
+{% for article in articles['items'] %}
 <div class="article card" id="{{ article.id }}">
   {% if project %} {% if project in article.projects %}
   <i
@@ -47,36 +63,48 @@ content %}
   </div>
   <p>{{ article.summary }}</p>
 </div>
-{% endfor %}
+{% endfor %} {% if tab != 'library' %}
 <div id="prev_next">
-  {% if articles.has_prev %}
-  <a href="{{ url_for('site.intmain', page=articles.prev_num) }}"
+  {% if articles['has_prev'] %}
+  <a href="{{ url_for('site.intmain', page=articles['prev_page']) }}"
     >&lt;&lt; Newer Articles</a
   >
-  {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles.has_next %}
-  <a href="{{ url_for('site.intmain', page=articles.next_num) }}"
+  {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles['has_next'] %}
+  <a href="{{ url_for('site.intmain', page=articles['next_page']) }}"
     >Older Articles &gt;&gt;</a
   >
-  {% else %} Older Articles &gt;&gt; {% endif %}
-  <div id="total">{{ articles.total }} articles total</div>
+  {% else %} Older Articles &gt;&gt; {% endif %} {% else %}
+  <div id="prev_next">
+    {% if articles['has_prev'] %}
+    <a href="{{ url_for('site.library', page=articles['prev_page']) }}"
+      >&lt;&lt; Newer Articles</a
+    >
+    {% else %} &lt;&lt; Newer Articles{% endif %} | {% if articles['has_next']
+    %}
+    <a href="{{ url_for('site.library', page=articles['next_page']) }}"
+      >Older Articles &gt;&gt;</a
+    >
+    {% else %} Older Articles &gt;&gt; {% endif %} {% endif %}
+    <div id="total">{{ articles['total'] }} articles total</div>
+  </div>
+  <script>
+    function toggleLibray(el, id) {
+      $.post("{{ url_for('site.toggle_in_library') }}", { id }).done(() => {
+        const $icon = $(el);
+        const tab = {{ tab | tojson }};
+        const $article = $(`#${id}`);
+        if (tab === "library") {
+          const $total = $('#total');
+          let content = $total.html().split(' ');
+          content[0] = content[0] - 1;
+          content = content.join(' ');
+          $total.html(content);
+          $article.remove();
+        }
+        if ($icon.hasClass('fas')) return $icon.removeClass('fas').addClass('far');
+        if ($icon.hasClass('far')) return $icon.removeClass('far').addClass('fas');
+      });
+    }
+  </script>
+  {% endblock %}
 </div>
-<script>
-  function toggleLibray(el, id) {
-    $.post("{{ url_for('site.toggle_in_library') }}", { id }).done(() => {
-      const $icon = $(el);
-      const tab = {{ tab | tojson }};
-      const $article = $(`#${id}`);
-      if (tab === "library") {
-        const $total = $('#total');
-        let content = $total.html().split(' ');
-        content[0] = content[0] - 1;
-        content = content.join(' ');
-        $total.html(content);
-        $article.remove();
-      }
-      if ($icon.hasClass('fas')) return $icon.removeClass('fas').addClass('far');
-      if ($icon.hasClass('far')) return $icon.removeClass('far').addClass('fas');
-    });
-  }
-</script>
-{% endblock %}

@@ -1,47 +1,158 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
-from app.models import db, Article, articles_categories, articles_keyphrases, projects_categories, projects_keyphrases, Project, projects_articles
+from functools import reduce
+from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 
 site = Blueprint('site', __name__)
+LIMIT = 20 # num of articles per page
 
-@site.route("/", methods=['GET'])
-def intmain():
-    articles = Article.query
-    project = None
-    if session.get('selected-project') and session['selected-project'] != "none":
-        project = Project.query.filter_by(name=session['selected-project']).first()
-        # Query all articles that share at least one keyphrase and category with the selected project
-        cat_sq = db.session.query(articles_categories)\
-            .join(projects_categories, (articles_categories.c.category_id == projects_categories.c.category_id) & (projects_categories.c.project_id == project.id))\
-            .filter(articles_categories.c.article_id == Article.id)
-        kp_sq = db.session.query(articles_keyphrases)\
-            .join(projects_keyphrases, (articles_keyphrases.c.keyphrase_id == projects_keyphrases.c.keyphrase_id) & (projects_keyphrases.c.project_id == project.id))\
-            .filter(articles_keyphrases.c.article_id == Article.id)
-        articles = db.session.query(Article).filter(cat_sq.exists() & kp_sq.exists())
-    articles = articles.order_by(Article.publish_date.desc())
-    articles = articles.paginate(max_per_page=10, error_out=False)
+# TODO: 
+# reconfigure library to work with searching
+# fulltext instead of LIKE
 
-    for article in articles.items:
+# This is a horrific bit of code. I couldn't find a proper point of reference for doing stuff
+# like this but as soon as I do, I will wipe this garbage off the face of the planet.
+def build_search_query(project, param_keys):
+    def like_statement(column_name):
+        c = map(lambda key: f"LOWER({column_name}) LIKE LOWER(:{key})", param_keys)
+        return ' OR '.join(c)
+    operator = 'AND' if project else 'WHERE'
+    query = f"""
+        {operator} (
+				EXISTS (
+					SELECT * from articles_authors aa
+					JOIN author
+						ON author.id = aa.author_id
+					WHERE aa.article_id = a.id
+					AND ({like_statement('author.name')})
+				)
+				OR EXISTS (
+					SELECT * from articles_keyphrases ak
+					JOIN keyphrase
+						ON keyphrase.id = ak.keyphrase_id
+					WHERE ak.article_id = a.id
+					AND ({like_statement('keyphrase.name')})
+				)
+                OR EXISTS (
+					SELECT * from articles_categories ac
+					JOIN category
+						ON category.id = ac.category_id
+					WHERE ac.article_id = a.id
+					AND ({like_statement('category.name')})
+				)
+                OR ({like_statement('a.title')})
+        	)
+        """
+    return query
+
+def get_filter_query(project_id):
+    return """
+            WHERE EXISTS (
+                SELECT * FROM articles_categories ac 
+                JOIN projects_categories pc
+                    ON pc.category_id = ac.category_id AND pc.project_id = :id
+                WHERE ac.article_id = a.id
+            )
+            AND EXISTS (
+                SELECT * FROM articles_keyphrases ak 
+                JOIN projects_keyphrases pk
+                    ON pk.keyphrase_id = ak.keyphrase_id AND pk.project_id = :id 
+                WHERE ak.article_id = a.id
+            )
+        """
+
+def set_pagination_info(articles, page):
+    total = articles['total']
+    curr_amount = len(articles['items'])
+    articles['has_next'] = total > LIMIT * page + curr_amount
+    articles['has_prev'] = page > 0
+    articles['next_page'] = page + 1
+    articles['prev_page'] = page - 1
+
+def set_previous_versions(articles):
+    for article in articles['items']:
         version = article.version
         if version > 1:
             version1 = Article.query.filter_by(version=1, title=article.title).first()
             if version1 is not None:
                 article.version1 = version1
-    return render_template('main.html', articles=articles, tab='articles', project=project)
+
+def build_search_query_params(terms):
+    params = {}
+    for i in range(len(terms)):
+        term = terms[i]
+        params[f'term{str(i)}'] = f'%{term}%'
+    return params
+
+
+@site.route("/", methods=['GET'])
+def intmain():
+    # Query params
+    page = int(request.args.get('page')) if request.args.get('page') else 0
+    search_string = request.args.get('search') if request.args.get('search') else ''
+
+    # Filter articles if project is selected
+    filter_query = ""
+    project = None
+    if session.get('selected-project') and session['selected-project'] != "none":
+        project = Project.query.filter_by(name=session['selected-project']).first()
+        filter_query = get_filter_query(project.id)
+
+    # Filter articles on search string
+    search_query = ""
+    search_query_params = None
+    if search_string:
+        terms = list(filter(lambda x: x, search_string.split(' '))) # split search string on space, remove empty strings
+        search_query_params = build_search_query_params(terms)
+        search_query = build_search_query(project, search_query_params.keys())
+
+    # Construct queries
+    main_query = f"""
+        SELECT *
+            FROM article a
+        {filter_query}
+        {search_query}
+        ORDER BY publish_date DESC
+        LIMIT :limit
+        OFFSET :offset;
+    """
+    count_query = f"""
+        SELECT COUNT(*)
+            FROM article a
+        {filter_query}
+        {search_query};
+    """
+
+    # Populate articles with our query results
+    articles = {}
+    query_params = {'limit': LIMIT, 'offset': page * LIMIT}
+    if project:
+        query_params['id'] = project.id
+    if search_query_params:
+        query_params.update(search_query_params)
+    articles['items'] = Article.query.from_statement(db.text(main_query)).params(**query_params).all()
+    articles['total'] = db.engine.execute(db.text(count_query), **query_params).fetchall()[0]['count']
+
+    # Add additional metadata to articles for display
+    set_pagination_info(articles, page)
+    set_previous_versions(articles)
+    return render_template('main.html', articles=articles, tab='articles', project=project, search_string=search_string)
 
 
 @site.route('/library', methods=['GET'])
 def library():
     if session.get('selected-project') == None or session['selected-project'] == None:
         return redirect(url_for('site.intmain'))
+    page = int(request.args.get('page')) if request.args.get('page') else 0
     project = Project.query.filter_by(name=session["selected-project"]).first()
-    if project is not None:
-        articles = project.articles.order_by(Article.publish_date.desc()).paginate(max_per_page=10, error_out=False)
-        for article in articles.items:
-            version = article.version
-            if version > 1:
-                version1 = Article.query.filter_by(version=1, title=article.title).first()
-                if version1 is not None:
-                    article.version1 = version1
+
+    # Populate articles with our query results
+    articles = {}
+    articles['items'] = project.articles.order_by(Article.publish_date.desc()).limit(LIMIT).offset(page * LIMIT).all()
+    articles['total'] = project.articles.count()
+
+    # Add additional metadata to articles for display
+    set_pagination_info(articles, page)
+    set_previous_versions(articles)
     return render_template('main.html', articles=articles, tab='library', project=project)
 
 

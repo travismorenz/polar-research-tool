@@ -68,8 +68,7 @@ class Article(db.Model):
     summary = db.Column(db.Text, nullable=False)
     url = db.Column(db.Text, unique=True, nullable=False)
     version = db.Column(db.Integer, nullable=False)
-    publish_date = db.Column(db.DateTime, nullable=True) # This might be nullable=False, not sure yet
-    # TODO: Analysis result fields will probably go here
+    publish_date = db.Column(db.DateTime) # This might be nullable=False, not sure yet
 
     comments = db.relationship('Comment', back_populates='articles')
     categories = db.relationship('Category', secondary=articles_categories, back_populates="articles")

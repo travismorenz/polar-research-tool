@@ -9,6 +9,8 @@ LIMIT = 20 # num of articles per page
 # reconfigure library to work with searching
 # fulltext instead of LIKE
 
+# This is a horrific bit of code. I couldn't find a proper point of reference for doing stuff
+# like this but as soon as I do, I will wipe this garbage off the face of the planet.
 def build_search_query(project, param_keys):
     def like_statement(column_name):
         c = map(lambda key: f"LOWER({column_name}) LIKE LOWER(:{key})", param_keys)

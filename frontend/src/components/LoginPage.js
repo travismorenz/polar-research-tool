@@ -10,7 +10,6 @@ function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { state, setState } = useContext(AppContext);
-  console.log(isLoading);
 
   if (state.isLoggedIn) return <Redirect to="/" />;
 

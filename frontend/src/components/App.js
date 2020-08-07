@@ -25,7 +25,6 @@ function App() {
 
   return (
     <div className="app">
-      {state.username}
       <AppContext.Provider value={{ state, setState }}>
         <BrowserRouter>
           <Switch>

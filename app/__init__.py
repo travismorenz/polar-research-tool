@@ -1,5 +1,6 @@
 from celery import Celery
 from celery.schedules import crontab
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask import Flask, render_template, redirect, url_for
 from app.models import db, Person
@@ -27,6 +28,7 @@ def load_user(username):
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
     app.secret_key = os.getenv('SECRET_KEY')
     # Initialize database

@@ -14,18 +14,21 @@ def login_get():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    username = request.form['username']
-    password = request.form['password']
+    if current_user.is_authenticated:
+        return {'data': current_user.username}
+    form_data = request.get_json()
+    username = form_data['username']
+    password = form_data['password']
 
     if not username or not username.strip():
-        return render_template("login.html", error="Username is missing.")
+        return {'error': 'Username is missing.'}
     if not password:
-        return render_template("login.html", error="Password is missing.")
+        return {'error': 'Password is missing'}
     person = Person.query.filter_by(username=username).first()
     if person is None or not person.check_password(password):
-        return render_template("login.html", error="Credentials are incorrect.")
+        return {'error': 'Credentials are incorrect'}
     login_user(person, remember=True)
-    return redirect(url_for('site.intmain'))
+    return {'data': username}
 
 
 @auth.route('/register', methods=['GET'])

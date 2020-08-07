@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import login from "../services/login";
 import { AppContext } from "./App";
 
-function LoginPage() {
+const LoginPage = () => {
   const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -69,6 +69,6 @@ function LoginPage() {
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;

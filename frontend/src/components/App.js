@@ -7,7 +7,7 @@ export const AppContext = createContext();
 
 const Main = () => <div>Main</div>;
 
-function App() {
+const App = () => {
   const [state, setState] = useState({
     username: "",
     isLoggedIn: false,
@@ -36,6 +36,6 @@ function App() {
       </AppContext.Provider>
     </div>
   );
-}
+};
 
 export default App;

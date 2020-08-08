@@ -6,12 +6,6 @@ import os
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['GET'])
-def login_get():
-    if current_user.is_authenticated:
-        return redirect(url_for('newmain'))
-    return render_template('login.html')
-
 @auth.route('/login', methods=['POST'])
 def login_post():
     if not current_user.is_authenticated:
@@ -28,14 +22,6 @@ def login_post():
         login_user(person, remember=True)
     projects = [project.serialize() for project in current_user.projects]
     return {'data': {'username': current_user.username, 'projects': projects}}
-
-
-@auth.route('/register', methods=['GET'])
-def register_get():
-    if current_user.is_authenticated:
-        return redirect(url_for('newmain'))
-    return render_template('register.html')
-        
 
 @auth.route('/register', methods=['POST'])
 def register_post():

@@ -7,7 +7,6 @@ site = Blueprint('site', __name__)
 LIMIT = 50 # num of articles per page
 
 # TODO: 
-# reconfigure library to work with searching
 # fulltext instead of LIKE
 
 # This is a horrific bit of code. I couldn't find a proper point of reference for doing stuff
@@ -168,25 +167,3 @@ def library():
     set_pagination_info(articles, page)
     set_previous_versions(articles)
     return render_template('main.html', articles=articles, tab='library', project=project)
-
-
-@site.route('/toggle-in-library', methods=['POST'])
-def toggle_in_library():
-    res = {}
-    id = request.form['id']
-    if session.get('selected-project') and session['selected-project'] != "none":
-        article = Article.query.filter_by(id=id).first()
-        project = Project.query.filter_by(name=session['selected-project']).first()
-        if article in project.articles:
-            project.articles.remove(article)
-        else:
-            project.articles.append(article)
-        db.session.add(project)
-        db.session.commit()
-    return res
-    
-
-@site.route('/select-project', methods=['POST'])
-def select_project():
-    session['selected-project'] = request.form['selection']
-    return {}

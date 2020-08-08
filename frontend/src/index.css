@@ -134,6 +134,16 @@ main {
   padding-bottom: 10px;
 }
 
+.loading-lg {
+  margin-top: 5rem;
+}
+
+.loading.loading-lg::after {
+  height: 2.6rem;
+  margin: -1.3rem 0 0 1.3rem;
+  width: 2.6rem;
+}
+
 /* Account Page */
 .account-wrapper button {
   margin-top: 0.3rem;

@@ -3,8 +3,6 @@ import React, { useContext, useEffect } from "react";
 import { AppContext } from "./App";
 import getArticles from "../services/getArticles";
 
-// TODO: resolve warnings
-// TODO: loading spinner
 // TODO: proxy
 // TODO: library/register/account
 
@@ -13,7 +11,7 @@ const ArticlesPage = () => {
     state: { selectedProject, articles },
     setState,
   } = useContext(AppContext);
-  const displayArticles = articles[`${selectedProject}`]; //TODO: page
+  const displayArticles = articles[`${selectedProject}`] || []; //TODO: page
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -36,7 +34,7 @@ const ArticlesPage = () => {
         </div>
         <form id="search-bar" className="has-icon-left"></form>
       </div>
-      {displayArticles &&
+      {displayArticles.length ? (
         displayArticles.map((article) => (
           <div className="article card" key={article.id}>
             <a href={article.url} target="_blank" rel="noopener noreferrer">
@@ -63,7 +61,10 @@ const ArticlesPage = () => {
             </div>
             <p>{article.summary}</p>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="loading loading-lg"></div>
+      )}
     </div>
   );
 };

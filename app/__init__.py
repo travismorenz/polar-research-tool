@@ -37,8 +37,8 @@ def create_app():
     # Initialize login manager
     login.init_app(app)
     # Register the views 
-    from app.views.site import site
-    from app.views.auth import auth
-    app.register_blueprint(site)
+    from app.routes.articles import articles
+    from app.routes.auth import auth
+    app.register_blueprint(articles)
     app.register_blueprint(auth)
     return app

@@ -1,5 +1,5 @@
 export default (selectedProject) =>
-  fetch(`http://localhost:8080/articles/${selectedProject}`, {
+  fetch(`/articles/${selectedProject}`, {
     credentials: "include",
   })
     .then((res) => res.json())

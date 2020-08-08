@@ -4,6 +4,7 @@ import { AppContext } from "./App";
 import getArticles from "../services/getArticles";
 
 // TODO: proxy
+// TODO: pagination
 // TODO: library/register/account
 
 const ArticlesPage = () => {

@@ -3,7 +3,7 @@ from functools import reduce
 from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 import time
 
-site = Blueprint('site', __name__)
+articles = Blueprint('articles', __name__)
 LIMIT = 50 # num of articles per page
 
 # TODO: 
@@ -84,8 +84,8 @@ def build_search_query_params(terms):
     return params
 
 
-@site.route("/articles/", defaults={'project_id': None})
-@site.route("/articles/<string:project_id>")
+@articles.route("/api/articles/", defaults={'project_id': None})
+@articles.route("/api/articles/<string:project_id>")
 def articles_get(project_id):
     # Query params
     page = int(request.args.get('page')) if request.args.get('page') else 0
@@ -151,10 +151,10 @@ def articles_get(project_id):
             articles[row_id]['categories'].append(category_name)
     return {'articles': articles}
 
-@site.route('/library', methods=['GET'])
+@articles.route('/library', methods=['GET'])
 def library():
     if session.get('selected-project') == None or session['selected-project'] == None:
-        return redirect(url_for('site.intmain'))
+        return redirect(url_for('articles.intmain'))
     page = int(request.args.get('page')) if request.args.get('page') else 0
     project = Project.query.filter_by(name=session["selected-project"]).first()
 

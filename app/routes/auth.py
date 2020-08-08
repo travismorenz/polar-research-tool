@@ -6,7 +6,7 @@ import os
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/api/login', methods=['POST'])
 def login_post():
     if not current_user.is_authenticated:
         form_data = request.get_json()
@@ -23,7 +23,7 @@ def login_post():
     projects = [project.serialize() for project in current_user.projects]
     return {'data': {'username': current_user.username, 'projects': projects}}
 
-@auth.route('/register', methods=['POST'])
+@auth.route('/api/register', methods=['POST'])
 def register_post():
     username = request.form['username']
     password = request.form['password']
@@ -50,14 +50,14 @@ def register_post():
     return redirect(url_for("auth.login_get"))
 
 
-@auth.route('/logout', methods=['POST'])
+@auth.route('/api/logout', methods=['POST'])
 def logout():
     session.clear();
     logout_user()
     return {}
 
 
-@auth.route('/account', methods=['GET'])
+@auth.route('/api/account', methods=['GET'])
 def account():
     context = {}
     context['projects'] = []
@@ -72,7 +72,7 @@ def account():
 #####
 #  All project endpoints will be moved into their own view file at some point
 #####
-@auth.route('/create-project', methods=['POST'])
+@auth.route('/api/create-project', methods=['POST'])
 def create_project():
     res = {'selector': '#create-project-error'}
     name = request.form['name'].strip()
@@ -90,7 +90,7 @@ def create_project():
     return res
 
 
-@auth.route('/delete-project', methods=['POST'])
+@auth.route('/api/delete-project', methods=['POST'])
 def delete_project():
     res = {}
     name = request.form['name']
@@ -100,7 +100,7 @@ def delete_project():
     return res
 
 
-@auth.route('/join-project', methods=['POST'])
+@auth.route('/api/join-project', methods=['POST'])
 def join_project():
     res = {'selector': '#join-project-error'}
     name = request.form['name'].strip()
@@ -118,7 +118,7 @@ def join_project():
 
 
 # By convention, this should be DELETE. jQuery only has built in post tho, so I'm going to be lazy and leave it
-@auth.route('/leave-project', methods=['POST'])
+@auth.route('/api/leave-project', methods=['POST'])
 def leave_project():
     res = {}
     name = request.form['name']
@@ -134,7 +134,7 @@ def clean_input(input):
     input = input.split(',')
     return sorted([x.strip() for x in set(filter(lambda x: x != '', input))])
 
-@auth.route('/save-projects', methods={'POST'})
+@auth.route('/api/save-projects', methods={'POST'})
 def save_projects():
     res = {}
     projects = request.get_json(force=True)

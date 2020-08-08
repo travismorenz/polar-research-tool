@@ -5,6 +5,7 @@ import getArticles from "../services/getArticles";
 
 // TODO: resolve warnings
 // TODO: loading spinner
+// TODO: proxy
 // TODO: library/register/account
 
 const ArticlesPage = () => {
@@ -37,23 +38,25 @@ const ArticlesPage = () => {
       </div>
       {displayArticles &&
         displayArticles.map((article) => (
-          <div className="article card">
+          <div className="article card" key={article.id}>
             <a href={article.url} target="_blank" rel="noopener noreferrer">
               <h5>{article.title}</h5>
             </a>
             <div id="authors">
               {article.authors.map((name, i) => (
-                <span>
-                  <a href="#">{name}</a>
+                <span key={`${article.id}-${i}`}>
+                  <button className="btn-link">{name}</button>
                   {i < article.authors.length - 1 ? ", " : ""}
                 </span>
               ))}
             </div>
             <div className="metadata">
-              <span className="publish_date">{article["publish_date"]}</span>
+              <span className="publish_date">
+                {article["publish_date"].slice(0, 16)}
+              </span>
               {article.categories.map((name, i) => (
-                <span>
-                  <a hef="#">{name}</a>
+                <span key={`${article.id}-${name}`}>
+                  <button className="btn-link">{name}</button>
                   {i < article.categories.length - 1 ? " | " : ""}
                 </span>
               ))}

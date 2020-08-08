@@ -57,9 +57,9 @@ const Navbar = () => {
                     <Link to="/account">My Account</Link>
                   </li>
                   <li className="menu-item">
-                    <a href="#" onClick={handleLogout}>
+                    <button className="logout-btn" onClick={handleLogout}>
                       Logout
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </div>

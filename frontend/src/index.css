@@ -2,6 +2,18 @@ body {
   font-size: 0.7rem;
 }
 
+.btn-link {
+  background: none;
+  border: none;
+  color: #807fe2;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
 /* Header */
 header {
   padding: 0.5rem 0;
@@ -24,6 +36,24 @@ header .form-group:not(:last-child) {
 
 .navbar-brand span {
   font-size: 1rem;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  margin: 0 -0.4rem;
+  padding: 0.2rem 0.4rem;
+  text-align: left;
+  width: 100%;
+}
+
+.logout-btn:hover,
+.logout-btn:focus {
+  background: #f1f1fc;
+  color: #5755d9;
 }
 
 /* Login & Register Pages */

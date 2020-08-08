@@ -3,6 +3,10 @@ import React, { useContext, useEffect } from "react";
 import { AppContext } from "./App";
 import getArticles from "../services/getArticles";
 
+// TODO: resolve warnings
+// TODO: loading spinner
+// TODO: library/register/account
+
 const ArticlesPage = () => {
   const {
     state: { selectedProject, articles },

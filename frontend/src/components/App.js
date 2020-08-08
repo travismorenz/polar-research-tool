@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
+import ArticlesPage from "./ArticlesPage";
 import LoginPage from "./LoginPage";
 import Navbar from "./Navbar";
 import login from "../services/login";
@@ -12,8 +13,6 @@ export const initialState = {
   projects: [],
   selectedProject: "",
 };
-
-const Main = () => <div>Main</div>;
 
 const App = () => {
   const [state, setState] = useState(initialState);
@@ -34,7 +33,7 @@ const App = () => {
         <BrowserRouter>
           <Navbar />
           <Switch>
-            <Route exact path="/" component={Main} />
+            <Route exact path="/" component={ArticlesPage} />
             <Route exact path="/login" component={LoginPage} />
             <Redirect to="/" />
           </Switch>

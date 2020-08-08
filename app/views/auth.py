@@ -64,11 +64,11 @@ def register_post():
     return redirect(url_for("auth.login_get"))
 
 
-@auth.route('/logout')
+@auth.route('/logout', methods=['POST'])
 def logout():
     session.clear();
     logout_user()
-    return redirect(url_for('site.intmain'))
+    return {}
 
 
 @auth.route('/account', methods=['GET'])

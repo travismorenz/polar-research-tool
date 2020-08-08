@@ -6,16 +6,17 @@ import Navbar from "./Navbar";
 import login from "../services/login";
 
 export const AppContext = createContext();
+export const initialState = {
+  username: "",
+  isLoggedIn: false,
+  projects: [],
+  selectedProject: "",
+};
 
 const Main = () => <div>Main</div>;
 
 const App = () => {
-  const [state, setState] = useState({
-    username: "",
-    isLoggedIn: false,
-    projects: [],
-    selectedProject: "",
-  });
+  const [state, setState] = useState(initialState);
 
   // Attempts to login using an existing session cookie. No username/pass is needed.
   useEffect(() => {

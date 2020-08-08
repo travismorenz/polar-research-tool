@@ -1,13 +1,19 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { AppContext } from "./App";
+import { AppContext, initialState } from "./App";
+import logout from "../services/logout";
 
 const Navbar = () => {
   const {
     state: { isLoggedIn, username, projects, selectedProject },
     setState,
   } = useContext(AppContext);
+
+  const handleLogout = async () => {
+    await logout();
+    setState(initialState);
+  };
 
   return (
     <header>
@@ -51,7 +57,9 @@ const Navbar = () => {
                     <Link to="/account">My Account</Link>
                   </li>
                   <li className="menu-item">
-                    <a href="#">Logout</a>
+                    <a href="#" onClick={handleLogout}>
+                      Logout
+                    </a>
                   </li>
                 </ul>
               </div>

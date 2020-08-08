@@ -14,21 +14,20 @@ def login_get():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    if current_user.is_authenticated:
-        return {'data': current_user.username}
-    form_data = request.get_json()
-    username = form_data['username']
-    password = form_data['password']
-
-    if not username or not username.strip():
-        return {'error': 'Username is missing.'}
-    if not password:
-        return {'error': 'Password is missing'}
-    person = Person.query.filter_by(username=username).first()
-    if person is None or not person.check_password(password):
-        return {'error': 'Credentials are incorrect'}
-    login_user(person, remember=True)
-    return {'data': username}
+    if not current_user.is_authenticated:
+        form_data = request.get_json()
+        username = form_data['username']
+        password = form_data['password']
+        if not username or not username.strip():
+            return {'error': 'Username is missing.'}
+        if not password:
+            return {'error': 'Password is missing'}
+        person = Person.query.filter_by(username=username).first()
+        if person is None or not person.check_password(password):
+            return {'error': 'Credentials are incorrect'}
+        login_user(person, remember=True)
+    projects = [project.serialize() for project in current_user.projects]
+    return {'data': {'username': current_user.username, 'projects': projects}}
 
 
 @auth.route('/register', methods=['GET'])

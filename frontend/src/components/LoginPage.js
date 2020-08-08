@@ -2,23 +2,26 @@ import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import login from "../services/login";
 import { AppContext } from "./App";
+import login from "../services/login";
 
 const LoginPage = () => {
   const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { state, setState } = useContext(AppContext);
+  const {
+    state: { isLoggedIn },
+    setState,
+  } = useContext(AppContext);
 
-  if (state.isLoggedIn) return <Redirect to="/" />;
+  if (isLoggedIn) return <Redirect to="/" />;
 
   const onSubmit = async (input) => {
     setIsLoading(true);
     const { data, error } = await login(input);
     setIsLoading(false);
     if (error) return setError(error);
-    setState({ isLoggedIn: true, username: data });
+    setState((s) => ({ ...s, isLoggedIn: true, ...data }));
   };
 
   return (

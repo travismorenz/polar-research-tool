@@ -59,6 +59,12 @@ class Project(db.Model):
     categories = db.relationship('Category', secondary=projects_categories, back_populates="projects")
     articles = db.relationship('Article', secondary=projects_articles, back_populates="projects", lazy="dynamic")
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)

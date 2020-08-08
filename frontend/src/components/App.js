@@ -12,6 +12,7 @@ export const initialState = {
   isLoggedIn: false,
   projects: [],
   selectedProject: "",
+  articles: {},
 };
 
 const App = () => {

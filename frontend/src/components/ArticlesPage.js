@@ -1,29 +1,28 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { AppContext } from "./App";
+import getArticles from "../services/getArticles";
 
 const ArticlesPage = () => {
-  const [time, setTime] = useState("");
   const {
-    state: { selectedProject },
+    state: { selectedProject, articles },
     setState,
   } = useContext(AppContext);
+  const displayArticles = articles[`${selectedProject}`]; //TODO: page
 
   useEffect(() => {
-    const init = async () => {
-      const t1 = performance.now();
-      const res = await fetch(
-        `http://localhost:8080/articles/${selectedProject}`,
-        {
-          credentials: "include",
-        }
-      ).then((res) => res.json());
-      console.log(res);
-      console.log(Object.keys(res.articles).length);
-      setTime(performance.now() - t1);
+    const loadArticles = async () => {
+      const newArticles = await getArticles(selectedProject); //TODO: page
+      setState((s) => ({
+        ...s,
+        articles: { ...s.articles, [`${selectedProject}`]: newArticles }, //TODO: page
+      }));
     };
-    init();
-  }, [selectedProject]);
+
+    if (articles[`${selectedProject}`]) return;
+    loadArticles();
+  }, [articles, selectedProject, setState]);
+
   return (
     <div className="container grid-lg">
       <div className="space-between">
@@ -32,7 +31,7 @@ const ArticlesPage = () => {
         </div>
         <form id="search-bar" className="has-icon-left"></form>
       </div>
-      {time}
+      {displayArticles && displayArticles.map((x) => <div>{x.title}</div>)}
     </div>
   );
 };

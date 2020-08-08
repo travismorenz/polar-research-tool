@@ -143,12 +143,12 @@ def articles_get(project_id):
         category_name = row['category_name']
         if row_id not in articles:
             articles[row_id] = row
-            row['author_name'] = [author_name]
-            row['category_name'] = [category_name]
-        if author_name not in articles[row_id]['author_name']:
-            articles[row_id]['author_name'].append(author_name)
-        if category_name not in articles[row_id]['category_name']:
-            articles[row_id]['category_name'].append(category_name)
+            row['authors'] = [author_name]
+            row['categories'] = [category_name]
+        if author_name not in articles[row_id]['authors']:
+            articles[row_id]['authors'].append(author_name)
+        if category_name not in articles[row_id]['categories']:
+            articles[row_id]['categories'].append(category_name)
     return {'articles': articles}
 
 @site.route('/library', methods=['GET'])

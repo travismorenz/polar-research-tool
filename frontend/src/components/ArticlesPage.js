@@ -31,7 +31,32 @@ const ArticlesPage = () => {
         </div>
         <form id="search-bar" className="has-icon-left"></form>
       </div>
-      {displayArticles && displayArticles.map((x) => <div>{x.title}</div>)}
+      {displayArticles &&
+        displayArticles.map((article) => (
+          <div className="article card">
+            <a href={article.url} target="_blank" rel="noopener noreferrer">
+              <h5>{article.title}</h5>
+            </a>
+            <div id="authors">
+              {article.authors.map((name, i) => (
+                <span>
+                  <a href="#">{name}</a>
+                  {i < article.authors.length - 1 ? ", " : ""}
+                </span>
+              ))}
+            </div>
+            <div className="metadata">
+              <span className="publish_date">{article["publish_date"]}</span>
+              {article.categories.map((name, i) => (
+                <span>
+                  <a hef="#">{name}</a>
+                  {i < article.categories.length - 1 ? " | " : ""}
+                </span>
+              ))}
+            </div>
+            <p>{article.summary}</p>
+          </div>
+        ))}
     </div>
   );
 };

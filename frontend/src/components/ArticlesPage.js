@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
 import Article from "./Article";
+import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
 import getArticles from "../services/getArticles";
 
@@ -12,11 +13,12 @@ const ArticlesPage = () => {
     state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  const projectPage = projects[selectedProjectId].pages[page];
+  const selectedProject = projects[selectedProjectId];
+  const projectPage = selectedProject.pages[page];
 
   useEffect(() => {
     const loadArticles = async () => {
-      const { articles, count } = await getArticles(selectedProjectId);
+      const { articles, count } = await getArticles(selectedProjectId, page);
       if (count) action("set_count", count);
       action("add_articles", { page, articles });
     };
@@ -26,12 +28,12 @@ const ArticlesPage = () => {
 
   return (
     <div className="container grid-lg">
-      <div className="space-between">
-        <div className="tabs">
-          <div className="btn-group btn-group-block" id="pagebar"></div>
-        </div>
-        <form id="search-bar" className="has-icon-left"></form>
-      </div>
+      <ArticlesControls
+        activeTab="articles"
+        page={page}
+        setPage={setPage}
+        count={selectedProject.count}
+      />
       {projectPage ? (
         projectPage.map((id) => <Article key={id} {...articles[id]} />)
       ) : (

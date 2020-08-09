@@ -83,6 +83,23 @@ def build_search_query_params(terms):
         params[f'term{str(i)}'] = f'%{term}%'
     return params
 
+def format_articles(query_result):
+    articles = {}
+    for row in query_result:
+        row = dict(row)
+        row_id = row['id']
+        author_name = row['author_name']
+        category_name = row['category_name']
+        if row_id not in articles:
+            articles[row_id] = row
+            row['authors'] = [author_name]
+            row['categories'] = [category_name]
+        if author_name not in articles[row_id]['authors']:
+            articles[row_id]['authors'].append(author_name)
+        if category_name not in articles[row_id]['categories']:
+            articles[row_id]['categories'].append(category_name)
+    return articles
+
 
 @articles.route("/api/articles/", defaults={'project_id': None})
 @articles.route("/api/articles/<string:project_id>")
@@ -118,10 +135,10 @@ def articles_get(project_id):
         JOIN (
             SELECT a.id, a.title, a.summary, a.url, a.version, a.publish_date
             FROM   article a
-        {filter_query}
-        {search_query}
-        ORDER BY a.publish_date DESC
-        LIMIT :limit OFFSET :offset) a
+            {filter_query}
+            {search_query}
+            ORDER BY a.publish_date DESC
+            LIMIT :limit OFFSET :offset) a
         ON a.id = ac.article_id
         JOIN articles_authors aa ON aa.article_id = a.id
         JOIN author au ON au.id = aa.author_id
@@ -134,38 +151,35 @@ def articles_get(project_id):
     """
 
     # Populate articles and fill out article authors and categories
-    articles = {}
     count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
     count = dict(count_query_result[0])['count']
     main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
-    for row in main_query_result:
-        row = dict(row)
-        row_id = row['id']
-        author_name = row['author_name']
-        category_name = row['category_name']
-        if row_id not in articles:
-            articles[row_id] = row
-            row['authors'] = [author_name]
-            row['categories'] = [category_name]
-        if author_name not in articles[row_id]['authors']:
-            articles[row_id]['authors'].append(author_name)
-        if category_name not in articles[row_id]['categories']:
-            articles[row_id]['categories'].append(category_name)
+    articles = format_articles(main_query_result)
     return {'articles': articles, 'count': count}
 
-@articles.route('/library', methods=['GET'])
-def library():
-    if session.get('selected-project') == None or session['selected-project'] == None:
-        return redirect(url_for('articles.intmain'))
-    page = int(request.args.get('page')) if request.args.get('page') else 0
-    project = Project.query.filter_by(name=session["selected-project"]).first()
-
+@articles.route("/api/library/<string:project_id>")
+def library(project_id):
+    main_query = f"""
+        SELECT a.id, a.title, a.summary, a.url, a.version, a.publish_date, c.name as category_name, au.name as author_name
+        FROM project p
+        JOIN projects_articles pa ON pa.project_id = p.id
+        JOIN article a ON a.id = pa.article_id
+        JOIN articles_categories ac ON ac.article_id = a.id
+        JOIN category c ON c.id = ac.category_id
+        JOIN articles_authors aa ON aa.article_id = a.id
+        JOIN author au ON au.id = aa.author_id
+        WHERE p.id = :id
+    """
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM project p
+        JOIN projects_articles pa ON pa.project_id = p.id
+        JOIN article a ON a.id = pa.article_id
+        WHERE p.id = :id
+    """
     # Populate articles with our query results
-    articles = {}
-    articles['items'] = project.articles.order_by(Article.publish_date.desc()).limit(LIMIT).offset(page * LIMIT).all()
-    articles['total'] = project.articles.count()
-
-    # Add additional metadata to articles for display
-    set_pagination_info(articles, page)
-    set_previous_versions(articles)
-    return render_template('main.html', articles=articles, tab='library', project=project)
+    count_query_result = db.engine.execute(db.text(count_query), id=project_id).fetchall()
+    count = dict(count_query_result[0])['count']
+    main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()
+    articles = format_articles(main_query_result)
+    return  {'articles': articles, 'count': count}

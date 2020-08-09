@@ -27,12 +27,12 @@ export const reducer = (state, action) => {
     case "login":
       state.isLoggedIn = true;
       state.username = action.payload.username;
-      action.payload.projects.forEach(
-        (p) => (state.projects[p.id] = createProject(p))
-      );
+      action.payload.projects.forEach((p) => {
+        if (!state.projects[p.id]) state.projects[p.id] = createProject(p);
+      });
       break;
     case "logout":
-      return initialState;
+      return { ...initialState, projects: { "": state.projects[""] } };
     default:
       return state;
   }

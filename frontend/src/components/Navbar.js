@@ -6,7 +6,7 @@ import logout from "../services/logout";
 
 const Navbar = () => {
   const {
-    state: { isLoggedIn, username, projects, selectedProject },
+    state: { isLoggedIn, username, projects, selectedProjectId },
     action,
   } = useContext(AppContext);
 
@@ -32,7 +32,7 @@ const Navbar = () => {
                   <select
                     className="form-select"
                     id="project-select"
-                    value={selectedProject}
+                    value={selectedProjectId}
                     onChange={(e) => action("select_project", e.target.value)}
                   >
                     {Object.values(projects).map((p) => (

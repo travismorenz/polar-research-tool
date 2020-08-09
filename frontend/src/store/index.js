@@ -7,7 +7,7 @@ export const initialState = {
     "": { name: "None", id: "", pages: [] },
   },
   articles: {},
-  selectedProject: "",
+  selectedProjectId: "",
 };
 
 export const reducer = (state, action) => {
@@ -16,21 +16,21 @@ export const reducer = (state, action) => {
       const { page, articles } = action.payload;
       articles.forEach((a) => {
         // Create new page if one doesn't exist
-        if (!state.projects[state.selectedProject].pages[page])
-          state.projects[state.selectedProject].pages[page] = [];
+        if (!state.projects[state.selectedProjectId].pages[page])
+          state.projects[state.selectedProjectId].pages[page] = [];
         // Add article id to page if it doesn't exist
-        if (!state.projects[state.selectedProject].pages[page].includes(a.id))
-          state.projects[state.selectedProject].pages[page].push(a.id);
+        if (!state.projects[state.selectedProjectId].pages[page].includes(a.id))
+          state.projects[state.selectedProjectId].pages[page].push(a.id);
         // Add article to articles if it doesn't exist
         if (!state.articles[a.id]) state.articles[a.id] = a;
       });
       break;
     }
     case "set_count":
-      state.projects[state.selectedProject].count = action.payload;
+      state.projects[state.selectedProjectId].count = action.payload;
       break;
     case "select_project":
-      state.selectedProject = action.payload;
+      state.selectedProjectId = action.payload;
       break;
     case "login":
       state.isLoggedIn = true;

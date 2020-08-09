@@ -1,5 +1,5 @@
-export default (selectedProject) =>
-  fetch(`/articles/${selectedProject}`, {
+export default (selectedProjectId) =>
+  fetch(`/articles/${selectedProjectId}`, {
     credentials: "include",
   })
     .then((res) => res.json())

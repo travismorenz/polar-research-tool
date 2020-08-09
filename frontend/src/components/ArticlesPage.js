@@ -9,20 +9,20 @@ import getArticles from "../services/getArticles";
 const ArticlesPage = () => {
   const [page, setPage] = useState(0);
   const {
-    state: { selectedProject, projects, articles },
+    state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  const projectPage = projects[selectedProject].pages[page];
+  const projectPage = projects[selectedProjectId].pages[page];
 
   useEffect(() => {
     const loadArticles = async () => {
-      const { articles, count } = await getArticles(selectedProject);
+      const { articles, count } = await getArticles(selectedProjectId);
       if (count) action("set_count", count);
       action("add_articles", { page, articles });
     };
-    if (projects[selectedProject].pages[page]) return;
+    if (projects[selectedProjectId].pages[page]) return;
     loadArticles();
-  }, [action, page, projects, selectedProject]);
+  }, [action, page, projects, selectedProjectId]);
 
   return (
     <div className="container grid-lg">

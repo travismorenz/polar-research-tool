@@ -135,8 +135,10 @@ def articles_get(project_id):
 
     # Populate articles and fill out article authors and categories
     articles = {}
-    query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
-    for row in query_result:
+    count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
+    count = dict(count_query_result[0])['count']
+    main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
+    for row in main_query_result:
         row = dict(row)
         row_id = row['id']
         author_name = row['author_name']
@@ -149,7 +151,7 @@ def articles_get(project_id):
             articles[row_id]['authors'].append(author_name)
         if category_name not in articles[row_id]['categories']:
             articles[row_id]['categories'].append(category_name)
-    return {'articles': articles}
+    return {'articles': articles, 'count': count}
 
 @articles.route('/library', methods=['GET'])
 def library():

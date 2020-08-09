@@ -16,7 +16,9 @@ const ArticlesPage = () => {
 
   useEffect(() => {
     const loadArticles = async () => {
-      const newArticles = await getArticles(selectedProject); //TODO: page
+      const { articles: newArticles, count } = await getArticles(
+        selectedProject
+      ); //TODO: page
       setState((s) => ({
         ...s,
         articles: { ...s.articles, [`${selectedProject}`]: newArticles }, //TODO: page

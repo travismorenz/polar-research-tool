@@ -41,8 +41,7 @@ export const reducer = (state, action) => {
       });
       break;
     case "logout":
-      // Keep the base project around for fast loading after logout
-      return { ...initialState, projects: { "": state.projects[""] } };
+      return { ...initialState };
     default:
       return state;
   }

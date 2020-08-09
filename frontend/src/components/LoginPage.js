@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const {
     state: { isLoggedIn },
-    setState,
+    action,
   } = useContext(AppContext);
 
   if (isLoggedIn) return <Redirect to="/" />;
@@ -21,7 +21,7 @@ const LoginPage = () => {
     const { data, error } = await login(input);
     setIsLoading(false);
     if (error) return setError(error);
-    setState((s) => ({ ...s, isLoggedIn: true, ...data }));
+    action("login", data);
   };
 
   return (

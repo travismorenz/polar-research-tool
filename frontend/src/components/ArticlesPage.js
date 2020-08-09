@@ -1,33 +1,28 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { AppContext } from "./App";
 import getArticles from "../services/getArticles";
 
-// TODO: proxy
-// TODO: pagination
 // TODO: library/register/account
 
 const ArticlesPage = () => {
+  const [page, setPage] = useState(0);
   const {
-    state: { selectedProject, articles },
-    setState,
+    state: { selectedProject, projects },
+    action,
   } = useContext(AppContext);
-  const displayArticles = articles[`${selectedProject}`] || []; //TODO: page
+  const displayArticles = projects[selectedProject].pages[page] || [];
 
   useEffect(() => {
     const loadArticles = async () => {
-      const { articles: newArticles, count } = await getArticles(
-        selectedProject
-      ); //TODO: page
-      setState((s) => ({
-        ...s,
-        articles: { ...s.articles, [`${selectedProject}`]: newArticles }, //TODO: page
-      }));
+      const { articles, count } = await getArticles(selectedProject);
+      if (count) action("set_count", count);
+      action("add_articles", { page, articles });
     };
 
-    if (articles[`${selectedProject}`]) return;
+    if (projects[selectedProject].pages[page]) return;
     loadArticles();
-  }, [articles, selectedProject, setState]);
+  }, [action, page, projects, selectedProject]);
 
   return (
     <div className="container grid-lg">

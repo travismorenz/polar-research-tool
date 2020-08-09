@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { AppContext, initialState } from "./App";
+import { AppContext } from "./App";
 import logout from "../services/logout";
 
 const Navbar = () => {
   const {
     state: { isLoggedIn, username, projects, selectedProject },
-    setState,
+    action,
   } = useContext(AppContext);
 
   const handleLogout = async () => {
     await logout();
-    setState(initialState);
+    action("logout");
   };
 
   return (
@@ -33,20 +33,13 @@ const Navbar = () => {
                     className="form-select"
                     id="project-select"
                     value={selectedProject}
-                    onChange={(e) => {
-                      e.persist();
-                      setState((s) => ({
-                        ...s,
-                        selectedProject: e.target.value,
-                      }));
-                    }}
+                    onChange={(e) => action("select_project", e.target.value)}
                   >
-                    {projects.map((p) => (
-                      <option value={p.name} key={p.id}>
-                        {p.name.charAt(0) + p.name.slice(1)}
+                    {Object.values(projects).map((p) => (
+                      <option value={p.id} key={p.id}>
+                        {p.name}
                       </option>
                     ))}
-                    <option value="">None</option>
                   </select>
                 </label>
               </div>

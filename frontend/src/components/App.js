@@ -16,6 +16,8 @@ const App = () => {
     dispatch,
   ]);
 
+  console.log(state);
+
   // Attempts to login using an existing session cookie. No username/pass is needed.
   useEffect(() => {
     const init = async () => {

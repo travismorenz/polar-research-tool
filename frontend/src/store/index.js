@@ -1,34 +1,37 @@
-const createProject = ({ name, id }) => ({ name, id, pages: [] });
+const createProject = ({ name, id }) => ({
+  name,
+  id,
+  pages: [],
+  isLoading: false,
+});
 
 export const initialState = {
   username: "",
   isLoggedIn: false,
   projects: {
-    "": { name: "None", id: "", pages: [] },
+    _default: createProject({ name: "None", id: "_default" }),
   },
   articles: {},
-  selectedProjectId: "",
+  selectedProjectId: "_default",
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case "add_articles": {
-      const { page, articles } = action.payload;
-      articles.forEach((a) => {
-        // Create new page if one doesn't exist
-        if (!state.projects[state.selectedProjectId].pages[page])
-          state.projects[state.selectedProjectId].pages[page] = [];
-        // Add article id to page if it doesn't exist
-        if (!state.projects[state.selectedProjectId].pages[page].includes(a.id))
-          state.projects[state.selectedProjectId].pages[page].push(a.id);
-        // Add article to articles if it doesn't exist
-        if (!state.articles[a.id]) state.articles[a.id] = a;
-      });
+    case "set_pages_loaded": {
+      const { projectId, pages, count } = action.payload;
+      state.projects[projectId].count = count;
+      state.projects[projectId].pages = pages;
+      state.projects[projectId].isLoading = false;
       break;
     }
-    case "set_count":
-      state.projects[state.selectedProjectId].count = action.payload;
+    case "set_pages_loading":
+      state.projects[action.payload].isLoading = true;
       break;
+    case "set_count": {
+      const { projectId, count } = action.payload;
+      state.projects[projectId].count = count;
+      break;
+    }
     case "select_project":
       state.selectedProjectId = action.payload;
       break;
@@ -37,7 +40,8 @@ export const reducer = (state, action) => {
       state.username = action.payload.username;
       // Fill out each pulled in project with needed fields
       action.payload.projects.forEach((p) => {
-        if (!state.projects[p.id]) state.projects[p.id] = createProject(p);
+        if (!state.projects[p.id])
+          state.projects[p.id] = createProject(p, p.id);
       });
       break;
     case "logout":

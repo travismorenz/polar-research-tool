@@ -1,5 +1,5 @@
-export const getArticlesByProject = (selectedProjectId, page) =>
-  fetch(`/articles-by-project/${selectedProjectId}?page=${page}`, {
+export const getArticleIds = (projectId) =>
+  fetch(`/article-ids/${projectId === "_default" ? "" : projectId}`, {
     credentials: "include",
   }).then((res) => res.json());
 

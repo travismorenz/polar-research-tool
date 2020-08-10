@@ -71,13 +71,11 @@ def articles_by_id():
     return {'articles': articles}
 
 
-@articles.route("/api/articles-by-project/", defaults={'project_id': None})
-@articles.route("/api/articles-by-project/<string:project_id>")
+@articles.route("/api/article-ids/", defaults={'project_id': ""})
+@articles.route("/api/article-ids/<string:project_id>")
 def articles_by_project(project_id):
-    # Query params
-    page = int(request.args.get('page')) if request.args.get('page') else 0
-    query_params = {'limit': LIMIT, 'offset': page * LIMIT}
     # Filter articles if project is selected
+    query_params = {}
     filter_query = ""
     if project_id:
         filter_query = FILTER_QUERY
@@ -88,19 +86,11 @@ def articles_by_project(project_id):
         FROM article a
         {filter_query}
         ORDER BY a.publish_date DESC
-        LIMIT :limit OFFSET :offset
-    """
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM article a
-        {filter_query}
     """
     # Populate articles and fill out article authors and categories
-    count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
-    count = dict(count_query_result[0])['count']
     main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
     article_ids = [row['id'] for row in main_query_result]
-    return {'ids': article_ids, 'count': count}
+    return {'ids': article_ids}
 
 
 @articles.route("/api/articles-by-library/<string:project_id>")

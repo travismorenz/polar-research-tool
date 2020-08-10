@@ -6,6 +6,7 @@ import { AppContext } from "./App";
 import { getArticlesByProject, getArticlesById } from "../services/getArticles";
 
 // TODO: library/register/account
+// TODO: as a part of register, remove unnecessary server side validation. Let frontend deal with all that
 
 const ArticlesPage = () => {
   const [page, setPage] = useState(0);

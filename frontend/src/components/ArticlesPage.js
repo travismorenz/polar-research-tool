@@ -1,14 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 import Article from "./Article";
 import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
-import getArticles from "../services/getArticles";
+import { getArticlesByProject, getArticlesById } from "../services/getArticles";
 
 // TODO: library/register/account
 
 const ArticlesPage = () => {
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     state: { selectedProjectId, projects, articles },
     action,
@@ -18,13 +19,24 @@ const ArticlesPage = () => {
 
   useEffect(() => {
     const loadArticles = async () => {
-      const { articles, count } = await getArticles(selectedProjectId, page);
-      if (count) action("set_count", count);
-      action("add_articles", { page, articles });
+      setIsLoading(true);
+      const { ids, count } = await getArticlesByProject(
+        selectedProjectId,
+        page
+      );
+      const neededArticles = ids.filter((id) => !articles[id]);
+      if (neededArticles.length) {
+        const newArticles = await getArticlesById(neededArticles);
+        action("add_articles", { page, articles: newArticles });
+      }
+      action("set_count", count);
+      setIsLoading(false);
     };
-    if (projects[selectedProjectId].pages[page]) return;
-    loadArticles();
-  }, [action, page, projects, selectedProjectId]);
+    // Load articles if current page hasn't been loaded and isn't being loaded
+    if (!projects[selectedProjectId].pages[page] && !isLoading) loadArticles();
+  }, [action, articles, isLoading, page, projects, selectedProjectId]);
+
+  useEffect(() => setPage(0), [selectedProjectId]);
 
   return (
     <div className="container grid-lg">

@@ -54,8 +54,8 @@ def format_articles(query_result):
             articles[row_id]['categories'].append(category_name)
     return articles
 
-@articles.route("/api/articles", methods=["POST"])
-def get_articles():
+@articles.route("/api/articles-by-id", methods=["POST"])
+def articles_by_id():
     ids = tuple(request.get_json()['ids'])
     query = f"""
         SELECT a.id, a.title, a.summary, a.url, a.version, a.publish_date, c.name as category_name, au.name as author_name
@@ -73,7 +73,7 @@ def get_articles():
 
 @articles.route("/api/articles-by-project/", defaults={'project_id': None})
 @articles.route("/api/articles-by-project/<string:project_id>")
-def articles_get(project_id):
+def articles_by_project(project_id):
     # Query params
     page = int(request.args.get('page')) if request.args.get('page') else 0
     query_params = {'limit': LIMIT, 'offset': page * LIMIT}

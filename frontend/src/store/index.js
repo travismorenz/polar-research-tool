@@ -17,16 +17,20 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case "add_articles":
+      action.payload.forEach((a) => (state.articles[a.id] = a));
+      break;
     case "set_pages_loaded": {
       const { projectId, pages, count } = action.payload;
       state.projects[projectId].count = count;
       state.projects[projectId].pages = pages;
-      state.projects[projectId].isLoading = false;
       break;
     }
-    case "set_pages_loading":
-      state.projects[action.payload].isLoading = true;
+    case "set_project_loading": {
+      const { projectId, bool } = action.payload;
+      state.projects[projectId].isLoading = bool;
       break;
+    }
     case "set_count": {
       const { projectId, count } = action.payload;
       state.projects[projectId].count = count;

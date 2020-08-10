@@ -5,7 +5,6 @@ import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
 import { getArticleIds, getArticlesById } from "../services/getArticles";
 
-// TODO: Preload all ids initially, load project ids in the background. Prevent changing to project until loaded.
 // TODO: library/register/account
 // TODO: as a part of register, remove unnecessary server side validation. Let frontend deal with all that
 
@@ -15,32 +14,13 @@ const ArticlesPage = () => {
     state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  // const selectedProject = projects[selectedProjectId];
-  const projectPage = false;
-
-  // useEffect(() => {
-  //   const loadArticles = async () => {
-  //     setIsLoading(true);
-  //     const { ids, count } = await getArticlesByProject(
-  //       selectedProjectId,
-  //       page
-  //     );
-  //     const neededArticles = ids.filter((id) => !articles[id]);
-  //     if (neededArticles.length) {
-  //       const newArticles = await getArticlesById(neededArticles);
-  //       action("add_articles", { page, articles: newArticles });
-  //     }
-  //     action("set_count", count);
-  //     setIsLoading(false);
-  //   };
-  //   // Load articles if current page hasn't been loaded and isn't being loaded
-  //   if (!projects[selectedProjectId].pages[page] && !isLoading) loadArticles();
-  // }, [action, articles, isLoading, page, projects, selectedProjectId]);
+  const projectPage = projects[selectedProjectId].pages[page];
+  const hasAllArticles = projectPage && projectPage.every((id) => articles[id]);
 
   // Load the article ids for each project and separate them into pages
   useEffect(() => {
     const loadArticleIds = async (projectId) => {
-      action("set_pages_loading", projectId);
+      action("set_project_loading", { projectId, bool: true });
       const { ids } = await getArticleIds(projectId);
       const count = ids.length;
       const pages = [];
@@ -48,12 +28,39 @@ const ArticlesPage = () => {
         pages.push(ids.slice(i * 50, i * 50 + 50));
       }
       action("set_pages_loaded", { projectId, pages, count });
+      action("set_project_loading", { projectId, bool: false });
     };
     for (let project of Object.values(projects)) {
-      if (project.isLoading || project.pages.length) continue;
-      loadArticleIds(project.id);
+      if (!project.isLoading && !project.pages.length)
+        loadArticleIds(project.id);
     }
   }, [projects, action]);
+
+  // Load articles that are needed for each page
+  useEffect(() => {
+    const loadArticles = async () => {
+      const neededIds = projects[selectedProjectId].pages[page].filter(
+        (id) => !articles[id]
+      );
+      if (neededIds.length) {
+        action("set_project_loading", {
+          projectId: selectedProjectId,
+          bool: true,
+        });
+        const newArticles = await getArticlesById(neededIds);
+        action("add_articles", newArticles);
+        action("set_project_loading", {
+          projectId: selectedProjectId,
+          bool: false,
+        });
+      }
+    };
+    if (
+      projects[selectedProjectId].pages[page] &&
+      !projects[selectedProjectId].isLoading
+    )
+      loadArticles();
+  }, [articles, action, projects, page, selectedProjectId]);
 
   useEffect(() => setPage(0), [selectedProjectId]);
 
@@ -63,9 +70,9 @@ const ArticlesPage = () => {
         activeTab="articles"
         page={page}
         setPage={setPage}
-        count={false}
+        count={projects[selectedProjectId].count}
       />
-      {projectPage ? (
+      {hasAllArticles ? (
         projectPage.map((id) => <Article key={id} {...articles[id]} />)
       ) : (
         <div className="loading loading-lg"></div>

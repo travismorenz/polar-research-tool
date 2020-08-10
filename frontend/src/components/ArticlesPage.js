@@ -1,10 +1,11 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import Article from "./Article";
 import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
 import { getArticlesByProject, getArticlesById } from "../services/getArticles";
 
+// TODO: Preload all ids initially, load project ids in the background. Prevent changing to project until loaded.
 // TODO: library/register/account
 // TODO: as a part of register, remove unnecessary server side validation. Let frontend deal with all that
 

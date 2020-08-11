@@ -1,15 +1,13 @@
-const createProject = ({ name, id }) => ({
-  name,
-  id,
-  pages: [],
-  isLoading: false,
-});
-
 export const initialState = {
   username: "",
   isLoggedIn: false,
   projects: {
-    _default: createProject({ name: "None", id: "_default" }),
+    _default: {
+      id: "_default",
+      name: "None",
+      pages: [],
+      isLoading: false,
+    },
   },
   articles: {},
   selectedProjectId: "_default",
@@ -43,9 +41,14 @@ export const reducer = (state, action) => {
       state.isLoggedIn = true;
       state.username = action.payload.username;
       // Fill out each pulled in project with needed fields
-      action.payload.projects.forEach((p) => {
-        if (!state.projects[p.id])
-          state.projects[p.id] = createProject(p, p.id);
+      action.payload.projects.forEach(({ id, name }) => {
+        if (!state.projects[id])
+          state.projects[id] = {
+            id,
+            name,
+            pages: [],
+            isLoading: false,
+          };
       });
       break;
     case "logout":

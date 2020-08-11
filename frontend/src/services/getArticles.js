@@ -1,10 +1,10 @@
 export const getArticleIds = (projectId) =>
-  fetch(`/article-ids/${projectId === "_default" ? "" : projectId}`, {
+  fetch(`/api/article-ids/${projectId === "_default" ? "" : projectId}`, {
     credentials: "include",
   }).then((res) => res.json());
 
 export const getArticlesById = (ids) =>
-  fetch("/articles-by-id", {
+  fetch("/api/articles-by-id", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

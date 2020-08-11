@@ -1,5 +1,5 @@
 export default (input) =>
-  fetch("/register", {
+  fetch("/api/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

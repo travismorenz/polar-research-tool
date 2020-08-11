@@ -1,5 +1,5 @@
 export default () =>
-  fetch("/logout", {
+  fetch("/api/logout", {
     method: "POST",
     credentials: "include",
   });

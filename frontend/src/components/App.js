@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import ArticlesPage from "./ArticlesPage";
 import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 import Navbar from "./Navbar";
 import login from "../services/login";
 import { initialState, reducer } from "../store";
@@ -34,6 +35,7 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={ArticlesPage} />
             <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/register" component={RegisterPage} />
             <Redirect to="/" />
           </Switch>
         </BrowserRouter>

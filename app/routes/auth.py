@@ -12,10 +12,6 @@ def login_post():
         form_data = request.get_json()
         username = form_data['username']
         password = form_data['password']
-        if not username or not username.strip():
-            return {'error': 'Username is missing.'}
-        if not password:
-            return {'error': 'Password is missing'}
         person = Person.query.filter_by(username=username).first()
         if person is None or not person.check_password(password):
             return {'error': 'Credentials are incorrect'}
@@ -23,36 +19,29 @@ def login_post():
     projects = [project.serialize() for project in current_user.projects]
     return {'data': {'username': current_user.username, 'projects': projects}}
 
+
 @auth.route('/api/register', methods=['POST'])
 def register_post():
-    username = request.form['username']
-    password = request.form['password']
-    # Input validation
-    if not username or not username.strip():
-        return render_template("register.html", error="Username is missing.")
-    if not password:
-        return render_template("register.html", error="Password is missing.")
-    if len(password) < 7:
-        return render_template("register.html", error="Password must be at least 7 characters.")
-    if len(password) > 50:
-        return render_template("register.html", error="Password may be a maximum of 50 characters.")
-    if len(username) > 50:
-        return render_template("register.html", error="Username may be a maximum of 50 characters.")
-
+    form_data = request.get_json()
+    username = form_data['username']
+    password = form_data['password']
+    # Make sure user is unique
     person = Person.query.filter_by(username=username).first()
     if person is not None:
-        return render_template("register.html", error="User already exists.")
+        return {'error': 'That name is taken'}
+    # Create user in DB
     person = Person(username=username, admin=username in admins)
     person.set_password(password)
     db.session.add(person)
     db.session.commit()
-    flash("User successfully created!")
-    return redirect(url_for("auth.login_get"))
+    # Follow same precedure as /login
+    login_user(person, remember=True)
+    projects = [project.serialize() for project in current_user.projects]
+    return {'data': {'username': current_user.username, 'projects': projects}}
 
 
 @auth.route('/api/logout', methods=['POST'])
 def logout():
-    session.clear();
     logout_user()
     return {}
 

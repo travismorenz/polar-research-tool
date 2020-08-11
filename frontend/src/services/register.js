@@ -1,0 +1,9 @@
+export default (input) =>
+  fetch("/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(input),
+  }).then((res) => res.json());

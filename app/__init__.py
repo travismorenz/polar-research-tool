@@ -39,8 +39,8 @@ def create_app():
     # Register the views 
     from app.routes.articles import articles
     from app.routes.auth import auth
-    from app.routes.test import test
+    from app.routes.main import main 
     app.register_blueprint(articles)
     app.register_blueprint(auth)
-    app.register_blueprint(test)
+    app.register_blueprint(main)
     return app

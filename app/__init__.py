@@ -27,7 +27,7 @@ def load_user(username):
     return Person.query.get(username)
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path="/")
     CORS(app, supports_credentials=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
     app.secret_key = os.getenv('SECRET_KEY')
@@ -39,6 +39,8 @@ def create_app():
     # Register the views 
     from app.routes.articles import articles
     from app.routes.auth import auth
+    from app.routes.test import test
     app.register_blueprint(articles)
     app.register_blueprint(auth)
+    app.register_blueprint(test)
     return app

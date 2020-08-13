@@ -3,21 +3,28 @@ services:
   redis:
     image: redis
   beat:
-    build: .
+    build: 
+      context: .
+      dockerfile: ./config/tasks.Dockerfile
     depends_on:
       - redis
     command: celery -A app.worker.celery_app beat -l DEBUG
     environment:
       - TZ=${UPDATE_TIMEZONE}
   worker:
-    build: .
+    build: 
+      context: .
+      dockerfile: ./config/tasks.Dockerfile
     depends_on:
       - redis
     command: celery -A app.worker.celery_app worker -l ERROR
     environment:
       - TZ=${UPDATE_TIMEZONE}
   web:
-    build: .
+    build: 
+      context: .
+      dockerfile: ./config/web.Dockerfile
+    depends_on:
     ports:
       - "${APP_PORT}:8000"
     depends_on:

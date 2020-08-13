@@ -16,7 +16,6 @@ Jinja2==2.11.2
 kombu==4.6.8
 MarkupSafe==1.1.1
 pdfminer==20191125
-pkg-resources==0.0.0
 psycopg2-binary==2.8.5
 pycryptodome==3.9.7
 python-dotenv==0.13.0

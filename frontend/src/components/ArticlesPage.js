@@ -65,6 +65,7 @@ const ArticlesPage = () => {
       loadArticles();
   }, [articles, action, projects, page, selectedProjectId]);
 
+  // Set the page to 0 when changing projects
   useEffect(() => setPage(0), [selectedProjectId]);
 
   return (

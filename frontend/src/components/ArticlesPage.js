@@ -62,7 +62,7 @@ const ArticlesPage = () => {
         count={articleIds.length}
       />
       {/* {displayedArticles.length ? ( */}
-      {displayedArticles.length && isLoading ? (
+      {displayedArticles.length && !isLoading ? (
         displayedArticles.map((article) => (
           <Article key={article.id} {...article} />
         ))

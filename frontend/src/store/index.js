@@ -5,7 +5,7 @@ export const initialState = {
     _default: {
       id: "_default",
       name: "None",
-      pages: [],
+      articleIds: [],
       isLoading: false,
     },
   },
@@ -16,12 +16,11 @@ export const initialState = {
 export const reducer = (state, action) => {
   switch (action.type) {
     case "add_articles":
-      action.payload.forEach((a) => (state.articles[a.id] = a));
+      action.payload.forEach((a) => (state.articles[a.id] = { ...a }));
       break;
-    case "set_pages_loaded": {
-      const { projectId, pages, count } = action.payload;
-      state.projects[projectId].count = count;
-      state.projects[projectId].pages = pages;
+    case "set_article_ids": {
+      const { projectId, ids } = action.payload;
+      state.projects[projectId].articleIds = ids;
       break;
     }
     case "set_project_loading": {
@@ -46,7 +45,7 @@ export const reducer = (state, action) => {
           state.projects[id] = {
             id,
             name,
-            pages: [],
+            articleIds: [],
             isLoading: false,
           };
       });

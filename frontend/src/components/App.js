@@ -8,6 +8,7 @@ import RegisterPage from "./RegisterPage";
 import Navbar from "./Navbar";
 import login from "../services/login";
 import { initialState, reducer } from "../store";
+import { getArticleIds } from "../services/getArticles";
 
 export const AppContext = createContext();
 
@@ -26,6 +27,20 @@ const App = () => {
     };
     init();
   }, [action]);
+
+  // Load the article ids for each project and separate them into pages
+  useEffect(() => {
+    const loadArticleIds = async (projectId) => {
+      action("set_project_loading", { projectId, bool: true });
+      const { ids } = await getArticleIds(projectId);
+      action("set_article_ids", { projectId, ids });
+      action("set_project_loading", { projectId, bool: false });
+    };
+    for (let project of Object.values(state.projects)) {
+      if (!project.isLoading && !project.articleIds.length)
+        loadArticleIds(project.id);
+    }
+  }, [state.projects, action]);
 
   return (
     <div className="app">

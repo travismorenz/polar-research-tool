@@ -17,7 +17,7 @@ const ArticlesPage = () => {
     state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  const { articleIds, isLoading } = projects[selectedProjectId];
+  const { articleIds, isLoading, libraryIds } = projects[selectedProjectId];
   const displayedArticles = pageSlice(articleIds, page)
     .filter((id) => articles[id])
     .map((id) => articles[id]);
@@ -60,6 +60,7 @@ const ArticlesPage = () => {
         page={page}
         setPage={setPage}
         count={articleIds.length}
+        showLibrary={!!libraryIds.length}
       />
       {/* {displayedArticles.length ? ( */}
       {displayedArticles.length && !isLoading ? (

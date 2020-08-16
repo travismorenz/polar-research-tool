@@ -8,7 +8,7 @@ import RegisterPage from "./RegisterPage";
 import Navbar from "./Navbar";
 import login from "../services/login";
 import { initialState, reducer } from "../store";
-import { getArticleIds } from "../services/getArticles";
+import { getArticleIds, getLibraryIds } from "../services/getArticles";
 
 export const AppContext = createContext();
 
@@ -32,8 +32,15 @@ const App = () => {
   useEffect(() => {
     const loadArticleIds = async (projectId) => {
       action("set_project_loading", { projectId, bool: true });
-      const { ids } = await getArticleIds(projectId);
-      action("set_article_ids", { projectId, ids });
+      const { ids: articleIds } = await getArticleIds(projectId);
+
+      let libraryIds = [];
+      if (projectId !== "_default") {
+        const { ids } = await getLibraryIds(projectId);
+        libraryIds = ids;
+      }
+
+      action("set_article_ids", { projectId, articleIds, libraryIds });
       action("set_project_loading", { projectId, bool: false });
     };
     for (let project of Object.values(state.projects)) {

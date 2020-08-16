@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ArticlesControls = ({ activeTab, page, setPage, count }) => {
+const ArticlesControls = ({ activeTab, page, setPage, count, showLibrary }) => {
   const totalPages = count ? Math.ceil(count / 50) : "?";
   const hasPagesLeft = page > 0;
   const hasPagesRight = page + 1 < totalPages;
@@ -14,12 +14,14 @@ const ArticlesControls = ({ activeTab, page, setPage, count }) => {
         >
           Articles
         </Link>
-        <Link
-          className={`btn ${activeTab === "library" ? "active" : ""}`}
-          to="/library"
-        >
-          Libary
-        </Link>
+        {showLibrary && (
+          <Link
+            className={`btn ${activeTab === "library" ? "active" : ""}`}
+            to="/library"
+          >
+            Libary
+          </Link>
+        )}
       </div>
       <div className="text-right page-controls">
         {count !== undefined && (

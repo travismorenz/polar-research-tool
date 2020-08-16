@@ -3,6 +3,11 @@ export const getArticleIds = (projectId) =>
     credentials: "include",
   }).then((res) => res.json());
 
+export const getLibraryIds = (projectId) =>
+  fetch(`/api/articles-by-library/${projectId}`, {
+    credentials: "include",
+  }).then((res) => res.json());
+
 export const getArticlesById = (ids) =>
   fetch("/api/articles-by-id", {
     method: "POST",

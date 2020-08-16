@@ -102,16 +102,7 @@ def library(project_id):
         JOIN article a ON a.id = pa.article_id
         WHERE p.id = :id
     """
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM project p
-        JOIN projects_articles pa ON pa.project_id = p.id
-        JOIN article a ON a.id = pa.article_id
-        WHERE p.id = :id
-    """
     # Populate articles with our query results
-    count_query_result = db.engine.execute(db.text(count_query), id=project_id).fetchall()
-    count = dict(count_query_result[0])['count']
     main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()
     article_ids = [row['id'] for row in main_query_result]
-    return {'ids': article_ids, 'count': count}
+    return {'ids': article_ids}

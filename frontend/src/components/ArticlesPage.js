@@ -6,7 +6,8 @@ import { AppContext } from "./App";
 import { getArticleIds, getArticlesById } from "../services/getArticles";
 
 // TODO: library/register/account
-// TODO: as a part of register, remove unnecessary server side validation. Let frontend deal with all that
+
+const PAGE_SIZE = 50;
 
 const ArticlesPage = () => {
   const [page, setPage] = useState(0);
@@ -24,8 +25,8 @@ const ArticlesPage = () => {
       const { ids } = await getArticleIds(projectId);
       const count = ids.length;
       const pages = [];
-      for (let i = 0; i < Math.ceil(count / 50); i++) {
-        pages.push(ids.slice(i * 50, i * 50 + 50));
+      for (let i = 0; i < Math.ceil(count / PAGE_SIZE); i++) {
+        pages.push(ids.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE));
       }
       action("set_pages_loaded", { projectId, pages, count });
       action("set_project_loading", { projectId, bool: false });
@@ -55,6 +56,8 @@ const ArticlesPage = () => {
         });
       }
     };
+    // Only load articles if the page exists (i.e the ids have been loaded)
+    // and if the articles/ids for that page are not currently being loaded
     if (
       projects[selectedProjectId].pages[page] &&
       !projects[selectedProjectId].isLoading

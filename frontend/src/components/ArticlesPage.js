@@ -17,7 +17,7 @@ const ArticlesPage = () => {
     state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  const { articleIds } = projects[selectedProjectId];
+  const { articleIds, isLoading } = projects[selectedProjectId];
   const displayedArticles = pageSlice(articleIds, page)
     .filter((id) => articles[id])
     .map((id) => articles[id]);
@@ -59,10 +59,10 @@ const ArticlesPage = () => {
         activeTab="articles"
         page={page}
         setPage={setPage}
-        count={projects[selectedProjectId].articleIds.length}
+        count={articleIds.length}
       />
-      {displayedArticles.length ? (
-        // {displayedArticles.length && projects[selectedProjectId].articleIds ? (
+      {/* {displayedArticles.length ? ( */}
+      {displayedArticles.length && isLoading ? (
         displayedArticles.map((article) => (
           <Article key={article.id} {...article} />
         ))

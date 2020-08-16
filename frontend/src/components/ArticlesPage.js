@@ -61,7 +61,8 @@ const ArticlesPage = () => {
         setPage={setPage}
         count={projects[selectedProjectId].articleIds.length}
       />
-      {displayedArticles.length === PAGE_SIZE ? (
+      {displayedArticles.length ? (
+        // {displayedArticles.length && projects[selectedProjectId].articleIds ? (
         displayedArticles.map((article) => (
           <Article key={article.id} {...article} />
         ))

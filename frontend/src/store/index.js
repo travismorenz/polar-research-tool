@@ -1,19 +1,12 @@
-const projectSchema = {
-  id: "",
-  name: "",
-  allIds: [],
-  libraryIds: [],
-  isLoading: false,
-};
-
 export const initialState = {
   username: "",
   isLoggedIn: false,
   projects: {
     _default: {
-      ...projectSchema,
       id: "_default",
       name: "None",
+      pages: [],
+      isLoading: false,
     },
   },
   articles: {},
@@ -25,9 +18,10 @@ export const reducer = (state, action) => {
     case "add_articles":
       action.payload.forEach((a) => (state.articles[a.id] = a));
       break;
-    case "set_article_ids": {
-      const { projectId, ids } = action.payload;
-      state.projects[projectId].allIds = ids;
+    case "set_pages_loaded": {
+      const { projectId, pages, count } = action.payload;
+      state.projects[projectId].count = count;
+      state.projects[projectId].pages = pages;
       break;
     }
     case "set_project_loading": {
@@ -50,9 +44,10 @@ export const reducer = (state, action) => {
       action.payload.projects.forEach(({ id, name }) => {
         if (!state.projects[id])
           state.projects[id] = {
-            ...projectSchema,
             id,
             name,
+            pages: [],
+            isLoading: false,
           };
       });
       break;

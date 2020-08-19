@@ -1,26 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const ArticlesControls = ({ activeTab, page, setPage, count, showLibrary }) => {
+const ArticlesControls = ({
+  tab,
+  setTab,
+  page,
+  setPage,
+  totalCount,
+  libraryCount,
+}) => {
+  const count = tab === "articles" ? totalCount : libraryCount;
   const totalPages = count ? Math.ceil(count / 50) : "?";
   const hasPagesLeft = page > 0;
   const hasPagesRight = page + 1 < totalPages;
   return (
     <div className="space-between">
       <div className="tabs btn-group btn-group-block">
-        <Link
-          className={`btn ${activeTab === "articles" ? "active" : ""}`}
-          to="/"
+        <button
+          className={`btn ${tab === "articles" ? "active" : ""}`}
+          onClick={() => setTab("articles")}
         >
           Articles
-        </Link>
-        {showLibrary && (
-          <Link
-            className={`btn ${activeTab === "library" ? "active" : ""}`}
-            to="/library"
+        </button>
+        {libraryCount > 0 && (
+          <button
+            className={`btn ${tab === "library" ? "active" : ""}`}
+            onClick={() => setTab("library")}
           >
             Libary
-          </Link>
+          </button>
         )}
       </div>
       <div className="text-right page-controls">

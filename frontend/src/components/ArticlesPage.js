@@ -12,32 +12,43 @@ const pageSlice = (ids, page) =>
 const PAGE_SIZE = 50;
 
 const ArticlesPage = () => {
+  const [tab, setTab] = useState("articles");
   const [page, setPage] = useState(0);
   const {
     state: { selectedProjectId, projects, articles },
     action,
   } = useContext(AppContext);
-  const { articleIds, isLoading, libraryIds } = projects[selectedProjectId];
-  const displayedArticles = pageSlice(articleIds, page)
+  const { id: projectId, articleIds, isLoading, libraryIds } = projects[
+    selectedProjectId
+  ];
+
+  let displayedArticles =
+    tab === "articles"
+      ? pageSlice(articleIds, page)
+      : pageSlice(libraryIds, page);
+  displayedArticles = displayedArticles
     .filter((id) => articles[id])
     .map((id) => articles[id]);
 
   // Load articles that are needed for each page
   useEffect(() => {
     const loadArticles = async () => {
-      const neededIds = pageSlice(articleIds, page).filter(
-        (id) => !articles[id]
-      );
+      let neededIds =
+        tab === "articles"
+          ? pageSlice(articleIds, page)
+          : pageSlice(libraryIds, page);
+
+      neededIds = neededIds.filter((id) => !articles[id]);
 
       if (!neededIds.length) return;
 
-      action("set_project_loading", { projectId: id, bool: true });
+      action("set_project_loading", { projectId, bool: true });
       const newArticles = await getArticlesById(neededIds);
       action("add_articles", newArticles);
-      action("set_project_loading", { projectId: id, bool: false });
+      action("set_project_loading", { projectId, bool: false });
     };
 
-    const { id, articleIds, isLoading } = projects[selectedProjectId];
+    // TODO: this conditional results in some unnecessary calls
     if (displayedArticles.length !== PAGE_SIZE && !isLoading) {
       loadArticles();
     }
@@ -45,27 +56,48 @@ const ArticlesPage = () => {
     action,
     articles,
     page,
-    projects,
-    selectedProjectId,
+    tab,
+    projectId,
+    articleIds,
+    libraryIds,
     displayedArticles.length,
+    isLoading,
   ]);
 
   // Set the page to 0 when changing projects
-  useEffect(() => setPage(0), [selectedProjectId]);
+  useEffect(() => {
+    setPage(0);
+    setTab("articles");
+  }, [selectedProjectId]);
+
+  const toggleArticleInLibrary = async () => {
+    console.log("yeet");
+  };
+
+  const toggleInLibrary = async (id) => {
+    await toggleArticleInLibrary(id);
+    action("toggle_library", id);
+  };
 
   return (
     <div className="container grid-lg">
       <ArticlesControls
-        activeTab="articles"
+        tab={tab}
+        setTab={setTab}
         page={page}
         setPage={setPage}
-        count={articleIds.length}
-        showLibrary={!!libraryIds.length}
+        totalCount={articleIds.length}
+        libraryCount={libraryIds.length}
       />
       {/* {displayedArticles.length ? ( */}
       {displayedArticles.length && !isLoading ? (
         displayedArticles.map((article) => (
-          <Article key={article.id} {...article} />
+          <Article
+            key={article.id}
+            inLibrary={libraryIds.includes(article.id)}
+            toggleInLibrary={toggleInLibrary}
+            {...article}
+          />
         ))
       ) : (
         <div className="loading loading-lg"></div>

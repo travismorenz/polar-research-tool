@@ -40,7 +40,8 @@ const App = () => {
         libraryIds = ids;
       }
 
-      action("set_article_ids", { projectId, articleIds, libraryIds });
+      action("set_article_ids", { projectId, articleIds });
+      action("set_library_ids", { projectId, libraryIds });
       action("set_project_loading", { projectId, bool: false });
     };
     for (let project of Object.values(state.projects)) {

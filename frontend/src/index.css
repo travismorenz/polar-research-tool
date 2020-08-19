@@ -134,6 +134,21 @@ main {
   border: 0;
 }
 
+.bookmark-btn {
+  padding: 0.1rem;
+  background: none;
+  border: none;
+  margin: 0 0 0 auto;
+}
+
+.bookmark-btn i.active::before {
+  background-color: #5755d9;
+}
+
+.bookmark-btn i.active::after {
+  background-color: white;
+}
+
 .card i {
   font-size: 1.2rem;
   color: #5755d9;

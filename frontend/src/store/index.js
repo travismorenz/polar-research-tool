@@ -28,6 +28,10 @@ export const reducer = (state, action) => {
     case "set_article_ids": {
       const { projectId, articleIds, libraryIds } = action.payload;
       state.projects[projectId].articleIds = articleIds;
+      break;
+    }
+    case "set_library_ids": {
+      const { projectId, libraryIds } = action.payload;
       state.projects[projectId].libraryIds = libraryIds;
       break;
     }

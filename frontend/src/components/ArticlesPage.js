@@ -5,7 +5,8 @@ import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
 import { getArticlesById } from "../services/getArticles";
 
-// TODO: library/register/account
+// TODO: Docker needs to npm run build
+// TODO: library/account
 const pageSlice = (ids, page) =>
   ids.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 

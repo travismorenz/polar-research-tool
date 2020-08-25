@@ -26,13 +26,25 @@ export const reducer = (state, action) => {
       action.payload.forEach((a) => (state.articles[a.id] = { ...a }));
       break;
     case "set_article_ids": {
-      const { projectId, articleIds, libraryIds } = action.payload;
+      const { projectId, articleIds } = action.payload;
       state.projects[projectId].articleIds = articleIds;
       break;
     }
     case "set_library_ids": {
       const { projectId, libraryIds } = action.payload;
       state.projects[projectId].libraryIds = libraryIds;
+      break;
+    }
+    case "toggle_in_library": {
+      const { projectId, articleId } = action.payload;
+      const library = state.projects[projectId].libraryIds;
+      if (library.includes(articleId)) {
+        state.projects[projectId].libraryIds = state.projects[
+          projectId
+        ].libraryIds.filter((id) => id !== articleId);
+      } else {
+        state.projects[projectId].libraryIds.push(articleId);
+      }
       break;
     }
     case "set_project_loading": {
@@ -51,7 +63,7 @@ export const reducer = (state, action) => {
     case "login":
       state.isLoggedIn = true;
       state.username = action.payload.username;
-      // Fill out each pulled in project with needed fields
+      // Fill out each pulled in project with needed attributes
       action.payload.projects.forEach(({ id, name }) => {
         if (!state.projects[id])
           state.projects[id] = {

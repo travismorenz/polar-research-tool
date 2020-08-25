@@ -4,6 +4,7 @@ import Article from "./Article";
 import ArticlesControls from "./ArticlesControls";
 import { AppContext } from "./App";
 import { getArticlesById } from "../services/getArticles";
+import toggleArticleInLibrary from "../services/toggleArticleInLibrary";
 
 // TODO: Docker needs to npm run build
 // TODO: library/account
@@ -71,13 +72,12 @@ const ArticlesPage = () => {
     setTab("articles");
   }, [selectedProjectId]);
 
-  const toggleArticleInLibrary = async () => {
-    console.log("yeet");
-  };
-
-  const toggleInLibrary = async (id) => {
-    await toggleArticleInLibrary(id);
-    action("toggle_library", id);
+  const toggleInLibrary = async (article_id) => {
+    await toggleArticleInLibrary(selectedProjectId, article_id);
+    action("toggle_in_library", {
+      projectId: selectedProjectId,
+      articleId: article_id,
+    });
   };
 
   return (
@@ -97,6 +97,7 @@ const ArticlesPage = () => {
             key={article.id}
             inLibrary={libraryIds.includes(article.id)}
             toggleInLibrary={toggleInLibrary}
+            onProjectPage={selectedProjectId !== "_default"}
             {...article}
           />
         ))

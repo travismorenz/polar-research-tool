@@ -5,6 +5,7 @@ const Article = ({
   categories,
   id,
   inLibrary,
+  onProjectPage,
   publish_date,
   summary,
   title,
@@ -13,9 +14,11 @@ const Article = ({
 }) => {
   return (
     <div className="article card">
-      <button className="bookmark-btn" onClick={() => toggleInLibrary(id)}>
-        <i className={`icon icon-bookmark ${inLibrary ? "active" : ""}`} />
-      </button>
+      {onProjectPage && (
+        <button className="bookmark-btn" onClick={() => toggleInLibrary(id)}>
+          <i className={`icon icon-bookmark ${inLibrary ? "active" : ""}`} />
+        </button>
+      )}
       <a href={url} target="_blank" rel="noopener noreferrer">
         <h5>{title}</h5>
       </a>

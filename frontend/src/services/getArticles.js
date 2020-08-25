@@ -1,12 +1,10 @@
 export const getArticleIds = (projectId) =>
-  fetch(`/api/article-ids/${projectId === "_default" ? "" : projectId}`, {
-    credentials: "include",
-  }).then((res) => res.json());
+  fetch(
+    `/api/article-ids/${projectId === "_default" ? "" : projectId}`
+  ).then((res) => res.json());
 
 export const getLibraryIds = (projectId) =>
-  fetch(`/api/articles-by-library/${projectId}`, {
-    credentials: "include",
-  }).then((res) => res.json());
+  fetch(`/api/articles-by-library/${projectId}`).then((res) => res.json());
 
 export const getArticlesById = (ids) =>
   fetch("/api/articles-by-id", {
@@ -14,7 +12,6 @@ export const getArticlesById = (ids) =>
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
     body: JSON.stringify({ ids }),
   })
     .then((res) => res.json())

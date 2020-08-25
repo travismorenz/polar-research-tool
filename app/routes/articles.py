@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
+from flask_login import login_required
 from functools import reduce
 from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 import time
@@ -73,7 +74,7 @@ def articles_by_id():
 
 @articles.route("/api/article-ids/", defaults={'project_id': ""})
 @articles.route("/api/article-ids/<string:project_id>")
-def articles_by_project(project_id):
+def get_article_ids(project_id):
     # Filter articles if project is selected
     query_params = {}
     filter_query = ""
@@ -94,7 +95,7 @@ def articles_by_project(project_id):
 
 
 @articles.route("/api/articles-by-library/<string:project_id>")
-def library(project_id):
+def get_articles_by_library(project_id):
     main_query = f"""
         SELECT a.id
         FROM project p
@@ -106,3 +107,17 @@ def library(project_id):
     main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()
     article_ids = [row['id'] for row in main_query_result]
     return {'ids': article_ids}
+
+@articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])
+def toggle_in_library(project_id):
+   article_id = request.get_json()['articleId']
+   article = Article.query.filter_by(id=article_id).first()
+   project = Project.query.filter_by(id=project_id).first()
+
+   if article in project.articles:
+       project.articles.remove(article)
+   else:
+        project.articles.append(article)
+   db.session.add(project)
+   db.session.commit()
+   return {}

@@ -22,6 +22,7 @@ FILTER_QUERY = """
     )
 """
 
+
 def set_pagination_info(articles, page):
     total = articles['total']
     curr_amount = len(articles['items'])
@@ -30,6 +31,7 @@ def set_pagination_info(articles, page):
     articles['next_page'] = page + 1
     articles['prev_page'] = page - 1
 
+
 def set_previous_versions(articles):
     for article in articles['items']:
         version = article.version
@@ -37,6 +39,7 @@ def set_previous_versions(articles):
             version1 = Article.query.filter_by(version=1, title=article.title).first()
             if version1 is not None:
                 article.version1 = version1
+
 
 def format_articles(query_result):
     articles = {}
@@ -54,6 +57,7 @@ def format_articles(query_result):
         if category_name not in articles[row_id]['categories']:
             articles[row_id]['categories'].append(category_name)
     return articles
+
 
 @articles.route("/api/articles-by-id", methods=["POST"])
 def articles_by_id():
@@ -107,6 +111,7 @@ def get_articles_by_library(project_id):
     main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()
     article_ids = [row['id'] for row in main_query_result]
     return {'ids': article_ids}
+
 
 @articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])
 def toggle_in_library(project_id):

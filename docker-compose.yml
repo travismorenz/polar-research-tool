@@ -1,34 +1,38 @@
 version: "3"
 services:
-  redis:
-    image: redis
-  beat:
-    build: 
+  # redis:
+  #   image: redis
+  # beat:
+  #   build:
+  #     context: .
+  #     dockerfile: ./config/tasks.Dockerfile
+  #   depends_on:
+  #     - redis
+  #   command: celery -A app.worker.celery_app beat -l DEBUG
+  #   environment:
+  #     - TZ=${UPDATE_TIMEZONE}
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: ./config/tasks.Dockerfile
+  #   depends_on:
+  #     - redis
+  #   command: celery -A app.worker.celery_app worker -l ERROR
+  #   environment:
+  #     - TZ=${UPDATE_TIMEZONE}
+  frontend:
+    build:
       context: .
-      dockerfile: ./config/tasks.Dockerfile
+      dockerfile: ./config/Dockerfile.frontend
     depends_on:
-      - redis
-    command: celery -A app.worker.celery_app beat -l DEBUG
-    environment:
-      - TZ=${UPDATE_TIMEZONE}
-  worker:
-    build: 
-      context: .
-      dockerfile: ./config/tasks.Dockerfile
-    depends_on:
-      - redis
-    command: celery -A app.worker.celery_app worker -l ERROR
-    environment:
-      - TZ=${UPDATE_TIMEZONE}
-  web:
-    build: 
-      context: .
-      dockerfile: ./config/web.Dockerfile
-    depends_on:
+      - api
     ports:
-      - "${APP_PORT}:8000"
-    depends_on:
-      - worker
-    command: gunicorn --bind 0.0.0.0:8000 "app:create_app()"
+      - "${APP_PORT}:80"
+    command: nginx -g 'daemon off;'
+  api:
+    build:
+      context: .
+      dockerfile: ./config/Dockerfile.api
     environment:
       - TZ=${UPDATE_TIMEZONE}
+    command: gunicorn --bind 0.0.0.0:8000 "app:create_app()"

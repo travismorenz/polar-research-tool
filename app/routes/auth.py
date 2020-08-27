@@ -17,7 +17,7 @@ def login_post():
             return {'error': 'Credentials are incorrect'}
         login_user(person, remember=True)
     projects = [project.serialize() for project in current_user.projects]
-    return {'data': {'username': current_user.username, 'projects': projects}}
+    return {'data': {'username': current_user.username, 'projects': projects, 'isAdmin': current_user.admin}}
 
 
 @auth.route('/api/register', methods=['POST'])

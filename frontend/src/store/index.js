@@ -9,6 +9,7 @@ const projectSchema = {
 export const initialState = {
   username: "",
   isLoggedIn: false,
+  isAdmin: false,
   projects: {
     _default: {
       ...projectSchema,
@@ -60,11 +61,13 @@ export const reducer = (state, action) => {
     case "select_project":
       state.selectedProjectId = action.payload;
       break;
-    case "login":
+    case "login": {
+      const { username, projects, isAdmin } = action.payload;
       state.isLoggedIn = true;
-      state.username = action.payload.username;
+      state.username = username;
+      state.isAdmin = !!isAdmin;
       // Fill out each pulled in project with needed attributes
-      action.payload.projects.forEach(({ id, name }) => {
+      projects.forEach(({ id, name }) => {
         if (!state.projects[id])
           state.projects[id] = {
             ...projectSchema,
@@ -73,6 +76,7 @@ export const reducer = (state, action) => {
           };
       });
       break;
+    }
     case "logout":
       return { ...initialState };
     default:

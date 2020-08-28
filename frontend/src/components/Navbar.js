@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { AppContext } from "./App";
-import logout from "../services/logout";
+import { logout } from "../services/auth";
 
 const Navbar = () => {
   const {

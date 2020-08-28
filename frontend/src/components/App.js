@@ -7,7 +7,7 @@ import ArticlesPage from "./ArticlesPage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import Navbar from "./Navbar";
-import login from "../services/login";
+import { login } from "../services/auth";
 import { initialState, reducer } from "../store";
 import { getArticleIds, getLibraryIds } from "../services/getArticles";
 

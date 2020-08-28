@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Redirect } from "react-router-dom";
 
 import { AppContext } from "./App";
-import register from "../services/register";
+import { register } from "../services/auth";
 
 const RegisterPage = () => {
   const {

@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 
 import Project from "./Project";
-import { addKeyphrase as addKeyphraseService } from "../services/projects";
+import {
+  addKeyphrase as addKeyphraseService,
+  removeKeyphrase as removeKeyphraseService,
+} from "../services/projects";
 import { AppContext } from "./App";
 
 const AccountPage = () => {
@@ -13,8 +16,15 @@ const AccountPage = () => {
   const addKeyphrase = async (keyphrase, projectId) => {
     const project = projects[projectId];
     keyphrase = keyphrase.trim();
-    if (project.keyphrases.includes(keyphrase)) return;
+    if (!keyphrase || project.keyphrases.includes(keyphrase)) return;
     const { keyphrases } = await addKeyphraseService(keyphrase, projectId);
+    action("set_keyphrases", { keyphrases, projectId });
+  };
+
+  const removeKeyphrase = async (keyphrase, projectId) => {
+    const project = projects[projectId];
+    keyphrase = keyphrase.trim();
+    const { keyphrases } = await removeKeyphraseService(keyphrase, projectId);
     action("set_keyphrases", { keyphrases, projectId });
   };
 
@@ -23,7 +33,12 @@ const AccountPage = () => {
       <h2>My Account</h2>
       <h4>Projects</h4>
       {Object.values(projects).map((project) => (
-        <Project addKeyphrase={addKeyphrase} key={project.id} {...project} />
+        <Project
+          addKeyphrase={addKeyphrase}
+          removeKeyphrase={removeKeyphrase}
+          key={project.id}
+          {...project}
+        />
       ))}
     </div>
   );

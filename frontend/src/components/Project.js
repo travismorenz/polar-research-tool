@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-const Project = ({ addKeyphrase, id, name, keyphrases, categories }) => {
+const Project = ({
+  addKeyphrase,
+  removeKeyphrase,
+  id,
+  name,
+  keyphrases,
+  categories,
+}) => {
   const [newKeyphrase, setNewKeyphrase] = useState("");
   const [newCategory, setNewCategory] = useState("");
 
@@ -13,7 +20,15 @@ const Project = ({ addKeyphrase, id, name, keyphrases, categories }) => {
           <h6>Keyphrases</h6>
           <ul className="max-height-list">
             {keyphrases.map((k) => (
-              <li key={k}>{k}</li>
+              <li key={k}>
+                {k}
+                <button
+                  className="remove"
+                  onClick={() => removeKeyphrase(k, id)}
+                >
+                  X
+                </button>
+              </li>
             ))}
           </ul>
           <input

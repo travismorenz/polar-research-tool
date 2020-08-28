@@ -4,6 +4,8 @@ import Project from "./Project";
 import {
   addKeyphrase as addKeyphraseService,
   removeKeyphrase as removeKeyphraseService,
+  addCategory as addCategoryService,
+  removeCategory as removeCategoryService,
 } from "../services/projects";
 import { AppContext } from "./App";
 
@@ -22,10 +24,23 @@ const AccountPage = () => {
   };
 
   const removeKeyphrase = async (keyphrase, projectId) => {
-    const project = projects[projectId];
     keyphrase = keyphrase.trim();
     const { keyphrases } = await removeKeyphraseService(keyphrase, projectId);
     action("set_keyphrases", { keyphrases, projectId });
+  };
+
+  const addCategory = async (category, projectId) => {
+    const project = projects[projectId];
+    category = category.trim();
+    if (!category || project.keyphrases.includes(category)) return;
+    const { categories } = await addCategoryService(category, projectId);
+    action("set_categories", { categories, projectId });
+  };
+
+  const removeCategory = async (category, projectId) => {
+    category = category.trim();
+    const { categories } = await removeCategoryService(category, projectId);
+    action("set_categories", { categories, projectId });
   };
 
   return (
@@ -36,6 +51,8 @@ const AccountPage = () => {
         <Project
           addKeyphrase={addKeyphrase}
           removeKeyphrase={removeKeyphrase}
+          addCategory={addCategory}
+          removeCategory={removeCategory}
           key={project.id}
           {...project}
         />

@@ -3,6 +3,8 @@ import React, { useState } from "react";
 const Project = ({
   addKeyphrase,
   removeKeyphrase,
+  addCategory,
+  removeCategory,
   id,
   name,
   keyphrases,
@@ -48,14 +50,29 @@ const Project = ({
           <h6>Categories</h6>
           <ul className="max-height-list">
             {categories.map((c) => (
-              <li key={c}>{c}</li>
+              <li key={c}>
+                {c}
+                <button
+                  className="remove"
+                  onClick={() => removeCategory(c, id)}
+                >
+                  X
+                </button>
+              </li>
             ))}
           </ul>
           <input
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
           />
-          <button>+</button>
+          <button
+            onClick={() => {
+              addCategory(newCategory, id);
+              setNewCategory("");
+            }}
+          >
+            +
+          </button>
         </div>
       </div>
       <div className="card-footer">

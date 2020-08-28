@@ -28,6 +28,11 @@ export const reducer = (state, action) => {
       state.projects[projectId].keyphrases = keyphrases;
       break;
     }
+    case "set_categories": {
+      const { projectId, categories } = action.payload;
+      state.projects[projectId].categories = categories;
+      break;
+    }
     case "add_articles":
       action.payload.forEach((a) => (state.articles[a.id] = { ...a }));
       break;

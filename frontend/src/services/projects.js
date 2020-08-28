@@ -17,3 +17,23 @@ export const removeKeyphrase = (keyphrase, projectId) =>
     credentials: "include",
     body: JSON.stringify({ keyphrase }),
   }).then((res) => res.json());
+
+export const addCategory = (category, projectId) =>
+  fetch(`/api/add-category/${projectId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ category }),
+  }).then((res) => res.json());
+
+export const removeCategory = (category, projectId) =>
+  fetch(`/api/remove-category/${projectId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ category }),
+  }).then((res) => res.json());

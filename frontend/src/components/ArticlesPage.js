@@ -6,12 +6,12 @@ import { AppContext } from "./App";
 import { getArticlesById } from "../services/getArticles";
 import toggleArticleInLibrary from "../services/toggleArticleInLibrary";
 
-// TODO: Docker needs to npm run build
-// TODO: library/account
 const pageSlice = (ids, page) =>
   ids.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 
 const PAGE_SIZE = 50;
+
+// TODO: fix switching to library from 2nd page bug
 
 const ArticlesPage = () => {
   const [tab, setTab] = useState("articles");

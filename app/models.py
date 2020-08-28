@@ -62,7 +62,9 @@ class Project(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'keyphrases': [k.serialize() for k in self.keyphrases],
+            'categories': [c.serialize() for c in self.categories]
         }
 
 
@@ -106,6 +108,9 @@ class Category(db.Model):
     articles = db.relationship('Article', secondary=articles_categories, back_populates="categories")
     projects = db.relationship('Project', secondary=projects_categories, back_populates="categories")
 
+    def serialize(self):
+        return self.name
+
 
 class Keyphrase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,4 +118,7 @@ class Keyphrase(db.Model):
 
     articles = db.relationship('Article', secondary=articles_keyphrases, back_populates="keyphrases")
     projects = db.relationship('Project', secondary=projects_keyphrases, back_populates="keyphrases")
+
+    def serialize(self):
+        return self.name
 

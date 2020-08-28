@@ -199,3 +199,37 @@ main {
 #edit-projects {
   display: none !important;
 }
+
+/* Project Card */
+.project .card-body {
+  display: flex;
+}
+
+.project .card-content {
+  text-align: center;
+  flex: 1;
+}
+
+.max-height-list {
+  height: 200px;
+  overflow-y: scroll;
+  list-style-type: none;
+}
+
+.max-height-list li {
+  text-decoration: none;
+}
+
+.project h5 {
+  text-align: center;
+}
+
+.project .card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.project .card-footer button {
+  border: none;
+  margin-left: auto;
+}

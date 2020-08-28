@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useCallback } from "react";
 import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
+import AccountPage from "./AccountPage";
 import ArticlesPage from "./ArticlesPage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
@@ -60,6 +61,7 @@ const App = () => {
             <Route exact path="/" component={ArticlesPage} />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />
+            <Route exact path="/account" component={AccountPage} />
             <Redirect to="/" />
           </Switch>
         </BrowserRouter>

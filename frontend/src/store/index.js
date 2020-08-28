@@ -67,12 +67,11 @@ export const reducer = (state, action) => {
       state.username = username;
       state.isAdmin = !!isAdmin;
       // Fill out each pulled in project with needed attributes
-      projects.forEach(({ id, name }) => {
-        if (!state.projects[id])
-          state.projects[id] = {
+      projects.forEach((project) => {
+        if (!state.projects[project.id])
+          state.projects[project.id] = {
             ...projectSchema,
-            id,
-            name,
+            ...project,
           };
       });
       break;

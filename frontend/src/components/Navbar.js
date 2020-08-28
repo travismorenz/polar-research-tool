@@ -6,7 +6,7 @@ import logout from "../services/logout";
 
 const Navbar = () => {
   const {
-    state: { isLoggedIn, isAdmin, username, projects, selectedProjectId },
+    state: { isLoggedIn, username, projects, selectedProjectId },
     action,
   } = useContext(AppContext);
 
@@ -44,9 +44,7 @@ const Navbar = () => {
                 </label>
               </div>
               <div className="dropdown">
-                <button className="btn dropdown-toggle">
-                  {username} {isAdmin && <strong>(admin)</strong>} ▼
-                </button>
+                <button className="btn dropdown-toggle">{username} ▼</button>
                 <ul className="menu">
                   <li className="menu-item">
                     <Link to="/account">My Account</Link>

@@ -23,6 +23,11 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case "set_keyphrases": {
+      const { projectId, keyphrases } = action.payload;
+      state.projects[projectId].keyphrases = keyphrases;
+      break;
+    }
     case "add_articles":
       action.payload.forEach((a) => (state.articles[a.id] = { ...a }));
       break;

@@ -80,5 +80,5 @@ def leave_project():
       current_user.projects.remove(project)
       db.session.add(current_user)
       db.session.commit()
-   return {'projects': [p.serialize() for p in current_user.projects]}
+   return {}
 

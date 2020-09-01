@@ -21,24 +21,30 @@ const ProjectControls = ({ projects, isAdmin, joinProject }) => {
     <div className="form-group project-controls">
       <h5>Join Project</h5>
       <label className="form-inline">
-        <select
-          className="form-select"
-          id="project-select"
-          value={selection}
-          onChange={(e) => setSelection(e.target.value)}
-        >
-          {options.map((name, i) => (
-            <option value={i} key={i}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <button
-          className="btn btn-primary"
-          onClick={() => joinProject(options[selection])}
-        >
-          Join Project
-        </button>
+        {options.length ? (
+          <>
+            <select
+              className="form-select"
+              id="project-select"
+              value={selection}
+              onChange={(e) => setSelection(e.target.value)}
+            >
+              {options.map((name, i) => (
+                <option value={i} key={i}>
+                  {name}
+                </option>
+              ))}
+            </select>
+            <button
+              className="btn btn-primary"
+              onClick={() => joinProject(options[selection])}
+            >
+              Join Project
+            </button>
+          </>
+        ) : (
+          "You have joined all available proejcts"
+        )}
       </label>
     </div>
   );

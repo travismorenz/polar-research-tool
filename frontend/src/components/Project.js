@@ -5,6 +5,7 @@ const Project = ({
   removeKeyphrase,
   addCategory,
   removeCategory,
+  leaveProject,
   id,
   name,
   keyphrases,
@@ -82,7 +83,12 @@ const Project = ({
         </div>
       </div>
       <div className="card-footer">
-        <button className="btn leave">Leave Project</button>
+        <button
+          className="btn leave"
+          onClick={() => leaveProject({ name, id })}
+        >
+          Leave Project
+        </button>
       </div>
     </div>
   );

@@ -50,3 +50,13 @@ export const joinProject = (projectName) =>
     credentials: "include",
     body: JSON.stringify({ projectName }),
   }).then((res) => res.json());
+
+export const leaveProject = (projectName) =>
+  fetch(`/api/leave-project`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ projectName }),
+  });

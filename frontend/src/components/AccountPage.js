@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Redirect } from "react-router-dom";
 
 import Project from "./Project";
 import {
@@ -7,15 +8,19 @@ import {
   addCategory as addCategoryService,
   removeCategory as removeCategoryService,
   joinProject as joinProjectService,
+  leaveProject as leaveProjectService,
 } from "../services/projects";
 import ProjectControls from "./ProjectControls";
 import { AppContext } from "./App";
 
 const AccountPage = () => {
   const {
-    state: { isAdmin, projects },
+    state: { isAdmin, projects, isLoggedIn },
     action,
   } = useContext(AppContext);
+
+  // Must be logged in to view this page
+  if (!isLoggedIn) return <Redirect to="/" />;
 
   const addKeyphrase = async (keyphrase, projectId) => {
     const project = projects[projectId];
@@ -50,6 +55,11 @@ const AccountPage = () => {
     action("add_project", newProject);
   };
 
+  const leaveProject = async ({ name, id }) => {
+    await leaveProjectService(name);
+    action("remove_project", id);
+  };
+
   return (
     <div className="container grid-lg">
       <h2>My Account</h2>
@@ -65,6 +75,7 @@ const AccountPage = () => {
           removeKeyphrase={removeKeyphrase}
           addCategory={addCategory}
           removeCategory={removeCategory}
+          leaveProject={leaveProject}
           key={project.id}
           {...project}
         />

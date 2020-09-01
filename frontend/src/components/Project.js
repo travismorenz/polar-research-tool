@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const Project = ({
   addKeyphrase,
@@ -12,6 +12,8 @@ const Project = ({
 }) => {
   const [newKeyphrase, setNewKeyphrase] = useState("");
   const [newCategory, setNewCategory] = useState("");
+  const keyphraseBottom = useRef();
+  const categoryBottom = useRef();
 
   if (id === "_default") return null;
   return (
@@ -32,15 +34,17 @@ const Project = ({
                 </button>
               </li>
             ))}
+            <div ref={keyphraseBottom} />
           </ul>
           <input
             value={newKeyphrase}
             onChange={(e) => setNewKeyphrase(e.target.value)}
           />
           <button
-            onClick={() => {
-              addKeyphrase(newKeyphrase, id);
+            onClick={async () => {
+              await addKeyphrase(newKeyphrase, id);
               setNewKeyphrase("");
+              keyphraseBottom.current.scrollIntoView();
             }}
           >
             +
@@ -60,15 +64,17 @@ const Project = ({
                 </button>
               </li>
             ))}
+            <div ref={categoryBottom} />
           </ul>
           <input
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
           />
           <button
-            onClick={() => {
-              addCategory(newCategory, id);
+            onClick={async () => {
+              await addCategory(newCategory, id);
               setNewCategory("");
+              categoryBottom.current.scrollIntoView();
             }}
           >
             +

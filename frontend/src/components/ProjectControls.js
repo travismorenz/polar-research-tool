@@ -19,6 +19,7 @@ const ProjectControls = ({ projects, isAdmin, joinProject }) => {
 
   return (
     <div className="form-group project-controls">
+      {isAdmin && "Admin controls will go here"}
       <h5>Join Project</h5>
       <label className="form-inline">
         {options.length ? (

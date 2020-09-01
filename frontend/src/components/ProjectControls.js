@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { getAllProjectNames } from "../services/projects";
 
-const ProjectControls = ({ projects, isAdmin }) => {
+const ProjectControls = ({ projects, isAdmin, joinProject }) => {
   const [allProjects, setAllProjects] = useState([]);
   const [selection, setSelection] = useState(0);
   useEffect(() => {
@@ -33,6 +33,12 @@ const ProjectControls = ({ projects, isAdmin }) => {
             </option>
           ))}
         </select>
+        <button
+          className="btn btn-primary"
+          onClick={() => joinProject(options[selection])}
+        >
+          Join Project
+        </button>
       </label>
     </div>
   );

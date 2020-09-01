@@ -62,3 +62,23 @@ def get_all_project_names():
         project_names.append(p.name)
     return {'projectNames': project_names}
 
+@projects.route("/api/join-project", methods=['POST'])
+def join_project():
+   project_name = request.get_json()['projectName']
+   project = Project.query.filter_by(name=project_name).first()
+   if project not in current_user.projects:
+      current_user.projects.append(project)
+      db.session.add(current_user)
+      db.session.commit()
+   return {'newProject': project.serialize()}
+
+@projects.route("/api/leave-project", methods=['POST'])
+def leave_project():
+   project_name = request.get_json()['projectName']
+   project = Project.query.filter_by(name=project_name).first()
+   if project in current_user.projects:
+      current_user.projects.remove(project)
+      db.session.add(current_user)
+      db.session.commit()
+   return {'projects': [p.serialize() for p in current_user.projects]}
+

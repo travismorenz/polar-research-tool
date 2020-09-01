@@ -201,6 +201,10 @@ main {
 }
 
 /* Project Card */
+.project {
+  margin-bottom: 2rem;
+}
+
 .project .card-body {
   display: flex;
 }

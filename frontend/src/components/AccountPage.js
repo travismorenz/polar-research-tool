@@ -6,6 +6,7 @@ import {
   removeKeyphrase as removeKeyphraseService,
   addCategory as addCategoryService,
   removeCategory as removeCategoryService,
+  joinProject as joinProjectService,
 } from "../services/projects";
 import ProjectControls from "./ProjectControls";
 import { AppContext } from "./App";
@@ -44,10 +45,19 @@ const AccountPage = () => {
     action("set_categories", { categories, projectId });
   };
 
+  const joinProject = async (projectName) => {
+    const { newProject } = await joinProjectService(projectName);
+    action("add_project", newProject);
+  };
+
   return (
     <div className="container grid-lg">
       <h2>My Account</h2>
-      <ProjectControls projects={projects} isAdmin={isAdmin} />
+      <ProjectControls
+        projects={projects}
+        isAdmin={isAdmin}
+        joinProject={joinProject}
+      />
       <h4>Projects</h4>
       {Object.values(projects).map((project) => (
         <Project

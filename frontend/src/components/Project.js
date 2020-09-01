@@ -47,7 +47,7 @@ const Project = ({
               keyphraseBottom.current.scrollIntoView();
             }}
           >
-            +
+            Add
           </button>
         </div>
         <div className="card-content">
@@ -77,7 +77,7 @@ const Project = ({
               categoryBottom.current.scrollIntoView();
             }}
           >
-            +
+            Add
           </button>
         </div>
       </div>

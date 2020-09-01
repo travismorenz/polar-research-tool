@@ -23,6 +23,9 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case "add_project":
+      state.projects[action.payload.id] = action.payload;
+      break;
     case "set_keyphrases": {
       const { projectId, keyphrases } = action.payload;
       state.projects[projectId].keyphrases = keyphrases;

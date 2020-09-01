@@ -40,3 +40,13 @@ export const removeCategory = (category, projectId) =>
 
 export const getAllProjectNames = () =>
   fetch("/api/project-names").then((res) => res.json());
+
+export const joinProject = (projectName) =>
+  fetch(`/api/join-project`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ projectName }),
+  }).then((res) => res.json());

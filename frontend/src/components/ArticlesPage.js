@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
 import Article from "./Article";
-import ArticlesControls from "./ArticlesControls";
+import ArticleControls from "./ArticleControls";
 import { AppContext } from "./App";
 import { getArticlesById } from "../services/getArticles";
 import toggleArticleInLibrary from "../services/toggleArticleInLibrary";
@@ -10,8 +10,6 @@ const pageSlice = (ids, page) =>
   ids.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 
 const PAGE_SIZE = 50;
-
-// TODO: fix switching to library from 2nd page bug
 
 const ArticlesPage = () => {
   const [tab, setTab] = useState("articles");
@@ -72,6 +70,13 @@ const ArticlesPage = () => {
     setTab("articles");
   }, [selectedProjectId]);
 
+  // Set the page to 0 when changing tabs
+  useEffect(() => {
+    if (tab === "library") {
+      setPage(0);
+    }
+  }, [tab]);
+
   const toggleInLibrary = async (article_id) => {
     await toggleArticleInLibrary(selectedProjectId, article_id);
     action("toggle_in_library", {
@@ -82,7 +87,7 @@ const ArticlesPage = () => {
 
   return (
     <div className="container grid-lg">
-      <ArticlesControls
+      <ArticleControls
         tab={tab}
         setTab={setTab}
         page={page}

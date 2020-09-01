@@ -37,3 +37,6 @@ export const removeCategory = (category, projectId) =>
     credentials: "include",
     body: JSON.stringify({ category }),
   }).then((res) => res.json());
+
+export const getAllProjectNames = () =>
+  fetch("/api/project-names").then((res) => res.json());

@@ -53,3 +53,12 @@ def remove_category(project_id):
       db.session.add(project)
       db.session.commit()
    return {'categories': [c.serialize() for c in project.categories]}
+
+@projects.route("/api/project-names")
+def get_all_project_names():
+    project_names = []
+    projects = Project.query.filter_by().all()
+    for p in projects:
+        project_names.append(p.name)
+    return {'projectNames': project_names}
+

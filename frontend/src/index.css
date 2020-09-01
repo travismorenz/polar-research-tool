@@ -240,3 +240,7 @@ main {
   margin-left: 10px;
   cursor: pointer;
 }
+
+.form-group.project-controls {
+  margin-bottom: 50px;
+}

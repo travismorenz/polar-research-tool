@@ -7,6 +7,7 @@ import {
   addCategory as addCategoryService,
   removeCategory as removeCategoryService,
 } from "../services/projects";
+import ProjectControls from "./ProjectControls";
 import { AppContext } from "./App";
 
 const AccountPage = () => {
@@ -46,6 +47,7 @@ const AccountPage = () => {
   return (
     <div className="container grid-lg">
       <h2>My Account</h2>
+      <ProjectControls projects={projects} isAdmin={isAdmin} />
       <h4>Projects</h4>
       {Object.values(projects).map((project) => (
         <Project

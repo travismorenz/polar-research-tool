@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import Article from "./Article";
-import ArticleControls from "./ArticleControls";
-import { AppContext } from "./App";
-import { getArticlesById } from "../services/getArticles";
-import toggleArticleInLibrary from "../services/toggleArticleInLibrary";
+import Article from "components/Article";
+import ArticleControls from "components/ArticleControls";
+import { AppContext } from "components/pages/App";
+import { getArticlesById } from "services/getArticles";
+import toggleArticleInLibrary from "services/toggleArticleInLibrary";
 
 const pageSlice = (ids, page) =>
   ids.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);

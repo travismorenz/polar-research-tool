@@ -2,14 +2,14 @@ import React, { createContext, useEffect, useCallback } from "react";
 import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import AccountPage from "./AccountPage";
-import ArticlesPage from "./ArticlesPage";
-import LoginPage from "./LoginPage";
-import RegisterPage from "./RegisterPage";
-import Navbar from "./Navbar";
-import { login } from "../services/auth";
-import { initialState, reducer } from "../store";
-import { getArticleIds, getLibraryIds } from "../services/getArticles";
+import Account from "components/pages/Account";
+import Articles from "components/pages/Articles";
+import Login from "components/pages/Login";
+import Register from "components/pages/Register";
+import Navbar from "components/Navbar";
+import { login } from "services/auth";
+import { initialState, reducer } from "store";
+import { getArticleIds, getLibraryIds } from "services/getArticles";
 
 export const AppContext = createContext();
 
@@ -58,10 +58,10 @@ const App = () => {
         <BrowserRouter>
           <Navbar />
           <Switch>
-            <Route exact path="/" component={ArticlesPage} />
-            <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/register" component={RegisterPage} />
-            <Route exact path="/account" component={AccountPage} />
+            <Route exact path="/" component={Articles} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/account" component={Account} />
             <Redirect to="/" />
           </Switch>
         </BrowserRouter>

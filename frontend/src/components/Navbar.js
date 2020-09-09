@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { AppContext } from "./App";
-import { logout } from "../services/auth";
+import { AppContext } from "components/pages/App";
+import { logout } from "services/auth";
 
 const Navbar = () => {
   const {

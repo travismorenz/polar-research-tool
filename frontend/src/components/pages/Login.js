@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { AppContext } from "./App";
-import { login } from "../services/auth";
+import { AppContext } from "components/pages/App";
+import { login } from "services/auth";
 
 const LoginPage = () => {
   const { register, handleSubmit } = useForm();

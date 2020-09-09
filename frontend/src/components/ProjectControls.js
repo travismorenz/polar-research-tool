@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { getAllProjectNames } from "../services/projects";
+import { getAllProjectNames } from "services/projects";
 
 const ProjectControls = ({ projects, isAdmin, joinProject }) => {
   const [allProjects, setAllProjects] = useState([]);

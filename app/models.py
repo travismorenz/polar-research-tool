@@ -5,33 +5,33 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 persons_projects = db.Table('persons_projects',
-                            db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
-                            db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True))
+    db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True))
 
 articles_categories = db.Table('articles_categories',
-                               db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-                               db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
 
 articles_keyphrases = db.Table('articles_keyphrases',
-                               db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-                               db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
 
 articles_authors = db.Table('articles_authors',
-                            db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-                            db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True))
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True))
 
 projects_keyphrases = db.Table('projects_keyphrases',
-                               db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-                               db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+    db.Column('keyphrase_id', db.Integer, db.ForeignKey('keyphrase.id'), primary_key=True))
 
 projects_categories = db.Table('projects_categories',
-                               db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-                               db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
 
 projects_articles = db.Table('projects_articles',
-                             db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-                             db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-                             db.Column('flagged', db.Boolean, nullable=False))
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('flagged', db.Boolean, nullable=False))
 
 
 class Person(UserMixin, db.Model):

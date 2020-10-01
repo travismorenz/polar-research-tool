@@ -1,27 +1,25 @@
 version: "3"
 services:
-  # Broken while database changes are being made
-
-  # redis:
-  #   image: redis
-  # beat:
-  #   build:
-  #     context: .
-  #     dockerfile: ./config/tasks.Dockerfile
-  #   depends_on:
-  #     - redis
-  #   command: celery -A app.worker.celery_app beat -l DEBUG
-  #   environment:
-  #     - TZ=${UPDATE_TIMEZONE}
-  # worker:
-  #   build:
-  #     context: .
-  #     dockerfile: ./config/tasks.Dockerfile
-  #   depends_on:
-  #     - redis
-  #   command: celery -A app.worker.celery_app worker -l ERROR
-  #   environment:
-  #     - TZ=${UPDATE_TIMEZONE}
+  redis:
+    image: redis
+  beat:
+    build:
+      context: .
+      dockerfile: ./config/tasks.Dockerfile
+    depends_on:
+      - redis
+    command: celery -A app.worker.celery_app beat -l DEBUG
+    environment:
+      - TZ=${UPDATE_TIMEZONE}
+  worker:
+    build:
+      context: .
+      dockerfile: ./config/tasks.Dockerfile
+    depends_on:
+      - redis
+    command: celery -A app.worker.celery_app worker -l ERROR
+    environment:
+      - TZ=${UPDATE_TIMEZONE}
   frontend:
     build:
       context: .

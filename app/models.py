@@ -31,7 +31,7 @@ projects_categories = db.Table('projects_categories',
 projects_articles = db.Table('projects_articles',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-    db.Column('flagged', db.Boolean, nullable=False))
+    db.Column('trash', db.Boolean, nullable=False))
 
 
 class Person(UserMixin, db.Model):

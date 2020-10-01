@@ -1,16 +1,19 @@
-import urllib.request
-import feedparser
-from app import celery_app
-import time
 import datetime
-from app.models import db, Project, Author, Category, Keyphrase, Article
-from io import StringIO, BytesIO
+import time
+import urllib.request
+from io import BytesIO, StringIO
+
+import feedparser
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfdocument import PDFDocument
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
+
+from app import celery_app
+from app.models import Article, Author, Category, Keyphrase, Project, db
+
 
 # Helpers
 def log(*msg):

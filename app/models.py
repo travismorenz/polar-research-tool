@@ -1,17 +1,16 @@
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
+
 db = SQLAlchemy()
 
-persons_projects = db.Table('persons_projects', 
+persons_projects = db.Table('persons_projects',
     db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True))
-
 
 articles_categories = db.Table('articles_categories',
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True))
-
 
 articles_keyphrases = db.Table('articles_keyphrases',
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
@@ -31,12 +30,14 @@ projects_categories = db.Table('projects_categories',
 
 projects_articles = db.Table('projects_articles',
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True))
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('trash', db.Boolean, nullable=False))
+
 
 class Person(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, unique=True, nullable=False)
-    password_hash = db.Column(db.Text,unique=False, nullable=False)
+    password_hash = db.Column(db.Text, unique=False, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.now(), nullable=False)
     admin = db.Column(db.Boolean, nullable=False)
 
@@ -45,7 +46,7 @@ class Person(UserMixin, db.Model):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
@@ -76,13 +77,14 @@ class Article(db.Model):
     summary = db.Column(db.Text, nullable=False)
     url = db.Column(db.Text, unique=True, nullable=False)
     version = db.Column(db.Integer, nullable=False)
-    publish_date = db.Column(db.DateTime) # This might be nullable=False, not sure yet
+    publish_date = db.Column(db.DateTime)  # This might be nullable=False, not sure yet
 
     comments = db.relationship('Comment', back_populates='articles')
     categories = db.relationship('Category', secondary=articles_categories, back_populates="articles")
     keyphrases = db.relationship('Keyphrase', secondary=articles_keyphrases, back_populates="articles")
     authors = db.relationship('Author', secondary=articles_authors, back_populates="articles")
     projects = db.relationship('Project', secondary=projects_articles, back_populates="articles", lazy="dynamic")
+
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)

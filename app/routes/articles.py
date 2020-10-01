@@ -105,7 +105,7 @@ def get_articles_by_library(project_id):
         FROM project p
         JOIN projects_articles pa ON pa.project_id = p.id
         JOIN article a ON a.id = pa.article_id
-        WHERE p.id = :id
+        WHERE p.id = :id AND trash = false
     """
     # Populate articles with our query results
     main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()

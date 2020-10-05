@@ -3,7 +3,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, url_for
 from flask_cors import CORS
 from flask_login import LoginManager
 

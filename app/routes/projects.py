@@ -2,8 +2,7 @@ import os
 
 from app.admins import admins
 from app.models import Category, Keyphrase, Person, Project, db
-from flask import (Blueprint, flash, redirect, render_template, request,
-                   session, url_for)
+from flask import Blueprint, request, session, url_for
 from flask_login import current_user, login_user, logout_user
 
 projects = Blueprint('projects', __name__)

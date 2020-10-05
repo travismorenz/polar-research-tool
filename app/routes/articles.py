@@ -5,8 +5,7 @@ from app.models import (Article, Author, Category, Project, articles_authors,
                         articles_categories, articles_keyphrases, db,
                         projects_articles, projects_categories,
                         projects_keyphrases)
-from flask import (Blueprint, redirect, render_template, request, session,
-                   url_for)
+from flask import Blueprint, request, session, url_for
 from flask_login import login_required
 
 articles = Blueprint('articles', __name__)

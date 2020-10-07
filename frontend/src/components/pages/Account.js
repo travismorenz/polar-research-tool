@@ -4,14 +4,13 @@ import ProjectControls from "components/ProjectControls";
 import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import {
-  addCategory as addCategoryService, addKeyphrase as addKeyphraseService,
-
-
-
+  addKeyphrase as addKeyphraseService,
+  removeKeyphrase as removeKeyphraseService,
+  addCategory as addCategoryService, 
+  removeCategory as removeCategoryService,
   joinProject as joinProjectService,
-  leaveProject as leaveProjectService, removeCategory as removeCategoryService, removeKeyphrase as removeKeyphraseService
+  leaveProject as leaveProjectService,
 } from "services/projects";
-
 
 const AccountPage = () => {
   const {

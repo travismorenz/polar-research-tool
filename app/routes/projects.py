@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from app.models import db, Person, Project, Keyphrase, Category
-from flask_login import current_user, login_user, logout_user
-from app.admins import admins
 import os
+
+from app.admins import admins
+from app.models import Category, Keyphrase, Person, Project, db
+from flask import Blueprint, request, session, url_for
+from flask_login import current_user, login_user, logout_user
 
 projects = Blueprint('projects', __name__)
 

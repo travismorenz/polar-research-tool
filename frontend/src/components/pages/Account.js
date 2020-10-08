@@ -1,17 +1,16 @@
+import { AppContext } from "components/pages/App";
+import Project from "components/Project";
+import ProjectControls from "components/ProjectControls";
 import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
-
-import ProjectControls from "components/ProjectControls";
-import Project from "components/Project";
 import {
   addKeyphrase as addKeyphraseService,
   removeKeyphrase as removeKeyphraseService,
-  addCategory as addCategoryService,
+  addCategory as addCategoryService, 
   removeCategory as removeCategoryService,
   joinProject as joinProjectService,
   leaveProject as leaveProjectService,
 } from "services/projects";
-import { AppContext } from "components/pages/App";
 
 const AccountPage = () => {
   const {

@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
 import { AppContext } from "components/pages/App";

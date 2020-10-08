@@ -1,6 +1,5 @@
 import time
 from functools import reduce
-
 from app.models import (Article, Author, Category, Project, articles_authors,
                         articles_categories, articles_keyphrases, db,
                         projects_articles, projects_categories,

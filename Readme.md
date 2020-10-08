@@ -39,6 +39,7 @@ After the `.env` is filled out, run `docker-compose up --build`. If you want it 
 If you want to make changes to the site and test them without spinning up docker then:
 
 - Create a python virtual environment and activate it.
+- Make sure dependencies are installed with `pip install -r requirements.txt`
 - Start the API with `python run.py`
 - In a separate terminal window, navigate into the frontend folder
 - Install the react dependencies with `npm i` and then start the frontend with `npm start`

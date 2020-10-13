@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { usePaginatedQuery } from "react-query";
+import { usePaginatedQuery, useMutation } from "react-query";
 
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
 import { AppContext } from "components/pages/App";
-import { getArticles } from "services/getArticles";
+import { getArticles, getLibrary } from "services/getArticles";
 import toggleArticleInLibrary from "services/toggleArticleInLibrary";
 
 const ArticlesPage = () => {
@@ -15,52 +15,55 @@ const ArticlesPage = () => {
   const [tab, setTab] = useState("articles");
   const [page, setPage] = useState(0);
 
-  const { latestData, isLoading, error, isFetching } = usePaginatedQuery(
-    ["articles", selectedProjectId, page],
-    getArticles
-  );
+  const {
+    latestData: articlesData,
+    isLoading: areArticlesLoading,
+    error: articlesError,
+  } = usePaginatedQuery(["articles", selectedProjectId, page], getArticles);
+  const {
+    latestData: libraryData,
+    isLoading: isLibraryLoading,
+    error: libraryError,
+  } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
 
   // Set the page to 0 when changing projects
   useEffect(() => {
     setPage(0);
     setTab("articles");
-  }, [selectedProjectId, tab]);
+  }, [selectedProjectId]);
 
-  // Set the page to 0 when changing tabs
-  useEffect(() => {
-    if (tab === "library") {
-      setPage(0);
-    }
-  }, [tab]);
-
-  if (!latestData || isLoading) {
+  const isLoading =
+    areArticlesLoading ||
+    isLibraryLoading ||
+    (tab === "articles" && !articlesData) ||
+    (tab === "library" && !libraryData);
+  if (isLoading) {
     return <div className="loading loading-lg"></div>;
   }
 
+  const error = articlesError || libraryError;
   if (error) {
     console.log(error);
-    return <div>There was an error retrieving the data. Check console.</div>;
+    return (
+      <div>There was an error retrieving the data. Check the console.</div>
+    );
   }
 
-  // const toggleInLibrary = async (article_id) => {
-  //   await toggleArticleInLibrary(selectedProjectId, article_id);
-  //   action("toggle_in_library", {
-  //     projectId: selectedProjectId,
-  //     articleId: article_id,
-  //   });
-  // };
-
+  const articles =
+    tab === "articles" ? articlesData.articles : libraryData.articles;
+  const count = tab === "articles" ? articlesData.count : libraryData.count;
+  console.log(libraryData);
   return (
     <div className="container grid-lg">
       <ArticleControls
+        count={count}
         tab={tab}
         setTab={setTab}
         page={page}
         setPage={setPage}
-        totalCount={latestData.count}
-        // libraryCount={libraryIds.length}
+        showLibrary={selectedProjectId !== "_default"}
       />
-      {Object.values(latestData.articles).map((article) => (
+      {Object.values(articles).map((article) => (
         <Article
           key={article.id}
           // inLibrary={libraryIds.includes(article.id)}

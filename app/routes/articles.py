@@ -73,15 +73,53 @@ def articles_query(ids):
     articles = format_articles(query_result)
     return articles
 
+@articles.route('/api/articles/library/<string:project_id>')
+def get_library(project_id):
+    # Pull limit and offset from search params
+    project_id = int(project_id)
+    page = int(request.args.get('page'))
+    offset = LIMIT * page
+
+    # Get relevant article ids from the DB
+    main_query = f"""
+        SELECT a.id
+        FROM article a
+        WHERE EXISTS
+            (
+                Select article_id, project_id
+                FROM projects_articles
+                WHERE article_id = a.id AND project_id = :project_id
+            )
+        ORDER BY a.publish_date DESC
+        LIMIT :limit OFFSET :offset
+    """
+    count_query = f"""
+       SELECT COUNT(*)
+        FROM article a
+        WHERE EXISTS
+            (
+                Select article_id, project_id
+                FROM projects_articles
+                WHERE article_id = a.id AND project_id = :project_id
+            ) 
+    """ 
+    main_results = db.engine.execute(db.text(main_query), project_id=project_id, limit=LIMIT, offset=offset).fetchall()
+    count_result = db.engine.execute(db.text(count_query), project_id=project_id).fetchall()
+    article_ids = [row['id'] for row in main_results]
+    count = count_result[0][0]
+
+    # Get the articles corresponding to the retrieved ids
+    articles = articles_query(tuple(article_ids))
+    return { 'articles': articles, 'count': count }
+
 @articles.route('/api/articles/', defaults={'project_id': ""})
 @articles.route('/api/articles/<string:project_id>')
 def get_articles(project_id):
     # Pull limit and offset from search params
-    page = int(request.args.get('page')) or 0
-    limit = request.args.get('limit') or LIMIT
+    page = int(request.args.get('page'))
     query_params = {
-        'offset': page * limit,
-        'limit': limit
+        'offset': page * LIMIT,
+        'limit': LIMIT
     }
     
     # Filter articles by their project
@@ -105,11 +143,11 @@ def get_articles(project_id):
     """
     main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
     count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
-    article_ids = tuple([row['id'] for row in main_query_result])
+    article_ids = [row['id'] for row in main_query_result]
     count = count_query_result[0][0]
 
     # Get the articles corresponding to those ids
-    articles = articles_query(article_ids)
+    articles = articles_query(tuple(article_ids))
     return {'articles': articles, 'count': count}
 
 

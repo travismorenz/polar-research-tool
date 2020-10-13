@@ -1,14 +1,13 @@
 import React from "react";
 
 const ArticlesControls = ({
+  count,
   tab,
   setTab,
   page,
   setPage,
-  totalCount,
-  libraryCount,
+  showLibrary,
 }) => {
-  const count = tab === "articles" ? totalCount : libraryCount;
   const totalPages = count ? Math.ceil(count / 50) : "?";
   const hasPagesLeft = page > 0;
   const hasPagesRight = page + 1 < totalPages;
@@ -17,14 +16,20 @@ const ArticlesControls = ({
       <div className="tabs btn-group btn-group-block">
         <button
           className={`btn ${tab === "articles" ? "active" : ""}`}
-          onClick={() => setTab("articles")}
+          onClick={() => {
+            setPage(0);
+            setTab("articles");
+          }}
         >
           Articles
         </button>
-        {libraryCount > 0 && (
+        {showLibrary && (
           <button
             className={`btn ${tab === "library" ? "active" : ""}`}
-            onClick={() => setTab("library")}
+            onClick={() => {
+              setPage(0);
+              setTab("library");
+            }}
           >
             Libary
           </button>

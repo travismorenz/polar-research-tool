@@ -56,10 +56,11 @@ const ArticlesPage = () => {
     );
   }
 
-  const articles =
-    tab === "articles"
-      ? Object.values(articlesData.articles)
-      : Object.values(libraryData.articles);
+  let articles =
+    tab === "articles" ? articlesData.articles : libraryData.articles;
+  articles = Object.values(articles).sort(
+    (a, b) => new Date(b.publish_date) - new Date(a.publish_date)
+  );
   const count = tab === "articles" ? articlesData.count : libraryData.count;
   return (
     <div className="container grid-lg">

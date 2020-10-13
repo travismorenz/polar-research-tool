@@ -88,7 +88,11 @@ def get_library(project_id):
                 WHERE article_id = a.id AND project_id = :project_id
             ) 
     """ 
-    main_results = db.engine.execute(db.text(main_query), project_id=project_id, limit=LIMIT, offset=offset).fetchall()
+    main_results = db.engine.execute(
+        db.text(main_query), 
+        project_id=project_id, 
+        limit=LIMIT, 
+        offset=offset).fetchall()
     count_result = db.engine.execute(db.text(count_query), project_id=project_id).fetchall()
     article_ids = [row['id'] for row in main_results] + [-1]
     count = count_result[0][0]

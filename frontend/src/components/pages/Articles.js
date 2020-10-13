@@ -79,7 +79,6 @@ const ArticlesPage = () => {
             toggleInLibrary({
               articleId: article.id,
               projectId: selectedProjectId,
-              libraryArticles: libraryData.articles,
             })
           }
           onProjectPage={selectedProjectId !== "_default"}

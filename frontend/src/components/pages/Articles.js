@@ -52,7 +52,6 @@ const ArticlesPage = () => {
   const articles =
     tab === "articles" ? articlesData.articles : libraryData.articles;
   const count = tab === "articles" ? articlesData.count : libraryData.count;
-  console.log(libraryData);
   return (
     <div className="container grid-lg">
       <ArticleControls

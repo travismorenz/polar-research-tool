@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { AppContext } from "components/pages/App";
 import { logout } from "services/auth";
@@ -9,6 +9,7 @@ const Navbar = () => {
     state: { isLoggedIn, username, projects, selectedProjectId },
     action,
   } = useContext(AppContext);
+  const history = useHistory();
 
   const handleLogout = async () => {
     await logout();
@@ -33,7 +34,10 @@ const Navbar = () => {
                     className="form-select"
                     id="project-select"
                     value={selectedProjectId}
-                    onChange={(e) => action("select_project", e.target.value)}
+                    onChange={(e) => {
+                      action("select_project", e.target.value);
+                      history.push("/");
+                    }}
                   >
                     {Object.values(projects).map((p) => (
                       <option value={p.id} key={p.id}>

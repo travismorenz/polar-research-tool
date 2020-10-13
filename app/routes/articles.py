@@ -77,7 +77,7 @@ def articles_query(ids):
 @articles.route('/api/articles/<string:project_id>')
 def get_articles(project_id):
     # Pull limit and offset from search params
-    page = request.args.get('page') or 0
+    page = int(request.args.get('page')) or 0
     limit = request.args.get('limit') or LIMIT
     query_params = {
         'offset': page * limit,

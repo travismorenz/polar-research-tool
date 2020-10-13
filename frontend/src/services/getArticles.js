@@ -1,3 +1,8 @@
+export const getArticles = (key, projectId, page = 0) =>
+  fetch(
+    `/api/articles/${projectId === "_default" ? "" : projectId}?page=${page}`
+  ).then((res) => res.json());
+
 export const getArticleIds = (projectId) =>
   fetch(
     `/api/article-ids/${projectId === "_default" ? "" : projectId}`

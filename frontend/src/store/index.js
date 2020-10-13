@@ -1,23 +1,13 @@
-const projectSchema = {
-  id: "",
-  name: "",
-  articleIds: [],
-  libraryIds: [],
-  isLoading: false,
-};
-
 export const initialState = {
   username: "",
   isLoggedIn: false,
   isAdmin: false,
   projects: {
     _default: {
-      ...projectSchema,
       id: "_default",
       name: "None",
     },
   },
-  articles: {},
   selectedProjectId: "_default",
 };
 
@@ -28,7 +18,6 @@ export const reducer = (state, action) => {
       break;
     case "add_project":
       state.projects[action.payload.id] = {
-        ...projectSchema,
         ...action.payload,
       };
       break;
@@ -89,7 +78,6 @@ export const reducer = (state, action) => {
       projects.forEach((project) => {
         if (!state.projects[project.id])
           state.projects[project.id] = {
-            ...projectSchema,
             ...project,
           };
       });

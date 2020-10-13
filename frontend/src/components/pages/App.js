@@ -29,29 +29,6 @@ const App = () => {
     init();
   }, [action]);
 
-  // Load the article ids for each project
-  useEffect(() => {
-    const loadArticleIds = async (projectId) => {
-      action("set_project_loading", { projectId, bool: true });
-      const { ids: articleIds } = await getArticleIds(projectId);
-
-      let libraryIds = [];
-      if (projectId !== "_default") {
-        const { ids } = await getLibraryIds(projectId);
-        libraryIds = ids;
-      }
-
-      action("set_article_ids", { projectId, articleIds });
-      action("set_library_ids", { projectId, libraryIds });
-      action("set_project_loading", { projectId, bool: false });
-    };
-
-    for (let project of Object.values(state.projects)) {
-      if (!project.isLoading && !project.articleIds.length)
-        loadArticleIds(project.id);
-    }
-  }, [state.projects, action]);
-
   return (
     <div className="app">
       <AppContext.Provider value={{ state, action }}>

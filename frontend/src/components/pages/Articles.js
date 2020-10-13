@@ -3,14 +3,13 @@ import { usePaginatedQuery, useMutation } from "react-query";
 
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
-import { AppContext, queryCache } from "components/pages/App";
+import { AppContext } from "components/pages/App";
 import { getArticles, getLibrary } from "services/getArticles";
 import toggleArticleInLibrary from "services/toggleArticleInLibrary";
 
 const ArticlesPage = () => {
   const {
-    state: { selectedProjectId, projects },
-    action,
+    state: { selectedProjectId },
   } = useContext(AppContext);
   const [tab, setTab] = useState("articles");
   const [page, setPage] = useState(0);

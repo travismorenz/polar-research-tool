@@ -26,24 +26,6 @@ FILTER_QUERY = """
 """
 
 
-def set_pagination_info(articles, page):
-    total = articles['total']
-    curr_amount = len(articles['items'])
-    articles['has_next'] = total > LIMIT * page + curr_amount
-    articles['has_prev'] = page > 0
-    articles['next_page'] = page + 1
-    articles['prev_page'] = page - 1
-
-
-def set_previous_versions(articles):
-    for article in articles['items']:
-        version = article.version
-        if version > 1:
-            version1 = Article.query.filter_by(version=1, title=article.title).first()
-            if version1 is not None:
-                article.version1 = version1
-
-
 def format_articles(query_result):
     articles = {}
     for row in query_result:
@@ -62,7 +44,7 @@ def format_articles(query_result):
     return articles
 
 
-def articles_query(ids):
+def get_articles_by_id(ids):
     query = f"""
         SELECT a.id, a.title, a.summary, a.url, a.version, a.publish_date, c.name as category_name, au.name as author_name
         FROM article a
@@ -112,7 +94,7 @@ def get_library(project_id):
     count = count_result[0][0]
 
     # Get the articles corresponding to the retrieved ids
-    articles = articles_query(tuple(article_ids))
+    articles = get_articles_by_id(tuple(article_ids))
     return { 'articles': articles, 'count': count }
 
 @articles.route('/api/articles/', defaults={'project_id': ""})
@@ -150,45 +132,8 @@ def get_articles(project_id):
     count = count_query_result[0][0]
 
     # Get the articles corresponding to those ids
-    articles = articles_query(tuple(article_ids))
+    articles = get_articles_by_id(tuple(article_ids))
     return {'articles': articles, 'count': count}
-
-
-@articles.route("/api/article-ids/", defaults={'project_id': ""})
-@articles.route("/api/article-ids/<string:project_id>")
-def get_article_ids(project_id):
-    # Filter articles if project is selected
-    query_params = {}
-    filter_query = ""
-    if project_id:
-        filter_query = FILTER_QUERY
-        query_params['id'] = project_id
-    # Construct queries
-    main_query = f"""
-        SELECT a.id
-        FROM article a
-        {filter_query}
-        ORDER BY a.publish_date DESC
-    """
-    # Populate articles and fill out article authors and categories
-    main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
-    article_ids = [row['id'] for row in main_query_result]
-    return {'ids': article_ids}
-
-
-@articles.route("/api/articles-by-library/<string:project_id>")
-def get_articles_by_library(project_id):
-    main_query = f"""
-        SELECT a.id
-        FROM project p
-        JOIN projects_articles pa ON pa.project_id = p.id
-        JOIN article a ON a.id = pa.article_id
-        WHERE p.id = :id AND trash = false
-    """
-    # Populate articles with our query results
-    main_query_result = db.engine.execute(db.text(main_query), id=project_id).fetchall()
-    article_ids = [row['id'] for row in main_query_result]
-    return {'ids': article_ids}
 
 
 @articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])

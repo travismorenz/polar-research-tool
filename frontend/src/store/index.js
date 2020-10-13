@@ -31,41 +31,6 @@ export const reducer = (state, action) => {
       state.projects[projectId].categories = categories;
       break;
     }
-    case "add_articles":
-      action.payload.forEach((a) => (state.articles[a.id] = { ...a }));
-      break;
-    case "set_article_ids": {
-      const { projectId, articleIds } = action.payload;
-      state.projects[projectId].articleIds = articleIds;
-      break;
-    }
-    case "set_library_ids": {
-      const { projectId, libraryIds } = action.payload;
-      state.projects[projectId].libraryIds = libraryIds;
-      break;
-    }
-    case "toggle_in_library": {
-      const { projectId, articleId } = action.payload;
-      const library = state.projects[projectId].libraryIds;
-      if (library.includes(articleId)) {
-        state.projects[projectId].libraryIds = state.projects[
-          projectId
-        ].libraryIds.filter((id) => id !== articleId);
-      } else {
-        state.projects[projectId].libraryIds.push(articleId);
-      }
-      break;
-    }
-    case "set_project_loading": {
-      const { projectId, bool } = action.payload;
-      state.projects[projectId].isLoading = bool;
-      break;
-    }
-    case "set_count": {
-      const { projectId, count } = action.payload;
-      state.projects[projectId].count = count;
-      break;
-    }
     case "select_project":
       state.selectedProjectId = action.payload;
       break;

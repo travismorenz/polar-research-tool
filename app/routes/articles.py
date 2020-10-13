@@ -105,7 +105,7 @@ def get_library(project_id):
     """ 
     main_results = db.engine.execute(db.text(main_query), project_id=project_id, limit=LIMIT, offset=offset).fetchall()
     count_result = db.engine.execute(db.text(count_query), project_id=project_id).fetchall()
-    article_ids = [row['id'] for row in main_results]
+    article_ids = [row['id'] for row in main_results] + [-1]
     count = count_result[0][0]
 
     # Get the articles corresponding to the retrieved ids
@@ -143,7 +143,7 @@ def get_articles(project_id):
     """
     main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
     count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
-    article_ids = [row['id'] for row in main_query_result]
+    article_ids = [row['id'] for row in main_query_result] + [-1]
     count = count_query_result[0][0]
 
     # Get the articles corresponding to those ids

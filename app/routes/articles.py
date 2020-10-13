@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session
-from flask_login import login_required
-from functools import reduce
-from app.models import db, Article, Author, articles_authors, articles_categories, articles_keyphrases, Category, Project, projects_articles, projects_categories, projects_keyphrases
 import time
+from functools import reduce
+from app.models import (Article, Author, Category, Project, articles_authors,
+                        articles_categories, articles_keyphrases, db,
+                        projects_articles, projects_categories,
+                        projects_keyphrases)
+from flask import Blueprint, request, session, url_for
+from flask_login import login_required
 
 articles = Blueprint('articles', __name__)
 

@@ -77,7 +77,6 @@ main {
   justify-content: space-between;
 }
 
-
 .tabs {
   width: 10rem;
 }
@@ -117,6 +116,8 @@ main {
   background: none;
   border: none;
   margin: 0 0 0 auto;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .bookmark-btn i.active::before {

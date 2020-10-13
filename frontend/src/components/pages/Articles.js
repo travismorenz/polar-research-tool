@@ -3,7 +3,7 @@ import { usePaginatedQuery, useMutation } from "react-query";
 
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
-import { AppContext } from "components/pages/App";
+import { AppContext, queryCache } from "components/pages/App";
 import { getArticles, getLibrary } from "services/getArticles";
 import toggleArticleInLibrary from "services/toggleArticleInLibrary";
 
@@ -24,7 +24,12 @@ const ArticlesPage = () => {
     latestData: libraryData,
     isLoading: isLibraryLoading,
     error: libraryError,
+    refetch: libraryRefetch,
   } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
+
+  const [toggleInLibrary] = useMutation(toggleArticleInLibrary, {
+    onSuccess: () => libraryRefetch(),
+  });
 
   // Set the page to 0 when changing projects
   useEffect(() => {
@@ -51,12 +56,6 @@ const ArticlesPage = () => {
     );
   }
 
-  /* TODO:
-    finish library adding/removing
-    delete extra services
-    delete extra endpoints
-    delete extra reducer logic
-  */
   const articles =
     tab === "articles"
       ? Object.values(articlesData.articles)
@@ -76,7 +75,13 @@ const ArticlesPage = () => {
         <Article
           key={article.id}
           inLibrary={isViewingProject && !!libraryData.articles[article.id]}
-          // toggleInLibrary={toggleInLibrary}
+          toggleInLibrary={() =>
+            toggleInLibrary({
+              articleId: article.id,
+              projectId: selectedProjectId,
+              libraryArticles: libraryData.articles,
+            })
+          }
           onProjectPage={selectedProjectId !== "_default"}
           {...article}
         />

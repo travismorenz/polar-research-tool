@@ -1,4 +1,4 @@
-export default (projectId, articleId) =>
+export default ({ projectId, articleId }) =>
   fetch(`/api/toggle-in-library/${projectId}`, {
     method: "POST",
     headers: {

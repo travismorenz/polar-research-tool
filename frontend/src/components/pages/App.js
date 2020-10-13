@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useCallback } from "react";
+import { ReactQueryCacheProvider, QueryCache } from "react-query";
 import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
@@ -12,6 +13,7 @@ import { initialState, reducer } from "store";
 import { getArticleIds, getLibraryIds } from "services/getArticles";
 
 export const AppContext = createContext();
+export const queryCache = new QueryCache();
 
 const App = () => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
@@ -32,16 +34,18 @@ const App = () => {
   return (
     <div className="app">
       <AppContext.Provider value={{ state, action }}>
-        <BrowserRouter>
-          <Navbar />
-          <Switch>
-            <Route exact path="/" component={Articles} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/account" component={Account} />
-            <Redirect to="/" />
-          </Switch>
-        </BrowserRouter>
+        <ReactQueryCacheProvider queryCache={queryCache}>
+          <BrowserRouter>
+            <Navbar />
+            <Switch>
+              <Route exact path="/" component={Articles} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/account" component={Account} />
+              <Redirect to="/" />
+            </Switch>
+          </BrowserRouter>
+        </ReactQueryCacheProvider>
       </AppContext.Provider>
     </div>
   );

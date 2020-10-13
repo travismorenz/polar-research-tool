@@ -26,6 +26,7 @@ const ArticlesPage = () => {
     refetch: libraryRefetch,
   } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
 
+  // TODO: change this to optimistically update
   const [toggleInLibrary] = useMutation(toggleArticleInLibrary, {
     onSuccess: () => libraryRefetch(),
   });

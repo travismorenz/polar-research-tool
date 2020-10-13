@@ -59,9 +59,7 @@ def format_articles(query_result):
     return articles
 
 
-@articles.route("/api/articles-by-id", methods=["POST"])
-def articles_by_id():
-    ids = tuple(request.get_json()['ids'])
+def articles_query(ids):
     query = f"""
         SELECT a.id, a.title, a.summary, a.url, a.version, a.publish_date, c.name as category_name, au.name as author_name
         FROM article a
@@ -73,7 +71,46 @@ def articles_by_id():
     """
     query_result = db.engine.execute(db.text(query), ids=ids)
     articles = format_articles(query_result)
-    return {'articles': articles}
+    return articles
+
+@articles.route('/api/articles/', defaults={'project_id': ""})
+@articles.route('/api/articles/<string:project_id>')
+def get_articles(project_id):
+    # Pull limit and offset from search params
+    page = request.args.get('page') or 0
+    limit = request.args.get('limit') or LIMIT
+    query_params = {
+        'offset': page * limit,
+        'limit': limit
+    }
+    
+    # Filter articles by their project
+    filter_query = ""
+    if project_id:
+        filter_query = FILTER_QUERY
+        query_params['id'] = project_id
+
+    # Get relevant article ids from the DB
+    main_query = f"""
+        SELECT a.id
+        FROM article a
+        {filter_query}
+        ORDER BY a.publish_date DESC
+        LIMIT :limit OFFSET :offset
+    """
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM article a
+        {filter_query}
+    """
+    main_query_result = db.engine.execute(db.text(main_query), **query_params).fetchall()
+    count_query_result = db.engine.execute(db.text(count_query), **query_params).fetchall()
+    article_ids = tuple([row['id'] for row in main_query_result])
+    count = count_query_result[0][0]
+
+    # Get the articles corresponding to those ids
+    articles = articles_query(article_ids)
+    return {'articles': articles, 'count': count}
 
 
 @articles.route("/api/article-ids/", defaults={'project_id': ""})

@@ -32,11 +32,13 @@ const ArticlesPage = () => {
     setTab("articles");
   }, [selectedProjectId]);
 
+  const isViewingProject = selectedProjectId !== "_default";
+
   const isLoading =
     areArticlesLoading ||
     isLibraryLoading ||
-    (tab === "articles" && !articlesData) ||
-    (tab === "library" && !libraryData);
+    !articlesData ||
+    (isViewingProject && !libraryData);
   if (isLoading) {
     return <div className="loading loading-lg"></div>;
   }
@@ -49,8 +51,16 @@ const ArticlesPage = () => {
     );
   }
 
+  /* TODO:
+    finish library adding/removing
+    delete extra services
+    delete extra endpoints
+    delete extra reducer logic
+  */
   const articles =
-    tab === "articles" ? articlesData.articles : libraryData.articles;
+    tab === "articles"
+      ? Object.values(articlesData.articles)
+      : Object.values(libraryData.articles);
   const count = tab === "articles" ? articlesData.count : libraryData.count;
   return (
     <div className="container grid-lg">
@@ -60,12 +70,12 @@ const ArticlesPage = () => {
         setTab={setTab}
         page={page}
         setPage={setPage}
-        showLibrary={selectedProjectId !== "_default"}
+        showLibrary={isViewingProject}
       />
-      {Object.values(articles).map((article) => (
+      {articles.map((article) => (
         <Article
           key={article.id}
-          // inLibrary={libraryIds.includes(article.id)}
+          inLibrary={isViewingProject && !!libraryData.articles[article.id]}
           // toggleInLibrary={toggleInLibrary}
           onProjectPage={selectedProjectId !== "_default"}
           {...article}

@@ -1,5 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { usePaginatedQuery, useMutation } from "react-query";
+import {
+  usePaginatedQuery,
+  useMutation,
+  useQueryCache,
+  isCancelledError,
+} from "react-query";
 
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
@@ -14,6 +19,7 @@ const ArticlesPage = () => {
   const [tab, setTab] = useState("articles");
   const [page, setPage] = useState(0);
 
+  // Primary queries for getting feed/library contents
   const {
     latestData: articlesData,
     isLoading: areArticlesLoading,
@@ -23,12 +29,29 @@ const ArticlesPage = () => {
     latestData: libraryData,
     isLoading: isLibraryLoading,
     error: libraryError,
-    refetch: libraryRefetch,
   } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
 
-  // TODO: change this to optimistically update
+  // Query for optimistically updating an article's classification
+  const cache = useQueryCache();
   const [toggleInLibrary] = useMutation(toggleArticleInLibrary, {
-    onSuccess: () => libraryRefetch(),
+    onMutate: ({ article, projectId, page }) => {
+      const queryKey = ["library", projectId, page];
+      const oldLibrary = cache.getQueryData(queryKey);
+      cache.cancelQueries(queryKey);
+      cache.setQueryData(queryKey, (old) => {
+        const isInLibrary = old.articles.includes(article);
+        const articles = isInLibrary
+          ? old.articles.filter((a) => a !== article)
+          : [...old.articles, article];
+        const count = isInLibrary ? old.count - 1 : old.count + 1;
+        return { articles, count };
+      });
+      return oldLibrary;
+    },
+    onError: (data, { projectId, page }, snapShot) =>
+      cache.setQueryData(["library", projectId, page], snapShot),
+    onSuccess: (data, { projectId, page }) =>
+      cache.invalidateQueries(["library", projectId, page]),
   });
 
   // Set the page to 0 when changing projects
@@ -39,6 +62,7 @@ const ArticlesPage = () => {
 
   const isViewingProject = selectedProjectId !== "_default";
 
+  // Loading UI
   const isLoading =
     areArticlesLoading ||
     isLibraryLoading ||
@@ -48,20 +72,24 @@ const ArticlesPage = () => {
     return <div className="loading loading-lg"></div>;
   }
 
+  // Error UI
   const error = articlesError || libraryError;
-  if (error) {
+  if (error && !isCancelledError(error)) {
+    // Ignore any errors caused by request cancellation
     console.log(error);
     return (
       <div>There was an error retrieving the data. Check the console.</div>
     );
   }
 
+  // Display articles based on current tab
+  const count = tab === "articles" ? articlesData.count : libraryData.count;
   let articles =
     tab === "articles" ? articlesData.articles : libraryData.articles;
-  articles = Object.values(articles).sort(
+  articles = articles.sort(
     (a, b) => new Date(b.publish_date) - new Date(a.publish_date)
   );
-  const count = tab === "articles" ? articlesData.count : libraryData.count;
+
   return (
     <div className="container grid-lg">
       <ArticleControls
@@ -75,11 +103,15 @@ const ArticlesPage = () => {
       {articles.map((article) => (
         <Article
           key={article.id}
-          inLibrary={isViewingProject && !!libraryData.articles[article.id]}
+          inLibrary={
+            isViewingProject &&
+            libraryData.articles.some((a) => a.id === article.id)
+          }
           toggleInLibrary={() =>
             toggleInLibrary({
-              articleId: article.id,
               projectId: selectedProjectId,
+              article,
+              page,
             })
           }
           onProjectPage={selectedProjectId !== "_default"}

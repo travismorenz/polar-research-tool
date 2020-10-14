@@ -41,7 +41,8 @@ def format_articles(query_result):
             articles[row_id]['authors'].append(author_name)
         if category_name not in articles[row_id]['categories']:
             articles[row_id]['categories'].append(category_name)
-    return articles
+    
+    return list(articles.values())
 
 
 def get_articles_by_id(ids):
@@ -142,14 +143,17 @@ def get_articles(project_id):
 
 @articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])
 def toggle_in_library(project_id):
-   article_id = request.get_json()['articleId']
-   article = Article.query.filter_by(id=article_id).first()
-   project = Project.query.filter_by(id=project_id).first()
+    article_id = request.get_json()['articleId']
+    article = Article.query.filter_by(id=article_id).first()
+    project = Project.query.filter_by(id=project_id).first()
 
-   if article in project.articles:
-       project.articles.remove(article)
-   else:
-        project.articles.append(article)
-   db.session.add(project)
-   db.session.commit()
-   return {}
+    try:
+        if article in project.articles:
+            project.articles.remove(article)
+        else:
+            project.articles.append(article)
+        db.session.add(project)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+    return {}

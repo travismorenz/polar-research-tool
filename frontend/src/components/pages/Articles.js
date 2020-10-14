@@ -34,7 +34,7 @@ const ArticlesPage = () => {
   const cache = useQueryCache();
   const [toggleInLibrary] = useLibraryToggle(cache);
 
-  // Set the page to 0 when changing projects
+  // Reset page state on project change
   useEffect(() => {
     setPage(0);
     setTab("articles");

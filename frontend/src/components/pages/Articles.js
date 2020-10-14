@@ -1,16 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  usePaginatedQuery,
-  useMutation,
-  useQueryCache,
   isCancelledError,
+  usePaginatedQuery,
+  useQueryCache,
 } from "react-query";
 
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
 import { AppContext } from "components/pages/App";
-import { getArticles, getLibrary } from "services/getArticles";
-import toggleArticleInLibrary from "services/toggleArticleInLibrary";
+import { getArticles, getLibrary } from "services/articles";
+import useLibraryToggle from "hooks/useLibraryToggle";
 
 const ArticlesPage = () => {
   const {
@@ -31,28 +30,9 @@ const ArticlesPage = () => {
     error: libraryError,
   } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
 
-  // Query for optimistically updating an article's classification
+  // Query for changing which tab an article belongs under
   const cache = useQueryCache();
-  const [toggleInLibrary] = useMutation(toggleArticleInLibrary, {
-    onMutate: ({ article, projectId, page }) => {
-      const queryKey = ["library", projectId, page];
-      const oldLibrary = cache.getQueryData(queryKey);
-      cache.cancelQueries(queryKey);
-      cache.setQueryData(queryKey, (old) => {
-        const isInLibrary = old.articles.includes(article);
-        const articles = isInLibrary
-          ? old.articles.filter((a) => a !== article)
-          : [...old.articles, article];
-        const count = isInLibrary ? old.count - 1 : old.count + 1;
-        return { articles, count };
-      });
-      return oldLibrary;
-    },
-    onError: (data, { projectId, page }, snapShot) =>
-      cache.setQueryData(["library", projectId, page], snapShot),
-    onSuccess: (data, { projectId, page }) =>
-      cache.invalidateQueries(["library", projectId, page]),
-  });
+  const [toggleInLibrary] = useLibraryToggle(cache);
 
   // Set the page to 0 when changing projects
   useEffect(() => {

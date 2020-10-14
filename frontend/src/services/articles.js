@@ -29,3 +29,13 @@ export const getLibrary = (_, projectId, page = 0) => {
 
   return request;
 };
+
+export const toggleInLibrary = ({ projectId, article }) =>
+  fetch(`/api/toggle-in-library/${projectId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ articleId: article.id }),
+  });

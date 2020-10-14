@@ -17,6 +17,7 @@ const Project = ({
   const categoryBottom = useRef();
 
   if (id === "_default") return null;
+
   return (
     <div className="project card">
       <h5>{name}</h5>

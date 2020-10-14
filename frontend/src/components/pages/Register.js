@@ -6,18 +6,20 @@ import { AppContext } from "components/pages/App";
 import { register } from "services/auth";
 
 const RegisterPage = () => {
-  const {
-    register: registerInput,
-    handleSubmit,
-    errors,
-    setError: setValidationError,
-  } = useForm();
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const {
     state: { isLoggedIn },
     action,
   } = useContext(AppContext);
+
+  // Form state
+  const {
+    register: registerInput,
+    handleSubmit,
+    errors,
+    setError: setValidationError,
+  } = useForm();
 
   if (isLoggedIn) return <Redirect to="/" />;
 
@@ -120,7 +122,7 @@ const RegisterPage = () => {
               className={`btn btn-primary ${isLoading ? "loading" : ""}`}
               disabled={isLoading}
             >
-              Login
+              Register
             </button>
           </form>
         </div>

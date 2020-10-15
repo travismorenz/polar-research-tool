@@ -1,9 +1,11 @@
-export const getArticles = (_, projectId, page = 0) => {
+export const getArticles = (_, projectId, tab = "feed", page = 0) => {
   // The controller and signal are used to make this request cancellable
   const controller = new AbortController();
   const signal = controller.signal;
   const request = fetch(
-    `/api/articles/${projectId === "_default" ? "" : projectId}?page=${page}`,
+    `/api/articles/${
+      projectId === "_default" ? "" : projectId
+    }?tab=${tab}&page=${page}`,
     {
       method: "get",
       signal,

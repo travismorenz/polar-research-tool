@@ -8,27 +8,26 @@ import {
 import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
 import { AppContext } from "components/pages/App";
-import { getArticles, getLibrary } from "services/articles";
+import { getArticles } from "services/articles";
 import useLibraryToggle from "hooks/useLibraryToggle";
 
 const ArticlesPage = () => {
   const {
     state: { selectedProjectId },
   } = useContext(AppContext);
-  const [tab, setTab] = useState("articles");
+  const [tab, setTab] = useState("feed");
   const [page, setPage] = useState(0);
 
-  // Primary queries for getting feed/library contents
+  // Articles query
   const {
+    // TODO: rename
     latestData: articlesData,
     isLoading: areArticlesLoading,
     error: articlesError,
-  } = usePaginatedQuery(["articles", selectedProjectId, page], getArticles);
-  const {
-    latestData: libraryData,
-    isLoading: isLibraryLoading,
-    error: libraryError,
-  } = usePaginatedQuery(["library", selectedProjectId, page], getLibrary);
+  } = usePaginatedQuery(
+    ["articles", selectedProjectId, tab, page],
+    getArticles
+  );
 
   // Query for changing which tab an article belongs under
   const cache = useQueryCache();
@@ -37,23 +36,19 @@ const ArticlesPage = () => {
   // Reset page state on project change
   useEffect(() => {
     setPage(0);
-    setTab("articles");
+    setTab("feed");
   }, [selectedProjectId]);
 
   const isViewingProject = selectedProjectId !== "_default";
 
   // Loading UI
-  const isLoading =
-    areArticlesLoading ||
-    isLibraryLoading ||
-    !articlesData ||
-    (isViewingProject && !libraryData);
+  const isLoading = areArticlesLoading || !articlesData;
   if (isLoading) {
     return <div className="loading loading-lg"></div>;
   }
 
   // Error UI
-  const error = articlesError || libraryError;
+  const error = articlesError;
   if (error && !isCancelledError(error)) {
     // Ignore any errors caused by request cancellation
     console.log(error);
@@ -63,10 +58,8 @@ const ArticlesPage = () => {
   }
 
   // Display articles based on current tab
-  const count = tab === "articles" ? articlesData.count : libraryData.count;
-  let articles =
-    tab === "articles" ? articlesData.articles : libraryData.articles;
-  articles = articles.sort(
+  const count = articlesData.count;
+  let articles = articlesData.articles.sort(
     (a, b) => new Date(b.publish_date) - new Date(a.publish_date)
   );
 
@@ -74,7 +67,7 @@ const ArticlesPage = () => {
     <div className="container grid-lg">
       <ArticleControls
         count={count}
-        tab={tab}
+        tab={tab} //TODO: deal with feed name change
         setTab={setTab}
         page={page}
         setPage={setPage}
@@ -83,10 +76,6 @@ const ArticlesPage = () => {
       {articles.map((article) => (
         <Article
           key={article.id}
-          inLibrary={
-            isViewingProject &&
-            libraryData.articles.some((a) => a.id === article.id)
-          }
           toggleInLibrary={() =>
             toggleInLibrary({
               projectId: selectedProjectId,

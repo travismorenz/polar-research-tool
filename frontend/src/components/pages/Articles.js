@@ -19,12 +19,7 @@ const ArticlesPage = () => {
   const [page, setPage] = useState(0);
 
   // Articles query
-  const {
-    // TODO: rename
-    latestData: articlesData,
-    isLoading: areArticlesLoading,
-    error: articlesError,
-  } = usePaginatedQuery(
+  const { latestData, isLoading, error } = usePaginatedQuery(
     ["articles", selectedProjectId, tab, page],
     getArticles
   );
@@ -42,13 +37,11 @@ const ArticlesPage = () => {
   const isViewingProject = selectedProjectId !== "_default";
 
   // Loading UI
-  const isLoading = areArticlesLoading || !articlesData;
-  if (isLoading) {
+  if (isLoading || !latestData) {
     return <div className="loading loading-lg"></div>;
   }
 
   // Error UI
-  const error = articlesError;
   if (error && !isCancelledError(error)) {
     // Ignore any errors caused by request cancellation
     console.log(error);
@@ -58,8 +51,8 @@ const ArticlesPage = () => {
   }
 
   // Display articles based on current tab
-  const count = articlesData.count;
-  let articles = articlesData.articles.sort(
+  const count = latestData.count;
+  let articles = latestData.articles.sort(
     (a, b) => new Date(b.publish_date) - new Date(a.publish_date)
   );
 
@@ -67,7 +60,7 @@ const ArticlesPage = () => {
     <div className="container grid-lg">
       <ArticleControls
         count={count}
-        tab={tab} //TODO: deal with feed name change
+        tab={tab}
         setTab={setTab}
         page={page}
         setPage={setPage}

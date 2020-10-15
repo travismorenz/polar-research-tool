@@ -4,20 +4,49 @@ const Article = ({
   authors,
   categories,
   id,
-  inLibrary,
-  onProjectPage,
   publish_date,
   summary,
   title,
-  toggleInLibrary,
+  isViewingProject,
+  tab,
+  changeArticleTab,
   url,
 }) => {
   return (
     <div className="article card">
-      {onProjectPage && (
-        <button className="bookmark-btn" onClick={() => toggleInLibrary(id)}>
-          <i className={`icon icon-bookmark ${inLibrary ? "active" : ""}`} />
-        </button>
+      {isViewingProject && (
+        <div className="form-group">
+          <label
+            className="form-radio form-inline"
+            onClick={
+              tab === "library" ? () => changeArticleTab("feed") : undefined
+            }
+          >
+            <input
+              type="radio"
+              name={`${id}tab`}
+              value="feed"
+              checked={tab === "feed"}
+              readOnly
+            />
+            <i className="form-icon"></i> Feed
+          </label>
+          <label
+            className="form-radio form-inline"
+            onClick={
+              tab === "feed" ? () => changeArticleTab("library") : undefined
+            }
+          >
+            <input
+              type="radio"
+              name={`${id}tab`}
+              value="library"
+              checked={tab === "library"}
+              readOnly
+            />
+            <i className="form-icon"></i> Library
+          </label>
+        </div>
       )}
       <a href={url} target="_blank" rel="noopener noreferrer">
         <h5>{title}</h5>

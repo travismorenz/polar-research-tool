@@ -10,21 +10,6 @@ from flask_login import login_required
 articles = Blueprint('articles', __name__)
 
 LIMIT = 50 # num of articles per page
-FILTER_QUERY = """
-    WHERE EXISTS (
-        SELECT * FROM articles_categories ac 
-        JOIN projects_categories pc
-            ON pc.category_id = ac.category_id AND pc.project_id = :id
-        WHERE ac.article_id = a.id
-    )
-    AND EXISTS (
-        SELECT * FROM articles_keyphrases ak 
-        JOIN projects_keyphrases pk
-            ON pk.keyphrase_id = ak.keyphrase_id AND pk.project_id = :id 
-        WHERE ak.article_id = a.id
-    )
-"""
-
 
 def format_articles(query_result):
     articles = {}
@@ -59,54 +44,41 @@ def get_articles_by_id(ids):
     articles = format_articles(query_result)
     return articles
 
-@articles.route('/api/articles/library/<string:project_id>')
-def get_library(project_id):
-    # Pull limit and offset from search params
-    project_id = int(project_id)
-    page = int(request.args.get('page'))
-    offset = LIMIT * page
+feed_filter = """
+    WHERE EXISTS (
+        SELECT * FROM articles_categories ac 
+        JOIN projects_categories pc
+            ON pc.category_id = ac.category_id AND pc.project_id = :project_id
+        WHERE ac.article_id = a.id
+    )
+    AND EXISTS (
+        SELECT * FROM articles_keyphrases ak 
+        JOIN projects_keyphrases pk
+            ON pk.keyphrase_id = ak.keyphrase_id AND pk.project_id = :project_id 
+        WHERE ak.article_id = a.id
+    )
+    AND NOT EXISTS (
+        SELECT article_id, project_id
+        FROM projects_articles
+        WHERE article_id = a.id AND project_id = :project_id
+    )
+"""
 
-    # Get relevant article ids from the DB
-    main_query = f"""
-        SELECT a.id
-        FROM article a
-        WHERE EXISTS
-            (
-                Select article_id, project_id
-                FROM projects_articles
-                WHERE article_id = a.id AND project_id = :project_id
-            )
-        ORDER BY a.publish_date DESC
-        LIMIT :limit OFFSET :offset
-    """
-    count_query = f"""
-       SELECT COUNT(*)
-        FROM article a
-        WHERE EXISTS
-            (
-                Select article_id, project_id
-                FROM projects_articles
-                WHERE article_id = a.id AND project_id = :project_id
-            ) 
-    """ 
-    main_results = db.engine.execute(
-        db.text(main_query), 
-        project_id=project_id, 
-        limit=LIMIT, 
-        offset=offset).fetchall()
-    count_result = db.engine.execute(db.text(count_query), project_id=project_id).fetchall()
-    article_ids = [row['id'] for row in main_results] + [-1]
-    count = count_result[0][0]
-
-    # Get the articles corresponding to the retrieved ids
-    articles = get_articles_by_id(tuple(article_ids))
-    return { 'articles': articles, 'count': count }
+library_filter = f"""
+    WHERE EXISTS
+        (
+            SELECT article_id, project_id
+            FROM projects_articles
+            WHERE article_id = a.id AND project_id = :project_id
+        ) 
+"""
 
 @articles.route('/api/articles/', defaults={'project_id': ""})
 @articles.route('/api/articles/<string:project_id>')
 def get_articles(project_id):
     # Pull limit and offset from search params
     page = int(request.args.get('page'))
+    tab = request.args.get('tab')
     query_params = {
         'offset': page * LIMIT,
         'limit': LIMIT
@@ -115,8 +87,8 @@ def get_articles(project_id):
     # Filter articles by their project
     filter_query = ""
     if project_id:
-        filter_query = FILTER_QUERY
-        query_params['id'] = project_id
+        filter_query = feed_filter if tab == "feed" else library_filter
+        query_params['project_id'] = project_id
 
     # Get relevant article ids from the DB
     main_query = f"""
@@ -141,19 +113,26 @@ def get_articles(project_id):
     return {'articles': articles, 'count': count}
 
 
-@articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])
+@articles.route("/api/change-article-tab/<string:project_id>", methods=["POST"])
 def toggle_in_library(project_id):
     article_id = request.get_json()['articleId']
+    target_tab = request.get_json()['targetTab']
+
     article = Article.query.filter_by(id=article_id).first()
     project = Project.query.filter_by(id=project_id).first()
 
-    try:
-        if article in project.articles:
-            project.articles.remove(article)
-        else:
-            project.articles.append(article)
-        db.session.add(project)
-        db.session.commit()
-    except Exception as e:
-        print(e)
+    # TODO: Find a better (actually working) solution to the problem of handling many fast updates
+    tries = 0
+    while tries < 10:
+        try:
+            if target_tab == "feed":
+                project.articles.remove(article)
+            elif target_tab == "library":
+                project.articles.append(article)
+            db.session.add(project)
+            db.session.commit()
+            break
+        except Exception as e:
+            print('error')
+            tries += 1
     return {}

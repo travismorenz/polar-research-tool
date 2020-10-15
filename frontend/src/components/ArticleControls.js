@@ -15,13 +15,13 @@ const ArticlesControls = ({
     <div className="space-between">
       <div className="tabs btn-group btn-group-block">
         <button
-          className={`btn ${tab === "articles" ? "active" : ""}`}
+          className={`btn ${tab === "feed" ? "active" : ""}`}
           onClick={() => {
             setPage(0);
-            setTab("articles");
+            setTab("feed");
           }}
         >
-          Articles
+          Feed
         </button>
         {showLibrary && (
           <button

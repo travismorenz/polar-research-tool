@@ -57,12 +57,17 @@ feed_filter = """
             ON pk.keyphrase_id = ak.keyphrase_id AND pk.project_id = :project_id 
         WHERE ak.article_id = a.id
     )
+    AND NOT EXISTS (
+        SELECT article_id, project_id
+        FROM projects_articles
+        WHERE article_id = a.id AND project_id = :project_id
+    )
 """
 
 library_filter = f"""
     WHERE EXISTS
         (
-            Select article_id, project_id
+            SELECT article_id, project_id
             FROM projects_articles
             WHERE article_id = a.id AND project_id = :project_id
         ) 

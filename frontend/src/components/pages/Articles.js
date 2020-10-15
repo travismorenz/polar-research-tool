@@ -73,6 +73,7 @@ const ArticlesPage = () => {
             toggleInLibrary({
               projectId: selectedProjectId,
               article,
+              tab,
               page,
             })
           }

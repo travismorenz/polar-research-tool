@@ -5,9 +5,9 @@ import { toggleInLibrary } from "services/articles";
 // Hook for optimistically toggling articles in/out of a project library
 export default (cache) =>
   useMutation(toggleInLibrary, {
-    onMutate: ({ article, projectId, page }) => {
+    onMutate: ({ article, projectId, tab, page }) => {
       // Construct the key used to identify the last library query
-      const queryKey = ["library", projectId, page];
+      const queryKey = ["articles", projectId, tab, page];
 
       // Create a snapshot of the library data at this time
       const oldLibrary = cache.getQueryData(queryKey);
@@ -17,11 +17,8 @@ export default (cache) =>
 
       // Optimistically toggle the article in/out of the library and update the count
       cache.setQueryData(queryKey, (old) => {
-        const isInLibrary = old.articles.includes(article);
-        const articles = isInLibrary
-          ? old.articles.filter((a) => a !== article)
-          : [...old.articles, article];
-        const count = isInLibrary ? old.count - 1 : old.count + 1;
+        const articles = old.articles.filter((a) => a !== article);
+        const count = old.count - 1;
         return { articles, count };
       });
 
@@ -29,8 +26,8 @@ export default (cache) =>
       return () => cache.setQueryData(queryKey, oldLibrary);
     },
     // Use the rollback function on error
-    onError: (data, variables, rollback) => () => rollback(),
+    onError: (_, __, rollback) => () => rollback(),
     // Refetch library on success
-    onSuccess: (data, { projectId, page }) =>
-      cache.invalidateQueries(["library", projectId, page]),
+    onSuccess: (_, { projectId, tab, page }) =>
+      cache.invalidateQueries(["articles", projectId, tab, page]),
   });

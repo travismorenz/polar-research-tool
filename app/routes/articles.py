@@ -113,19 +113,26 @@ def get_articles(project_id):
     return {'articles': articles, 'count': count}
 
 
-@articles.route("/api/toggle-in-library/<string:project_id>", methods=["POST"])
+@articles.route("/api/change-article-tab/<string:project_id>", methods=["POST"])
 def toggle_in_library(project_id):
     article_id = request.get_json()['articleId']
+    target_tab = request.get_json()['targetTab']
+
     article = Article.query.filter_by(id=article_id).first()
     project = Project.query.filter_by(id=project_id).first()
 
-    try:
-        if article in project.articles:
-            project.articles.remove(article)
-        else:
-            project.articles.append(article)
-        db.session.add(project)
-        db.session.commit()
-    except Exception as e:
-        print(e)
+    # TODO: Find a better (actually working) solution to the problem of handling many fast updates
+    tries = 0
+    while tries < 10:
+        try:
+            if target_tab == "feed":
+                project.articles.remove(article)
+            elif target_tab == "library":
+                project.articles.append(article)
+            db.session.add(project)
+            db.session.commit()
+            break
+        except Exception as e:
+            print('error')
+            tries += 1
     return {}

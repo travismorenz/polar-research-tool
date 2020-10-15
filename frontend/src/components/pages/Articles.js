@@ -9,7 +9,7 @@ import Article from "components/Article";
 import ArticleControls from "components/ArticleControls";
 import { AppContext } from "components/pages/App";
 import { getArticles } from "services/articles";
-import useLibraryToggle from "hooks/useLibraryToggle";
+import useChangeArticleTab from "hooks/useChangeArticleTab";
 
 const ArticlesPage = () => {
   const {
@@ -26,7 +26,7 @@ const ArticlesPage = () => {
 
   // Query for changing which tab an article belongs under
   const cache = useQueryCache();
-  const [toggleInLibrary] = useLibraryToggle(cache);
+  const [changeArticleTab] = useChangeArticleTab(cache);
 
   // Reset page state on project change
   useEffect(() => {
@@ -71,10 +71,11 @@ const ArticlesPage = () => {
           key={article.id}
           tab={tab}
           isViewingProject={isViewingProject}
-          toggleInLibrary={() =>
-            toggleInLibrary({
+          changeArticleTab={(targetTab) =>
+            changeArticleTab({
               projectId: selectedProjectId,
               article,
+              targetTab,
               tab,
               page,
             })

@@ -9,14 +9,19 @@ const Article = ({
   title,
   isViewingProject,
   tab,
-  toggleInLibrary,
+  changeArticleTab,
   url,
 }) => {
   return (
     <div className="article card">
       {isViewingProject && (
         <div className="form-group">
-          <label className="form-radio form-inline">
+          <label
+            className="form-radio form-inline"
+            onClick={
+              tab === "library" ? () => changeArticleTab("feed") : undefined
+            }
+          >
             <input
               type="radio"
               name={`${id}tab`}
@@ -26,7 +31,12 @@ const Article = ({
             />
             <i className="form-icon"></i> Feed
           </label>
-          <label className="form-radio form-inline">
+          <label
+            className="form-radio form-inline"
+            onClick={
+              tab === "feed" ? () => changeArticleTab("library") : undefined
+            }
+          >
             <input
               type="radio"
               name={`${id}tab`}

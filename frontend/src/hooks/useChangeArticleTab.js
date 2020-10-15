@@ -1,10 +1,9 @@
 import { useMutation } from "react-query";
-import { toggleInLibrary } from "services/articles";
+import { changeArticleTab } from "services/articles";
 
-// TODO: Modify for toggling articles between all tabs
-// Hook for optimistically toggling articles in/out of a project library
+// Hook for optimistically switching articles between tabs
 export default (cache) =>
-  useMutation(toggleInLibrary, {
+  useMutation(changeArticleTab, {
     onMutate: ({ article, projectId, tab, page }) => {
       // Construct the key used to identify the last library query
       const queryKey = ["articles", projectId, tab, page];

@@ -69,6 +69,8 @@ const ArticlesPage = () => {
       {articles.map((article) => (
         <Article
           key={article.id}
+          tab={tab}
+          isViewingProject={isViewingProject}
           toggleInLibrary={() =>
             toggleInLibrary({
               projectId: selectedProjectId,
@@ -77,7 +79,6 @@ const ArticlesPage = () => {
               page,
             })
           }
-          onProjectPage={selectedProjectId !== "_default"}
           {...article}
         />
       ))}

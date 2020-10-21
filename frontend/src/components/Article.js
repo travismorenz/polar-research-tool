@@ -5,6 +5,7 @@ const Article = ({
   categories,
   id,
   inLibrary,
+  keyphrases,
   onProjectPage,
   publish_date,
   summary,
@@ -30,10 +31,18 @@ const Article = ({
           </span>
         ))}
       </div>
+      <div id="keyphrases">
+        {keyphrases.map((keyphrase, i) => (
+          <span key={`${id}keyphrase${i}`}>
+            <button className="btn-link">{keyphrase}</button>
+              {i < keyphrases.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </div>
       <div className="metadata">
         <span className="publish_date">{publish_date.slice(0, 16)}</span>
         {categories.map((name, i) => (
-          <span key={`${id}cateogry${i}`}>
+          <span key={`${id}category${i}`}>
             <button className="btn-link">{name}</button>
             {i < categories.length - 1 ? " | " : ""}
           </span>

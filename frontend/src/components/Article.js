@@ -5,7 +5,7 @@ const Article = ({
   categories,
   id,
   inLibrary,
-  keyphrases,
+  keywords,
   onProjectPage,
   publish_date,
   summary,
@@ -31,11 +31,11 @@ const Article = ({
           </span>
         ))}
       </div>
-      <div id="keyphrases">
-        {keyphrases.map((keyphrase, i) => (
-          <span key={`${id}keyphrase${i}`}>
-            <button className="btn-link">{keyphrase}</button>
-              {i < keyphrases.length - 1 ? ", " : ""}
+      <div id="keywords">
+        {keywords.map((keyword, i) => (
+          <span key={`${id}keyword${i}`}>
+            <button className="btn-link">{keyword}</button>
+              {i < keywords.length - 1 ? ", " : ""}
           </span>
         ))}
       </div>

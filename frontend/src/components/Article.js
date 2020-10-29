@@ -68,12 +68,12 @@ const Article = ({
           </span>
         ))}
       </div>
-      <details class="accordion">
-        <summary class="accordion-header">
-          <i class="icon icon-arrow-right mr-1"></i>
+      <details className="accordion">
+        <summary className="accordion-header">
+          <i className="icon icon-arrow-right mr-1"></i>
           Summary
         </summary>
-        <div class="accordion-body">{summary}</div>
+        <div className="accordion-body">{summary}</div>
       </details>
     </div>
   );

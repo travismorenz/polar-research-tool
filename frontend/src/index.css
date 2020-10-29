@@ -196,3 +196,11 @@ main {
 .form-group.project-controls {
   margin-bottom: 50px;
 }
+
+.accordion {
+  cursor: pointer;
+}
+
+.accordion .accordion-header {
+  padding: 0.2rem 0;
+}

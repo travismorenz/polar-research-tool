@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { AppContext } from "components/pages/App";
@@ -13,7 +14,7 @@ const LoginPage = ({ history }) => {
     action,
   } = useContext(AppContext);
 
-  if (isLoggedIn) history.push("/");
+  if (isLoggedIn) return <Redirect to="/" />;
 
   const onSubmit = async (input) => {
     setIsLoading(true);

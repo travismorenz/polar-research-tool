@@ -204,3 +204,25 @@ main {
 .accordion .accordion-header {
   padding: 0.2rem 0;
 }
+
+.sticky-wrapper {
+  position: relative;
+  height: 44px;
+  z-index: 1;
+}
+
+.sticky .sticky-inner {
+  position: fixed;
+  background-color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  padding: 10px 10px 5px 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  width: 100%;
+}
+
+.sticky-inner .space-between {
+  max-width: 960px;
+}

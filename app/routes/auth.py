@@ -3,13 +3,13 @@ import os
 from app.admins import admins
 from app.models import Category, Keyphrase, Person, Project, db
 from flask import Blueprint, render_template, request, session, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/api/login', methods=['POST'])
 def login_post():
-    if not current_user.is_authenticated:
+    if not current_user.is_authenticated and not current_user.is_active:
         form_data = request.get_json()
         username = form_data['username']
         password = form_data['password']
@@ -42,12 +42,14 @@ def register_post():
 
 
 @auth.route('/api/logout', methods=['POST'])
+@login_required
 def logout():
     logout_user()
     return {}
 
 
 @auth.route('/api/account', methods=['GET'])
+@login_required
 def account():
     context = {}
     context['projects'] = []

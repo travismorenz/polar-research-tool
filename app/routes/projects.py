@@ -3,11 +3,12 @@ import os
 from app.admins import admins
 from app.models import Category, Keyphrase, Person, Project, db
 from flask import Blueprint, request, session, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 projects = Blueprint('projects', __name__)
 
 @projects.route("/api/add-keyphrase/<string:project_id>", methods=['POST'])
+@login_required
 def add_keyphrase(project_id):
    keyphrase_name = request.get_json()['keyphrase']
    project = Project.query.filter_by(id=project_id).first()
@@ -21,6 +22,7 @@ def add_keyphrase(project_id):
    return {'keyphrases': [k.serialize() for k in project.keyphrases]}
 
 @projects.route("/api/remove-keyphrase/<string:project_id>", methods=['POST'])
+@login_required
 def remove_keyphrase(project_id):
    keyphrase_name = request.get_json()['keyphrase']
    project = Project.query.filter_by(id=project_id).first()
@@ -32,6 +34,7 @@ def remove_keyphrase(project_id):
    return {'keyphrases': [k.serialize() for k in project.keyphrases]}
 
 @projects.route("/api/add-category/<string:project_id>", methods=['POST'])
+@login_required
 def add_category(project_id):
    category_name = request.get_json()['category']
    project = Project.query.filter_by(id=project_id).first()
@@ -45,6 +48,7 @@ def add_category(project_id):
    return {'categories': [c.serialize() for c in project.categories]}
 
 @projects.route("/api/remove-category/<string:project_id>", methods=['POST'])
+@login_required
 def remove_category(project_id):
    category_name = request.get_json()['category']
    project = Project.query.filter_by(id=project_id).first()
@@ -56,6 +60,7 @@ def remove_category(project_id):
    return {'categories': [c.serialize() for c in project.categories]}
 
 @projects.route("/api/project-names")
+@login_required
 def get_all_project_names():
     project_names = []
     projects = Project.query.filter_by().all()
@@ -64,6 +69,7 @@ def get_all_project_names():
     return {'projectNames': project_names}
 
 @projects.route("/api/join-project", methods=['POST'])
+@login_required
 def join_project():
    project_name = request.get_json()['projectName']
    project = Project.query.filter_by(name=project_name).first()
@@ -74,6 +80,7 @@ def join_project():
    return {'newProject': project.serialize()}
 
 @projects.route("/api/leave-project", methods=['POST'])
+@login_required
 def leave_project():
    project_name = request.get_json()['projectName']
    project = Project.query.filter_by(name=project_name).first()

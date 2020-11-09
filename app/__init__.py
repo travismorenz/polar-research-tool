@@ -25,6 +25,7 @@ import app.tasks
 
 login = LoginManager()
 @login.user_loader
+# login.login_view = 'auth./api/login'
 def load_user(username):
     return Person.query.get(username)
 
@@ -38,6 +39,7 @@ def create_app():
     db.create_all(app=app)
     # Initialize login manager
     login.init_app(app)
+    login.login_view = 'auth.login_post'
     # Register the views 
     from app.routes.articles import articles
     from app.routes.auth import auth

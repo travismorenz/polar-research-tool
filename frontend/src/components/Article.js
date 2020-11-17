@@ -14,47 +14,13 @@ const Article = ({
 }) => {
   return (
     <div className="article card">
-      {isViewingProject && (
-        <div className="form-group">
-          <label
-            className="form-radio form-inline"
-            onClick={
-              tab === "library" ? () => changeArticleTab("feed") : undefined
-            }
-          >
-            <input
-              type="radio"
-              name={`${id}tab`}
-              value="feed"
-              checked={tab === "feed"}
-              readOnly
-            />
-            <i className="form-icon"></i> Feed
-          </label>
-          <label
-            className="form-radio form-inline"
-            onClick={
-              tab === "feed" ? () => changeArticleTab("library") : undefined
-            }
-          >
-            <input
-              type="radio"
-              name={`${id}tab`}
-              value="library"
-              checked={tab === "library"}
-              readOnly
-            />
-            <i className="form-icon"></i> Library
-          </label>
-        </div>
-      )}
       <a href={url} target="_blank" rel="noopener noreferrer">
         <h5>{title}</h5>
       </a>
       <div id="authors">
         {authors.map((name, i) => (
           <span key={`${id}author${i}`}>
-            <button className="btn-link">{name}</button>
+            {name}
             {i < authors.length - 1 ? ", " : ""}
           </span>
         ))}
@@ -68,6 +34,31 @@ const Article = ({
           </span>
         ))}
       </div>
+      {isViewingProject && (
+        <div className="controls">
+          {tab !== "library" && (
+            <button
+              className="btn btn-primary"
+              onClick={() => changeArticleTab("library")}
+            >
+              Move to Library
+            </button>
+          )}
+          {tab !== "feed" && (
+            <button
+              className="btn btn-primary"
+              onClick={() => changeArticleTab("feed")}
+            >
+              Move to Feed
+            </button>
+          )}
+          {tab !== "trash" && (
+            <button className="btn" onClick={() => alert("To do")}>
+              <i className="icon icon-delete"></i>
+            </button>
+          )}
+        </div>
+      )}
       <details className="accordion">
         <summary className="accordion-header">
           <i className="icon icon-arrow-right mr-1"></i>

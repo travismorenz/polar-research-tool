@@ -109,6 +109,14 @@ main {
   margin-left: auto;
 }
 
+.article .controls {
+  margin-bottom: 10px;
+}
+
+.article .controls button:first-child {
+  margin-right: 10px;
+}
+
 .card {
   box-shadow: 0 0.25rem 1rem rgba(48, 55, 66, 0.15);
   padding: 1rem;
@@ -117,7 +125,6 @@ main {
 
 .publish_date {
   margin-right: 1rem;
-  font-weight: bold;
 }
 
 .metadata {

@@ -36,14 +36,6 @@ const Article = ({
       </div>
       {isViewingProject && (
         <div className="controls">
-          {tab !== "library" && (
-            <button
-              className="btn btn-primary"
-              onClick={() => changeArticleTab("library")}
-            >
-              Move to Library
-            </button>
-          )}
           {tab !== "feed" && (
             <button
               className="btn btn-primary"
@@ -52,8 +44,16 @@ const Article = ({
               Move to Feed
             </button>
           )}
+          {tab !== "library" && (
+            <button
+              className="btn btn-primary"
+              onClick={() => changeArticleTab("library")}
+            >
+              Move to Library
+            </button>
+          )}
           {tab !== "trash" && (
-            <button className="btn" onClick={() => alert("To do")}>
+            <button className="btn" onClick={() => changeArticleTab("trash")}>
               <i className="icon icon-delete"></i>
             </button>
           )}

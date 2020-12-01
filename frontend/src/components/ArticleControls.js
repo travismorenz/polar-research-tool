@@ -44,15 +44,26 @@ const ArticlesControls = ({
               Feed
             </button>
             {showLibrary && (
-              <button
-                className={`btn ${tab === "library" ? "active" : ""}`}
-                onClick={() => {
-                  setPage(0);
-                  setTab("library");
-                }}
-              >
-                Libary
-              </button>
+              <>
+                <button
+                  className={`btn ${tab === "library" ? "active" : ""}`}
+                  onClick={() => {
+                    setPage(0);
+                    setTab("library");
+                  }}
+                >
+                  Libary
+                </button>
+                <button
+                  className={`btn ${tab === "trash" ? "active" : ""}`}
+                  onClick={() => {
+                    setPage(0);
+                    setTab("trash");
+                  }}
+                >
+                  <i className="icon icon-delete"></i>
+                </button>
+              </>
             )}
           </div>
           <div className="text-right page-controls">

@@ -64,14 +64,16 @@ feed_filter = """
     )
 """
 
-library_filter = f"""
-    WHERE EXISTS
-        (
-            SELECT article_id, project_id
-            FROM projects_articles
-            WHERE article_id = a.id AND project_id = :project_id
-        ) 
-"""
+def build_library_filter(tab):
+    trash = 'false' if tab == 'library' else 'true'
+    return f"""
+        WHERE EXISTS
+            (
+                SELECT article_id, project_id, trash
+                FROM projects_articles
+                WHERE article_id = a.id AND project_id = :project_id AND trash = {trash}
+            ) 
+    """
 
 @articles.route('/api/articles/', defaults={'project_id': ""})
 @articles.route('/api/articles/<string:project_id>')
@@ -87,7 +89,7 @@ def get_articles(project_id):
     # Filter articles by their project
     filter_query = ""
     if project_id:
-        filter_query = feed_filter if tab == "feed" else library_filter
+        filter_query = feed_filter if tab == "feed" else build_library_filter(tab)
         query_params['project_id'] = project_id
 
     # Get relevant article ids from the DB
@@ -112,6 +114,12 @@ def get_articles(project_id):
     articles = get_articles_by_id(tuple(article_ids))
     return {'articles': articles, 'count': count}
 
+def build_trash_query(value):
+    return f"""
+        UPDATE projects_articles
+        SET trash = {value}
+        WHERE project_id = :project_id AND article_id = :article_id
+    """
 
 @articles.route("/api/change-article-tab/<string:project_id>", methods=["POST"])
 def toggle_in_library(project_id):
@@ -127,12 +135,20 @@ def toggle_in_library(project_id):
         try:
             if target_tab == "feed":
                 project.articles.remove(article)
-            elif target_tab == "library":
-                project.articles.append(article)
-            db.session.add(project)
-            db.session.commit()
+                db.session.add(project)
+                db.session.commit()
+
+            if target_tab == "library" or target_tab == "trash":
+                if article not in project.articles:
+                    project.articles.append(article)
+                    db.session.add(project)
+                    db.session.commit()
+                trash = 'true' if target_tab == "trash" else "false"
+                db.engine.execute(db.text(build_trash_query(trash)), project_id=project_id, article_id=article_id)
+
             break
         except Exception as e:
+            print(e)
             print('error')
             tries += 1
     return {}

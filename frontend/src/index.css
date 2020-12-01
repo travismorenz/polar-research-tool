@@ -171,12 +171,23 @@ main {
 
 .max-height-list {
   height: 200px;
+  padding: 5px;
   overflow-y: scroll;
-  list-style-type: none;
+  text-align: left;
 }
 
-.max-height-list li {
-  text-decoration: none;
+.max-height-list span {
+  margin-right: 10px;
+  background-color: lightgrey;
+  line-height: 30px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.max-height-list button {
+  background-color: transparent;
+  border: none;
 }
 
 .project h5 {

@@ -24,9 +24,9 @@ const Project = ({
       <div className="card-body">
         <div className="card-content">
           <h6>Keyphrases</h6>
-          <ul className="max-height-list">
+          <div className="max-height-list">
             {keyphrases.map((k) => (
-              <li key={k}>
+              <span key={k}>
                 {k}
                 <button
                   className="remove"
@@ -34,10 +34,10 @@ const Project = ({
                 >
                   X
                 </button>
-              </li>
+              </span>
             ))}
             <div ref={keyphraseBottom} />
-          </ul>
+          </div>
           <input
             value={newKeyphrase}
             onChange={(e) => setNewKeyphrase(e.target.value)}
@@ -54,9 +54,9 @@ const Project = ({
         </div>
         <div className="card-content">
           <h6>Categories</h6>
-          <ul className="max-height-list">
+          <div className="max-height-list">
             {categories.map((c) => (
-              <li key={c}>
+              <span key={c}>
                 {c}
                 <button
                   className="remove"
@@ -64,10 +64,10 @@ const Project = ({
                 >
                   X
                 </button>
-              </li>
+              </span>
             ))}
             <div ref={categoryBottom} />
-          </ul>
+          </div>
           <input
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}

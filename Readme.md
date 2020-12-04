@@ -2,7 +2,7 @@
 
 ## About
 
-Allows researchers to create keyword/category based projects, which creates uses these projects to create a database of arXiv articles that the researchers can interact with.
+A complete web application that allows researchers to interact with a curated database of research papers pulled from arXiv that are relevant to their current project.
 
 ### Tech Stack
 

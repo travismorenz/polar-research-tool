@@ -2,7 +2,7 @@
 
 ## About
 
-...
+Allows researchers to create keyword/category based projects, which creates uses these projects to create a database of arXiv articles that the researchers can interact with.
 
 ### Tech Stack
 

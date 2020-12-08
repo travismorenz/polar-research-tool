@@ -57,3 +57,9 @@ If you want to make changes to the site and test them without spinning up docker
 - add a feature that lets you easily find similar articles
 - rework UI to fit more articles on page
 - consider having database be something that is spun up in docker and not remote
+
+## Authors
+Aaron Tuor
+Ayush Kapoor
+Philip GeLinas
+Travis Morenz

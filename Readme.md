@@ -25,10 +25,15 @@ Backend
 
    - `APP_PORT`: The port that the web app will be hosted on.
    - `SECRET_KEY`: The key used for signing session cookies. You can generate one using `python3 -c 'import os; print(os.urandom(16))'`.
-   - `SQLALCHEMY_DATABASE_URI`: The connection string for your database.
+   - `SQLALCHEMY_DATABASE_URI`: The connection string for your database. The database should not contain any tables that conflict with the models in `models.py`.
    - `UPDATE_TIME` (HH:MM): The time of day that you would like to update the database with new articles.
 
 2. Duplicate the `admins.template.py` in the app directory and rename to `admins.py`. Then put the usernames of the users you want to be admins into that array. It **is** case sensitive and this must be done before the admin accounts are registered.
+
+## TODO:
+
+- update schema
+- add lucidchart + schema to this
 
 ### Startup
 
@@ -44,3 +49,11 @@ If you want to make changes to the site and test them without spinning up docker
 - In a separate terminal window, navigate into the frontend folder
 - Install the react dependencies with `npm i` and then start the frontend with `npm start`
   **We plan on streamlining this process**
+
+### Moving Forward
+
+- gameify this
+- potentially add filters
+- add a feature that lets you easily find similar articles
+- rework UI to fit more articles on page
+- consider having database be something that is spun up in docker and not remote

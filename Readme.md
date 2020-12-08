@@ -60,10 +60,7 @@ If you want to make changes to the site and test them without spinning up docker
 
 ## Authors
 
-Aaron Tuor
-
-Ayush Kapoor
-
-Philip GeLinas
-
-Travis Morenz
+- Aaron Tuor
+- Ayush Kapoor
+- Philip GeLinas
+- Travis Morenz

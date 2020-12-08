@@ -59,7 +59,11 @@ If you want to make changes to the site and test them without spinning up docker
 - consider having database be something that is spun up in docker and not remote
 
 ## Authors
+
 Aaron Tuor
+
 Ayush Kapoor
+
 Philip GeLinas
+
 Travis Morenz

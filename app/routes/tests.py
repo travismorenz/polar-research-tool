@@ -25,3 +25,7 @@ class BackendTests(unittest.TestCase):
     def test_toggle_in_library(self):
         response = self.client.post('/api/toggle-in-library/project_id', )
         self.assertEqual(response.status_code, 200)
+
+
+if __name__ == '__main__':
+    unittest.main()
